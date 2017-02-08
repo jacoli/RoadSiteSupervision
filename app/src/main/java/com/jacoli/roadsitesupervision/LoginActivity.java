@@ -13,10 +13,9 @@ public class LoginActivity extends CommonActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_login);
 
-        final Button loginBtn = (Button) findViewById(R.id.loginbtn);
+        final Button loginBtn = (Button) findViewById(R.id.login_btn);
 
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
