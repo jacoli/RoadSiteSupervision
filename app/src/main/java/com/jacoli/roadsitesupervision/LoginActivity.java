@@ -19,7 +19,7 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.jacoli.roadsitesupervision.*;
+import com.jacoli.roadsitesupervision.R;
 import com.jacoli.roadsitesupervision.services.*;
 import com.jacoli.roadsitesupervision.views.MyToast;
 
