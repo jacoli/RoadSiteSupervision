@@ -4,6 +4,7 @@
     android:id="@+id/activity_project_detail"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.jacoli.roadsitesupervision.ProjectDetailActivity">
 
     <com.jacoli.roadsitesupervision.TitleBar
@@ -54,16 +55,19 @@
         android:layout_below="@+id/main_info"
         android:text="单位工程：" />
 
-    <ScrollView
+    <GridView
+        android:id="@+id/gridview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/projects"
-        android:layout_alignParentEnd="true">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" />
-    </ScrollView>
+        android:layout_alignParentBottom="true"
+        android:layout_margin="16dp"
+        android:verticalSpacing="10dp"
+        android:horizontalSpacing="5dp"
+        android:columnWidth="48dp"
+        android:numColumns="auto_fit"
+        android:stretchMode="spacingWidth"
+        android:gravity="center"
+        />
 
 </RelativeLayout>
