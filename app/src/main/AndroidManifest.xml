@@ -15,9 +15,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <!--<activity android:name=".MainActivity" />-->
-        <activity android:name=".LoginActivity"/>
-        <activity android:name=".CommonActivity"></activity>
+        <!-- <activity android:name=".MainActivity" /> -->
+        <activity android:name=".LoginActivity" />
+        <activity android:name=".CommonActivity" />
+        <activity android:name=".ProjectDetailActivity" />
+        <activity android:name=".ComponetDetailActivity" />
+        <activity android:name=".SideStationDetailActivity"></activity>
     </application>
 
 </manifest>

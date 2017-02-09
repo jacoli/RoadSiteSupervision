@@ -61,20 +61,19 @@ public class SitesFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //final String[] models = {"施工旁站", "质量巡视", "安全巡视", "环保巡视", "质量抽检"};
 
+                MyToast.showMessage(getActivity(), models[position]);
+
                 if (position == 0) {
-                    MyToast.showMessage(getActivity(), models[position]);
+                    Intent intent = new Intent(getActivity(), ProjectDetailActivity.class);
+                    startActivity(intent);
                 }
                 else if (position == 1) {
-                    MyToast.showMessage(getActivity(), models[position]);
                 }
                 else if (position == 2) {
-                    MyToast.showMessage(getActivity(), models[position]);
                 }
                 else if (position == 3) {
-                    MyToast.showMessage(getActivity(), models[position]);
                 }
                 else if (position == 4) {
-                    MyToast.showMessage(getActivity(), models[position]);
                 }
                 else {
                     // invalid
