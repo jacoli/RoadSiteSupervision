@@ -60,7 +60,7 @@ public class CommonActivity extends Activity {
     public void createTitleBar() {
         titleBar = (TitleBar) findViewById(R.id.title_bar);
 
-        titleBar.setImmersive(true);
+        //titleBar.setImmersive(true);
 
         //titleBar.setBackgroundColor(CommonActivity.getColor(getBaseContext(), R.color.bg_title_bar));
 
