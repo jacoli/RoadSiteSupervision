@@ -47,6 +47,10 @@ public class LoginActivity extends CommonActivity {
         final CheckBox rememberPassword = (CheckBox) findViewById(R.id.rememberPassword);
         final Button serverIPBtn = (Button) findViewById(R.id.login_server_ip_btn);
 
+        // mock
+        usernameEdit.setText("user1");
+        passwordEdit.setText("123456");
+
         configsModel = BGConfigsModel.fetch(this);
         if (configsModel.getServerPort().length() == 0) {
             configsModel.setServerPort("8001");

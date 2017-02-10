@@ -1,10 +1,5 @@
 package com.jacoli.roadsitesupervision.services;
 
-import android.app.Activity;
-import android.content.SharedPreferences;
-
-import java.io.FileOutputStream;
-import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
 /**
@@ -12,6 +7,7 @@ import java.io.Serializable;
  */
 public class LoginModel extends MsgResponseBase implements Serializable {
     private String token;
+    private String Name;
     private String ExpirDate;
     private String ProjectID;
 
@@ -21,6 +17,14 @@ public class LoginModel extends MsgResponseBase implements Serializable {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public String getName() {
+        return Name;
+    }
+
+    public void setName(String name) {
+        Name = name;
     }
 
     public String getExpirDate() {
@@ -39,6 +43,7 @@ public class LoginModel extends MsgResponseBase implements Serializable {
         ProjectID = projectID;
     }
 
+    // 登录是否成功
     public boolean isLoginSuccess() {
         return getStatus() == 0
                 && getToken().length() > 0;

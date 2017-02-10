@@ -1,19 +1,8 @@
 package com.jacoli.roadsitesupervision;
 
-import android.app.Activity;
 import android.app.FragmentTransaction;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
-import android.support.v4.content.ContextCompat;
-import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
-import android.widget.TextView;
-import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
-import android.view.View;
-import android.widget.TextView;
 
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabSelectListener;

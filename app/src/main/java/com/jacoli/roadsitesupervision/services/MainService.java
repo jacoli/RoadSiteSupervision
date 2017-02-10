@@ -306,93 +306,12 @@ public class MainService {
         }
     }
 
-    public boolean sendProjectsQuery(final Handler handler) {
+    public boolean sendProjectDetailQuery(final Handler handler) {
         if (getLoginModel() == null || !getLoginModel().isLoginSuccess()) {
             return false;
         }
 
-        String url = serverBaseUrl + "/Maintain/APP.ashx?Type=GetProjectList";
-        BGRequest req = new BGRequest() {
-            @Override
-            public void success(MsgResponseBase res) {
-                setProjectsModel((ProjectsModel)res);
-                notifyMsg(handler, MSG_QUERY_PROJECTS_SUCCESS);
-            }
-
-            @Override
-            public void failed(MsgResponseBase res) {
-                notifyMsg(handler, MSG_QUERY_PROJECTS_FAILED);
-            }
-        };
-        return req.addParam("Token", getLoginModel().getToken())
-                .addParam("ProjectType", "0")
-                .send(url, ProjectsModel.class);
-    }
-
-    public boolean sendPlanProjectsQuery(final Handler handler) {
-        if (getLoginModel() == null || !getLoginModel().isLoginSuccess()) {
-            return false;
-        }
-
-        String url = serverBaseUrl + "/Maintain/APP.ashx?Type=GetProjectList";
-        BGRequest req = new BGRequest() {
-            @Override
-            public void success(MsgResponseBase model) {
-                notifyMsg(handler, MSG_QUERY_PROJECTS_SUCCESS, model);
-            }
-
-            @Override
-            public void failed(MsgResponseBase model) {
-                notifyMsg(handler, MSG_QUERY_PROJECTS_FAILED, model);
-            }
-        };
-        return req.addParam("Token", getLoginModel().getToken())
-                .addParam("ProjectType", "0")
-                .send(url, ProjectsModel.class);
-    }
-
-    public boolean sendPlanProjectDetailQuery(final String ProjectID, final Handler handler) {
-        if (getLoginModel() == null || !getLoginModel().isLoginSuccess()) {
-            return false;
-        }
-
-        if (ProjectID.length() == 0) {
-            return false;
-        }
-
-//        String mock = "{\"Status\":0,\"Msg\":\"OK\",\"ProjectName\":\"test\",\"ExplorDate\":\"2016-03-28 18:00:00\",\"LineName\":\"\",\"ControlStartStack\":\"K0+-810\",\"ControlEndStack\":\"K2+360\",\"GZ1\":\"K1+100\",\"GZ1Lon\":\"\",\"GZ1Lat\":\"\",\"SchemeImage\":\"http://localhost:11834/WebFile/Maintain/rule/SchemeImage/2-1328.png\",\"WarningArea\":\"1600\",\"UpTransitionArea\":\"190\",\"PortraitBuffer\":\"120\",\"LateralBufferOutput\":\"0.5\",\"WorkspaceGOutput\":\"1200\",\"DownTransitionArea\":\"30\",\"TerminatorZ\":\"30\",\"SpeedLimitVal\":\"80\",\"Table2Count\":\"12\",\"table2\":[{\"SignNumber\":\"b2\",\"SignCode\":\"A-1-2\",\"SignName\":\"施工距离标志\",\"SignImageURL\":\"http://localhost:11834/WebFile/Maintain/rule/SignImage/WEB/A-1-2.png\",\"SignCount\":\"3\",\"SignRemark\":\"1600\"},{\"SignNumber\":\"b3\",\"SignCode\":\"A-1-3\",\"SignName\":\"施工长度标志\",\"SignImageURL\":\"http://localhost:11834/WebFile/Maintain/rule/SignImage/WEB/A-1-3.png\",\"SignCount\":\"1\",\"SignRemark\":\"1320\"},{\"SignNumber\":\"b5\",\"SignCode\":\"A-1-5-1\",\"SignName\":\"两车道向右变一车道\",\"SignImageURL\":\"http://localhost:11834/WebFile/Maintain/rule/SignImage/WEB/A-1-5-1.png\",\"SignCount\":\"1\",\"SignRemark\":\"\"},{\"SignNumber\":\"b14\",\"SignCode\":\"A-1-7-2\",\"SignName\":\"向右导向\",\"SignImageURL\":\"http://localhost:11834/WebFile/Maintain/rule/SignImage/WEB/A-1-7-2.png\",\"SignCount\":\"1\",\"SignRemark\":\"\"},{\"SignNumber\":\"b19\",\"SignCode\":\"A-1-11-1\",\"SignName\":\"限速100\",\"SignImageURL\":\"http://localhost:11834/WebFile/Maintain/rule/SignImage/WEB/A-1-11-1.png\",\"SignCount\":\"1\",\"SignRemark\":\"\"},{\"SignNumber\":\"b21\",\"SignCode\":\"A-1-11-3\",\"SignName\":\"限速80\",\"SignImageURL\":\"http://localhost:11834/WebFile/Maintain/rule/SignImage/WEB/A-1-11-3.png\",\"SignCount\":\"1\",\"SignRemark\":\"\"},{\"SignNumber\":\"b30\",\"SignCode\":\"A-1-12-3\",\"SignName\":\"解除限速80\",\"SignImageURL\":\"http://localhost:11834/WebFile/Maintain/rule/SignImage/WEB/A-1-12-3.png\",\"SignCount\":\"1\",\"SignRemark\":\"\"},{\"SignNumber\":\"b37\",\"SignCode\":\"A-1-13\",\"SignName\":\"禁止超车\",\"SignImageURL\":\"http://localhost:11834/WebFile/Maintain/rule/SignImage/WEB/A-1-13.png\",\"SignCount\":\"1\",\"SignRemark\":\"\"},{\"SignNumber\":\"b38\",\"SignCode\":\"A-1-14\",\"SignName\":\"解除禁止超车\",\"SignImageURL\":\"http://localhost:11834/WebFile/Maintain/rule/SignImage/WEB/A-1-14.png\",\"SignCount\":\"1\",\"SignRemark\":\"\"},{\"SignNumber\":\"b42\",\"SignCode\":\"A-3-1\",\"SignName\":\"交通锥\",\"SignImageURL\":\"http://localhost:11834/WebFile/Maintain/rule/SignImage/WEB/A-3-1.png\",\"SignCount\":\"367\",\"SignRemark\":\"\"},{\"SignNumber\":\"b47\",\"SignCode\":\"A-3-6\",\"SignName\":\"附设警示灯的路栏\",\"SignImageURL\":\"http://localhost:11834/WebFile/Maintain/rule/SignImage/WEB/A-3-6.png\",\"SignCount\":\"1\",\"SignRemark\":\"\"},{\"SignNumber\":\"b54\",\"SignCode\":\"A-3-11\",\"SignName\":\"警示频闪灯\",\"SignImageURL\":\"http://localhost:11834/WebFile/Maintain/rule/SignImage/WEB/A-3-11.png\",\"SignCount\":\"1\",\"SignRemark\":\"\"}],\"Table3Count\":\"14\",\"table3\":[{\"SignNumber\":\"b2\",\"SignCode\":\"A-1-2\",\"SignName\":\"施工距离标志\",\"SignImageURL\":\"http://localhost:11834/WebFile/Maintain/rule/SignImage/WEB/A-1-2.png\",\"StackNumber\":\"K0+-810\",\"SignRemark\":\"1600\"},{\"SignNumber\":\"b19\",\"SignCode\":\"A-1-11-1\",\"SignName\":\"限速100\",\"SignImageURL\":\"http://localhost:11834/WebFile/Maintain/rule/SignImage/WEB/A-1-11-1.png\",\"StackNumber\":\"K0+-10\",\"SignRemark\":\"\"},{\"SignNumber\":\"b2\",\"SignCode\":\"A-1-2\",\"SignName\":\"施工距离标志\",\"SignImageURL\":\"http://localhost:11834/WebFile/Maintain/rule/SignImage/WEB/A-1-2.png\",\"StackNumber\":\"K0+190\",\"SignRemark\":\"1600\"},{\"SignNumber\":\"b21\",\"SignCode\":\"A-1-11-3\",\"SignName\":\"限速80\",\"SignImageURL\":\"http://localhost:11834/WebFile/Maintain/rule/SignImage/WEB/A-1-11-3.png\",\"StackNumber\":\"K0+190\",\"SignRemark\":\"\"},{\"SignNumber\":\"b5\",\"SignCode\":\"A-1-5-1\",\"SignName\":\"两车道向右变一车道\",\"SignImageURL\":\"http://localhost:11834/WebFile/Maintain/rule/SignImage/WEB/A-1-5-1.png\",\"StackNumber\":\"K0+390\",\"SignRemark\":\"\"},{\"SignNumber\":\"b37\",\"SignCode\":\"A-1-13\",\"SignName\":\"禁止超车\",\"SignImageURL\":\"http://localhost:11834/WebFile/Maintain/rule/SignImage/WEB/A-1-13.png\",\"StackNumber\":\"K0+390\",\"SignRemark\":\"\"},{\"SignNumber\":\"b54\",\"SignCode\":\"A-3-11\",\"SignName\":\"警示频闪灯\",\"SignImageURL\":\"http://localhost:11834/WebFile/Maintain/rule/SignImage/WEB/A-3-11.png\",\"StackNumber\":\"K0+390\",\"SignRemark\":\"\"},{\"SignNumber\":\"b42\",\"SignCode\":\"A-3-1\",\"SignName\":\"交通锥\",\"SignImageURL\":\"http://localhost:11834/WebFile/Maintain/rule/SignImage/WEB/A-3-1.png\",\"StackNumber\":\"K0+790\",\"SignRemark\":\"\"},{\"SignNumber\":\"b14\",\"SignCode\":\"A-1-7-2\",\"SignName\":\"向右导向\",\"SignImageURL\":\"http://localhost:11834/WebFile/Maintain/rule/SignImage/WEB/A-1-7-2.png\",\"StackNumber\":\"K0+885\",\"SignRemark\":\"\"},{\"SignNumber\":\"b47\",\"SignCode\":\"A-3-6\",\"SignName\":\"附设警示灯的路栏\",\"SignImageURL\":\"http://localhost:11834/WebFile/Maintain/rule/SignImage/WEB/A-3-6.png\",\"StackNumber\":\"K0+980\",\"SignRemark\":\"\"},{\"SignNumber\":\"b3\",\"SignCode\":\"A-1-3\",\"SignName\":\"施工长度标志\",\"SignImageURL\":\"http://localhost:11834/WebFile/Maintain/rule/SignImage/WEB/A-1-3.png\",\"StackNumber\":\"K0+980\",\"SignRemark\":\"1320\"},{\"SignNumber\":\"b42\",\"SignCode\":\"A-3-1\",\"SignName\":\"交通锥\",\"SignImageURL\":\"http://localhost:11834/WebFile/Maintain/rule/SignImage/WEB/A-3-1.png\",\"StackNumber\":\"K2+330\",\"SignRemark\":\"\"},{\"SignNumber\":\"b30\",\"SignCode\":\"A-1-12-3\",\"SignName\":\"解除限速80\",\"SignImageURL\":\"http://localhost:11834/WebFile/Maintain/rule/SignImage/WEB/A-1-12-3.png\",\"StackNumber\":\"K2+360\",\"SignRemark\":\"\"},{\"SignNumber\":\"b38\",\"SignCode\":\"A-1-14\",\"SignName\":\"解除禁止超车\",\"SignImageURL\":\"http://localhost:11834/WebFile/Maintain/rule/SignImage/WEB/A-1-14.png\",\"StackNumber\":\"K2+360\",\"SignRemark\":\"\"}]}";
-//
-//        Gson gson = new Gson();
-//        PlanDetailModel res = gson.fromJson(mock, PlanDetailModel.class);
-//
-//        notifyMsg(handler, MSG_QUERY_PROJECT_DETAIL_SUCCESS, res);
-//
-//        return true;
-
-
-        String url = serverBaseUrl + "/Maintain/APP.ashx?Type=GetSchemeDetail";
-        BGRequest req = new BGRequest() {
-            @Override
-            public void success(MsgResponseBase model) {
-                notifyMsg(handler, MSG_QUERY_PROJECT_DETAIL_SUCCESS, model);
-            }
-
-            @Override
-            public void failed(MsgResponseBase model) {
-                notifyMsg(handler, MSG_QUERY_PROJECT_DETAIL_FAILED, model);
-            }
-        };
-        return req.addParam("Token", getLoginModel().getToken())
-                .addParam("ProjectID", ProjectID)
-                .send(url, PlanDetailModel.class);
-    }
-
-    public boolean sendProjectDetailQuery(final String ProjectID, final Handler handler) {
-        if (getLoginModel() == null || !getLoginModel().isLoginSuccess()) {
-            return false;
-        }
-
-        if (ProjectID.length() == 0) {
+        if (getLoginModel().getProjectID().length() == 0) {
             return false;
         }
 
@@ -401,11 +320,11 @@ public class MainService {
             @Override
             public void run() {
                 try {
-                    String url = serverBaseUrl + "/Maintain/APP.ashx?Type=GetProjectDetail";
+                    String url = serverBaseUrl + "/APP.ashx?Type=GetUnitProjectList";
 
                     FormBody body = new FormBody.Builder()
                             .add("Token", getLoginModel().getToken())
-                            .add("ProjectID", ProjectID)
+                            .add("ProjectID", getLoginModel().getProjectID())
                             .build();
 
                     Request request = new Request.Builder()
@@ -421,21 +340,13 @@ public class MainService {
 
                         responseStr = responsePrevProcess(responseStr);
 
-                        //String mockStr = "{\"Status\":0,\"Msg\":\"OK\",\"ProjectName\":\"杭州到宁波\",\"LineName\":\"杭千高速\",\"ControlStartStack\":\"K0+-760\",\"ControlEndStack\":\"K2+720\",\"GZ1\":\"K1+100\",\"GZ1Lon\":\"\",\"GZ1Lat\":\"\",\"SchemeImage\":\"http://139.196.200.114:80/Maintain/rule/SchemeImage/1-12.png\",\"SignCount\":\"12\",\"items\":[{\"SignNumber\":\"b32\",\"SignName\":\"解除限速60\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-1-12-5.png\",\"StackNumber\":\"K0+-760\"},{\"SignNumber\":\"b38\",\"SignName\":\"解除禁止超车\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-1-14.png\",\"StackNumber\":\"K0+-760\"},{\"SignNumber\":\"b3\",\"SignName\":\"施工长度标志\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-1-3.png\",\"StackNumber\":\"K1+100\"},{\"SignNumber\":\"b47\",\"SignName\":\"附设警示灯的路栏\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-3-6.png\",\"StackNumber\":\"K1+100\"},{\"SignNumber\":\"b14\",\"SignName\":\"向右导向\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-1-7-2.png\",\"StackNumber\":\"K1+160\"},{\"SignNumber\":\"b5\",\"SignName\":\"两车道向右变一车道\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-1-5-1.png\",\"StackNumber\":\"K1+595\"},{\"SignNumber\":\"b36\",\"SignName\":\"解除限速20\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-1-12-9.png\",\"StackNumber\":\"K1+595\"},{\"SignNumber\":\"b50\",\"SignName\":\"夜间语音提示设施\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-3-9.png\",\"StackNumber\":\"K1+595\"},{\"SignNumber\":\"b54\",\"SignName\":\"警示频闪灯\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-3-11.png\",\"StackNumber\":\"K1+595\"},{\"SignNumber\":\"b23\",\"SignName\":\"限速60\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-1-11-5.png\",\"StackNumber\":\"K1+770\"},{\"SignNumber\":\"b21\",\"SignName\":\"限速80\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-1-11-3.png\",\"StackNumber\":\"K1+970\"},{\"SignNumber\":\"b2\",\"SignName\":\"施工距离标志\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-1-2.png\",\"StackNumber\":\"K2+720\"}]}";
+                        //responseStr = "{\"Status\":0,\"Msg\":\"OK\",\"ProjectName\":\"杭州到宁波\",\"LineName\":\"杭千高速\",\"ControlStartStack\":\"K0+-760\",\"ControlEndStack\":\"K2+720\",\"GZ1\":\"K1+100\",\"GZ1Lon\":\"\",\"GZ1Lat\":\"\",\"SchemeImage\":\"http://139.196.200.114:80/Maintain/rule/SchemeImage/1-12.png\",\"SignCount\":\"12\",\"items\":[{\"SignNumber\":\"b32\",\"SignName\":\"解除限速60\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-1-12-5.png\",\"StackNumber\":\"K0+-760\"},{\"SignNumber\":\"b38\",\"SignName\":\"解除禁止超车\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-1-14.png\",\"StackNumber\":\"K0+-760\"},{\"SignNumber\":\"b3\",\"SignName\":\"施工长度标志\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-1-3.png\",\"StackNumber\":\"K1+100\"},{\"SignNumber\":\"b47\",\"SignName\":\"附设警示灯的路栏\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-3-6.png\",\"StackNumber\":\"K1+100\"},{\"SignNumber\":\"b14\",\"SignName\":\"向右导向\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-1-7-2.png\",\"StackNumber\":\"K1+160\"},{\"SignNumber\":\"b5\",\"SignName\":\"两车道向右变一车道\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-1-5-1.png\",\"StackNumber\":\"K1+595\"},{\"SignNumber\":\"b36\",\"SignName\":\"解除限速20\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-1-12-9.png\",\"StackNumber\":\"K1+595\"},{\"SignNumber\":\"b50\",\"SignName\":\"夜间语音提示设施\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-3-9.png\",\"StackNumber\":\"K1+595\"},{\"SignNumber\":\"b54\",\"SignName\":\"警示频闪灯\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-3-11.png\",\"StackNumber\":\"K1+595\"},{\"SignNumber\":\"b23\",\"SignName\":\"限速60\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-1-11-5.png\",\"StackNumber\":\"K1+770\"},{\"SignNumber\":\"b21\",\"SignName\":\"限速80\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-1-11-3.png\",\"StackNumber\":\"K1+970\"},{\"SignNumber\":\"b2\",\"SignName\":\"施工距离标志\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-1-2.png\",\"StackNumber\":\"K2+720\"}]}";
                         Gson gson = new Gson();
-                        GetProjectDetailResponse res = gson.fromJson(responseStr, GetProjectDetailResponse.class);
+                        ProjectDetailModel res = gson.fromJson(responseStr, ProjectDetailModel.class);
 
                         if (res != null && res.isSuccess()) {
-                            // 更新数据
-                            ProjectModel detailModel = cachedProjects.get(ProjectID);
-                            if (detailModel == null) {
-                                detailModel = new ProjectModel();
-                                cachedProjects.put(ProjectID, detailModel);
-                            }
-                            detailModel.setDetail(res);
-
                             // 通知UI
-                            notifyMsg(handler, MSG_QUERY_PROJECT_DETAIL_SUCCESS);
+                            notifyMsg(handler, MSG_QUERY_PROJECT_DETAIL_SUCCESS, res);
                         }
                         else {
                             notifyMsg(handler, MSG_QUERY_PROJECT_DETAIL_FAILED);

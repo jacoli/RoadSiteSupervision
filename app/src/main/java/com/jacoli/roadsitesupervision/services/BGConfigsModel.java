@@ -101,13 +101,12 @@ public class BGConfigsModel implements Serializable {
             configsModel.setRememberUserName(true);
             configsModel.setRememberPassword(false);
             configsModel.setServerAddress("");
-            configsModel.setServerPort("80");
+            configsModel.setServerPort("8001");
         }
 
         __mainConfigModel = configsModel;
 
         return configsModel;
-
     }
 
     public String getServerPort() {
