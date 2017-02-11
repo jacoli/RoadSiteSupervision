@@ -111,4 +111,15 @@ public class ProjectDetailModel extends MsgResponseBase {
     public void setItems(List<SubProjectModel> items) {
         this.items = items;
     }
+
+    // apis
+    public SubProjectModel querySubProjectModelWithID(String ID) {
+        for (SubProjectModel subProjectModel : items) {
+            if (subProjectModel.getID().equals(ID)) {
+                return subProjectModel;
+            }
+        }
+
+        return null;
+    }
 }

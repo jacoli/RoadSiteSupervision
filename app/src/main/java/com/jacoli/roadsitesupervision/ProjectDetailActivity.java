@@ -1,24 +1,15 @@
 package com.jacoli.roadsitesupervision;
 
-import android.app.Activity;
-import android.content.Intent;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewDebug;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.CompoundButton;
-import android.widget.GridView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.jacoli.roadsitesupervision.services.ActiveSubProjectResp;
 import com.jacoli.roadsitesupervision.services.MainService;
 import com.jacoli.roadsitesupervision.services.ProjectDetailModel;
 import com.jacoli.roadsitesupervision.services.Utils;
@@ -66,7 +57,7 @@ public class ProjectDetailActivity extends CommonActivity {
         projectNameTextView.setText(projectName);
 
         FlowLayout flowLayout = (FlowLayout) findViewById(R.id.flow_layout);
-        for (ProjectDetailModel.SubProjectModel subProjectModel : model.getItems()) {
+        for (final ProjectDetailModel.SubProjectModel subProjectModel : model.getItems()) {
             Button button = new Button(this);
 
             int size = getResources().getDimensionPixelSize(R.dimen.project_detail_button_size);
@@ -79,27 +70,98 @@ public class ProjectDetailActivity extends CommonActivity {
 
             String text = "" + subProjectModel.getOrdinal();
             button.setText(text);
+
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    // TODO
+                    if (subProjectModel.getProgress() == 1 || subProjectModel.getProgress() == 2) {
+                        showSubProjectDetailActivity(subProjectModel);
+                    }
+                    else {
+                        if (subProjectModel.getPZStatus() == 2) {
+                            showSubProjectDetailActivity(subProjectModel);
+                        }
+                        else {
+                            AlertDialog.Builder builder = new AlertDialog.Builder(ProjectDetailActivity.this);
+                            //builder.setTitle("是否开始施工");
+                            builder.setMessage("是否开始施工，编号：" + subProjectModel.getOrdinal());
+
+                            builder.setPositiveButton("是", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int which) {
+                                    // TODO
+                                    MainService.getInstance().sendActiveSubProject(subProjectModel.getID(), handler);
+                                }
+                            });
+
+                            builder.setNegativeButton("否", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int which) {
+                                }
+                            });
+
+                            builder.create().show();
+                        }
+                    }
                 }
             });
 
-            if (subProjectModel.getProgress() == 1 || subProjectModel.getProgress() == 2) {
+            updateButtonWithStatus(button, subProjectModel.getProgress(), subProjectModel.getPZStatus());
+
+            button.setTag(subProjectModel.getID());
+
+            flowLayout.addView(button);
+        }
+
+        addBottomPaddingViewToFlowLayout(flowLayout);
+    }
+
+    // fix : flowlayout底部无法滑倒底，增加一个padding
+    private void addBottomPaddingViewToFlowLayout(FlowLayout layout) {
+        View view = new View(this);
+        int size = getResources().getDimensionPixelSize(R.dimen.project_detail_button_size);
+        FlowLayout.LayoutParams layoutParams = new FlowLayout.LayoutParams(size, size);
+        layoutParams.setNewLine(true);
+        layout.addView(view, layoutParams);
+    }
+
+    private void updateWithActiveSubProjectResp(ActiveSubProjectResp resp) {
+        if (resp == null) {
+            return;
+        }
+
+        // update model
+        ProjectDetailModel.SubProjectModel subProjectModel = model.querySubProjectModelWithID(resp.getID());
+        if (subProjectModel != null) {
+            subProjectModel.setProgress(resp.getProgress());
+            subProjectModel.setPZStatus(resp.getPZStatus());
+        }
+
+        // update view
+        FlowLayout flowLayout = (FlowLayout) findViewById(R.id.flow_layout);
+        Button button = (Button) flowLayout.findViewWithTag(resp.getID());
+        updateButtonWithStatus(button, resp.getProgress(), resp.getPZStatus());
+    }
+
+    private void updateButtonWithStatus(Button button, int Progress, int PZStatus) {
+        if (button != null) {
+            if (Progress == 1 || Progress == 2) {
                 button.setBackgroundColor(Color.GREEN);
             }
             else {
-                if (subProjectModel.getPZStatus() == 2) {
+                if (PZStatus == 2) {
                     button.setBackgroundColor(Color.RED);
                 }
                 else {
                     button.setBackgroundColor(Color.GRAY);
                 }
             }
-
-            flowLayout.addView(button);
         }
+    }
+
+    private void showSubProjectDetailActivity(ProjectDetailModel.SubProjectModel subProjectModel) {
+
+
     }
 
     @Override
@@ -113,18 +175,16 @@ public class ProjectDetailActivity extends CommonActivity {
             case MainService.MSG_QUERY_PROJECT_DETAIL_FAILED:
                 Toast.makeText(getBaseContext(), "获取项目详情失败", Toast.LENGTH_SHORT).show();
                 break;
-//            case MainService.MSG_GET_SIGN_CHECK_SUCCESS:
-//                MyToast.showMessage(getBaseContext(), "获取检查标志成功");
-//                updateSignItemsViews();
-//                updateSensorItemsViews();
-//                curScanedSignCode = null;
-//                break;
-//            case MainService.MSG_GET_SIGN_CHECK_FAILED:
-//                Toast.makeText(getBaseContext(), "获取检查标志失败", Toast.LENGTH_SHORT).show();
-//                curScanedSignCode = null;
-//                break;
-//            default:
-//                break;
+            case MainService.MSG_ACTIVE_SUB_PROJECT_SUCCESS:
+                MyToast.showMessage(getBaseContext(), "激活工程成功");
+                ActiveSubProjectResp resp = (ActiveSubProjectResp) obj;
+                updateWithActiveSubProjectResp(resp);
+                break;
+            case MainService.MSG_ACTIVE_SUB_PROJECT_FAILED:
+                Toast.makeText(getBaseContext(), "激活工程失败", Toast.LENGTH_SHORT).show();
+                break;
+            default:
+                break;
         }
     }
 }

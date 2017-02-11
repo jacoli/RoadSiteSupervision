@@ -32,8 +32,8 @@ public class MainService {
     public static final int MSG_QUERY_PROJECTS_FAILED = 0x2002;
     public static final int MSG_QUERY_PROJECT_DETAIL_SUCCESS = 0x3001;
     public static final int MSG_QUERY_PROJECT_DETAIL_FAILED = 0x3002;
-    public static final int MSG_UPDATE_PROJECT_DATUM_SUCCESS = 0x4001;
-    public static final int MSG_UPDATE_PROJECT_DATUM_FAILED = 0x4002;
+    public static final int MSG_ACTIVE_SUB_PROJECT_SUCCESS = 0x4001;
+    public static final int MSG_ACTIVE_SUB_PROJECT_FAILED = 0x4002;
     public static final int MSG_SEND_SIGN_CHECK_SUCCESS = 0x5001;
     public static final int MSG_SEND_SIGN_CHECK_FAILED = 0x5002;
     public static final int MSG_GET_SIGN_CHECK_SUCCESS = 0x6001;
@@ -366,7 +366,7 @@ public class MainService {
         return true;
     }
 
-    public boolean sendUpdateProjectDatum(final String ProjectID, final String longitude, final String latitude, final Handler handler) {
+    public boolean sendActiveSubProject(final String ProjectID, final Handler handler) {
         if (getLoginModel() == null || !getLoginModel().isLoginSuccess()) {
             return false;
         }
@@ -375,22 +375,16 @@ public class MainService {
             return false;
         }
 
-        if (longitude.length() == 0 || latitude.length() == 0) {
-            return false;
-        }
-
         Runnable networkTask = new Runnable() {
 
             @Override
             public void run() {
                 try {
-                    String url = serverBaseUrl + "/Maintain/APP.ashx?Type=UpdateProjectDatum";
+                    String url = serverBaseUrl + "/APP.ashx?Type=ActiveUnitProject";
 
                     FormBody body = new FormBody.Builder()
                             .add("Token", getLoginModel().getToken())
-                            .add("ProjectID", ProjectID)
-                            .add("Lon", longitude)
-                            .add("Lat", latitude)
+                            .add("UnitProjectID", ProjectID)
                             .build();
 
                     Request request = new Request.Builder()
@@ -407,30 +401,23 @@ public class MainService {
                         responseStr = responsePrevProcess(responseStr);
 
                         Gson gson = new Gson();
-                        MsgResponseBase res = gson.fromJson(responseStr, MsgResponseBase.class);
+                        ActiveSubProjectResp res = gson.fromJson(responseStr, ActiveSubProjectResp.class);
 
                         if (res != null && res.isSuccess()) {
-                            // 更新数据
-                            ProjectModel detailModel = cachedProjects.get(ProjectID);
-                            if (detailModel != null && detailModel.getDetail() != null) {
-                                detailModel.getDetail().setGZ1Lat(latitude);
-                                detailModel.getDetail().setGZ1Lon(longitude);
-                                notifyMsg(handler, MSG_UPDATE_PROJECT_DATUM_SUCCESS);
-                            }
-                            else {
-                                notifyMsg(handler, MSG_UPDATE_PROJECT_DATUM_FAILED);
-                            }
+                            res.setID(ProjectID);
+
+                            notifyMsg(handler, MSG_ACTIVE_SUB_PROJECT_SUCCESS, res);
                         }
                         else {
-                            notifyMsg(handler, MSG_UPDATE_PROJECT_DATUM_FAILED);
+                            notifyMsg(handler, MSG_ACTIVE_SUB_PROJECT_FAILED);
                         }
                     }
                     else {
-                        notifyMsg(handler, MSG_UPDATE_PROJECT_DATUM_FAILED);
+                        notifyMsg(handler, MSG_ACTIVE_SUB_PROJECT_FAILED);
                     }
                 }
                 catch (IOException e) {
-                    notifyMsg(handler, MSG_UPDATE_PROJECT_DATUM_FAILED);
+                    notifyMsg(handler, MSG_ACTIVE_SUB_PROJECT_FAILED);
                 }
             }
         };
