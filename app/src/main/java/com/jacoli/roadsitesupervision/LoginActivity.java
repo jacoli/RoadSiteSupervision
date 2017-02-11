@@ -169,33 +169,12 @@ public class LoginActivity extends CommonActivity {
             }
 
             MainService.getInstance().logout();
-
-            persistAllExplores();
         }
 
         EditText usernameEdit = (EditText)findViewById(R.id.usernameEdit);
         EditText passwordEdit = (EditText)findViewById(R.id.passwordEdit);
         usernameEdit.setText(configsModel.getUserName());
         passwordEdit.setText(configsModel.getPassword());
-    }
-
-    private boolean persistAllExplores() {
-        boolean ret = false;
-        // 数据模型持久化
-        try {
-            List<ExploreModel> list = MainService.getInstance().getExploreList();
-            FileOutputStream stream = this.openFileOutput("explore_list.s", MODE_PRIVATE);
-            ObjectOutputStream oos = new ObjectOutputStream(stream);
-            oos.writeObject(list);
-            oos.close();
-            stream.close();
-            ret = true;
-        }
-        catch (Exception e) {
-            Log.e("", e.toString());
-        }
-
-        return ret;
     }
 
     @Override

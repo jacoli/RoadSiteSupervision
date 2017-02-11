@@ -37,7 +37,8 @@
         <activity android:name=".CommonActivity" />
         <activity android:name=".ProjectDetailActivity" />
         <activity android:name=".ComponetDetailActivity" />
-        <activity android:name=".SideStationDetailActivity"></activity>
+        <activity android:name=".SideStationDetailActivity" />
+        <activity android:name=".SubProjectDetailActivity"></activity>
     </application>
 
 </manifest>

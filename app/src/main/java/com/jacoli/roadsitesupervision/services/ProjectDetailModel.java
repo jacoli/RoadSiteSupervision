@@ -9,8 +9,8 @@ import java.util.List;
 // 项目详情
 public class ProjectDetailModel extends MsgResponseBase {
 
-    // 子工程
-    public class SubProjectModel {
+    // 单位工程
+    public class UnitProjectModel {
 
         // 构件ID
         private String ID;
@@ -93,8 +93,8 @@ public class ProjectDetailModel extends MsgResponseBase {
     // 项目名称
     private String UnitProjectName;
 
-    // 子工程列表
-    private List<SubProjectModel> items;
+    // 单位工程列表
+    private List<UnitProjectModel> items;
 
     public String getUnitProjectName() {
         return UnitProjectName;
@@ -104,19 +104,19 @@ public class ProjectDetailModel extends MsgResponseBase {
         UnitProjectName = unitProjectName;
     }
 
-    public List<SubProjectModel> getItems() {
+    public List<UnitProjectModel> getItems() {
         return items;
     }
 
-    public void setItems(List<SubProjectModel> items) {
+    public void setItems(List<UnitProjectModel> items) {
         this.items = items;
     }
 
     // apis
-    public SubProjectModel querySubProjectModelWithID(String ID) {
-        for (SubProjectModel subProjectModel : items) {
-            if (subProjectModel.getID().equals(ID)) {
-                return subProjectModel;
+    public UnitProjectModel queryUnitProjectModelWithID(String ID) {
+        for (UnitProjectModel unitProjectModel : items) {
+            if (unitProjectModel.getID().equals(ID)) {
+                return unitProjectModel;
             }
         }
 

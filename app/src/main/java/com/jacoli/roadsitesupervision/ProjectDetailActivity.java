@@ -9,7 +9,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.jacoli.roadsitesupervision.services.ActiveSubProjectResp;
+import com.jacoli.roadsitesupervision.services.ActiveUnitProjectResp;
 import com.jacoli.roadsitesupervision.services.MainService;
 import com.jacoli.roadsitesupervision.services.ProjectDetailModel;
 import com.jacoli.roadsitesupervision.services.Utils;
@@ -57,7 +57,7 @@ public class ProjectDetailActivity extends CommonActivity {
         projectNameTextView.setText(projectName);
 
         FlowLayout flowLayout = (FlowLayout) findViewById(R.id.flow_layout);
-        for (final ProjectDetailModel.SubProjectModel subProjectModel : model.getItems()) {
+        for (final ProjectDetailModel.UnitProjectModel unitProjectModel : model.getItems()) {
             Button button = new Button(this);
 
             int size = getResources().getDimensionPixelSize(R.dimen.project_detail_button_size);
@@ -68,29 +68,29 @@ public class ProjectDetailActivity extends CommonActivity {
             layoutParams.setMargins(margin_h, margin_v, margin_h, margin_v);
             button.setLayoutParams(layoutParams);
 
-            String text = "" + subProjectModel.getOrdinal();
+            String text = "" + unitProjectModel.getOrdinal();
             button.setText(text);
 
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (subProjectModel.getProgress() == 1 || subProjectModel.getProgress() == 2) {
-                        showSubProjectDetailActivity(subProjectModel);
+                    if (unitProjectModel.getProgress() == 1 || unitProjectModel.getProgress() == 2) {
+                        showSubProjectDetailActivity(unitProjectModel);
                     }
                     else {
-                        if (subProjectModel.getPZStatus() == 2) {
-                            showSubProjectDetailActivity(subProjectModel);
+                        if (unitProjectModel.getPZStatus() == 2) {
+                            showSubProjectDetailActivity(unitProjectModel);
                         }
                         else {
                             AlertDialog.Builder builder = new AlertDialog.Builder(ProjectDetailActivity.this);
                             //builder.setTitle("是否开始施工");
-                            builder.setMessage("是否开始施工，编号：" + subProjectModel.getOrdinal());
+                            builder.setMessage("是否开始施工，编号：" + unitProjectModel.getOrdinal());
 
                             builder.setPositiveButton("是", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int which) {
                                     // TODO
-                                    MainService.getInstance().sendActiveSubProject(subProjectModel.getID(), handler);
+                                    MainService.getInstance().sendActiveUnitProject(unitProjectModel.getID(), handler);
                                 }
                             });
 
@@ -106,9 +106,9 @@ public class ProjectDetailActivity extends CommonActivity {
                 }
             });
 
-            updateButtonWithStatus(button, subProjectModel.getProgress(), subProjectModel.getPZStatus());
+            updateButtonWithStatus(button, unitProjectModel.getProgress(), unitProjectModel.getPZStatus());
 
-            button.setTag(subProjectModel.getID());
+            button.setTag(unitProjectModel.getID());
 
             flowLayout.addView(button);
         }
@@ -125,16 +125,16 @@ public class ProjectDetailActivity extends CommonActivity {
         layout.addView(view, layoutParams);
     }
 
-    private void updateWithActiveSubProjectResp(ActiveSubProjectResp resp) {
+    private void updateWithActiveUnitProjectResp(ActiveUnitProjectResp resp) {
         if (resp == null) {
             return;
         }
 
         // update model
-        ProjectDetailModel.SubProjectModel subProjectModel = model.querySubProjectModelWithID(resp.getID());
-        if (subProjectModel != null) {
-            subProjectModel.setProgress(resp.getProgress());
-            subProjectModel.setPZStatus(resp.getPZStatus());
+        ProjectDetailModel.UnitProjectModel unitProjectModel = model.queryUnitProjectModelWithID(resp.getID());
+        if (unitProjectModel != null) {
+            unitProjectModel.setProgress(resp.getProgress());
+            unitProjectModel.setPZStatus(resp.getPZStatus());
         }
 
         // update view
@@ -159,7 +159,7 @@ public class ProjectDetailActivity extends CommonActivity {
         }
     }
 
-    private void showSubProjectDetailActivity(ProjectDetailModel.SubProjectModel subProjectModel) {
+    private void showSubProjectDetailActivity(ProjectDetailModel.UnitProjectModel unitProjectModel) {
 
 
     }
@@ -175,12 +175,12 @@ public class ProjectDetailActivity extends CommonActivity {
             case MainService.MSG_QUERY_PROJECT_DETAIL_FAILED:
                 Toast.makeText(getBaseContext(), "获取项目详情失败", Toast.LENGTH_SHORT).show();
                 break;
-            case MainService.MSG_ACTIVE_SUB_PROJECT_SUCCESS:
+            case MainService.MSG_ACTIVE_UNIT_PROJECT_SUCCESS:
                 MyToast.showMessage(getBaseContext(), "激活工程成功");
-                ActiveSubProjectResp resp = (ActiveSubProjectResp) obj;
-                updateWithActiveSubProjectResp(resp);
+                ActiveUnitProjectResp resp = (ActiveUnitProjectResp) obj;
+                updateWithActiveUnitProjectResp(resp);
                 break;
-            case MainService.MSG_ACTIVE_SUB_PROJECT_FAILED:
+            case MainService.MSG_ACTIVE_UNIT_PROJECT_FAILED:
                 Toast.makeText(getBaseContext(), "激活工程失败", Toast.LENGTH_SHORT).show();
                 break;
             default:

@@ -3,10 +3,10 @@ package com.jacoli.roadsitesupervision.services;
 import java.util.List;
 
 /**
- * Created by lichuange on 17/2/10.
+ * Created by lichuange on 17/2/11.
  */
 
-public class SubProjectsResponse extends MsgResponseBase {
+public class UnitProjectModel extends MsgResponseBase {
 
     // 构件
     public class ComponentModel {
@@ -89,17 +89,17 @@ public class SubProjectsResponse extends MsgResponseBase {
         }
     }
 
-    // 子工程
+    // 分部分项工程
     public class SubProjectModel {
 
         // 序号
         private int Ordinal;
 
-        // 子工程名称
+        // 分部分项工程名称
         private String Name;
 
         // 构件列表数组
-        private List<ComponentModel> Components;
+        private List<UnitProjectModel.ComponentModel> Components;
 
         public int getOrdinal() {
             return Ordinal;
@@ -117,23 +117,23 @@ public class SubProjectsResponse extends MsgResponseBase {
             Name = name;
         }
 
-        public List<ComponentModel> getComponents() {
+        public List<UnitProjectModel.ComponentModel> getComponents() {
             return Components;
         }
 
-        public void setComponents(List<ComponentModel> components) {
+        public void setComponents(List<UnitProjectModel.ComponentModel> components) {
             Components = components;
         }
     }
 
-    // 子工程列表
-    private List<SubProjectModel> SubProjects;
+    // 分部分项工程列表
+    private List<UnitProjectModel.SubProjectModel> SubProjects;
 
-    public List<SubProjectModel> getSubProjects() {
+    public List<UnitProjectModel.SubProjectModel> getSubProjects() {
         return SubProjects;
     }
 
-    public void setSubProjects(List<SubProjectModel> subProjects) {
+    public void setSubProjects(List<UnitProjectModel.SubProjectModel> subProjects) {
         SubProjects = subProjects;
     }
 }

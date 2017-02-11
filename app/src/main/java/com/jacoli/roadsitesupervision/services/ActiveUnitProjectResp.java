@@ -4,7 +4,7 @@ package com.jacoli.roadsitesupervision.services;
  * Created by lichuange on 17/2/11.
  */
 
-public class ActiveSubProjectResp extends MsgResponseBase {
+public class ActiveUnitProjectResp extends MsgResponseBase {
     // 构件ID
     private String ID;
 
