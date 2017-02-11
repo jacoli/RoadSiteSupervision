@@ -115,6 +115,7 @@ public class UnitProjectDetailActivity extends CommonActivity {
                             }
                             else {
                                 AlertDialog.Builder builder = new AlertDialog.Builder(UnitProjectDetailActivity.this);
+                                builder.setTitle("提示");
                                 builder.setMessage("是否开始施工，构件名称：" + componentModel.getName());
 
                                 builder.setPositiveButton("是", new DialogInterface.OnClickListener() {

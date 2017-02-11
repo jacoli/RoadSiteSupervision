@@ -6,4 +6,8 @@
     <dimen name="project_detail_button_margin_h">5dp</dimen>
     <dimen name="project_detail_button_margin_v">10dp</dimen>
     <dimen name="project_detail_button_size">48dp</dimen>
+
+    <dimen name="pz_button_horizontal_margin">10dp</dimen>
+    <dimen name="pz_button_vertical_margin">20dp</dimen>
+    <dimen name="pz_button_size">128dp</dimen>
 </resources>
