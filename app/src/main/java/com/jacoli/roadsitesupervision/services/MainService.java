@@ -28,8 +28,8 @@ public class MainService {
     public static final int MSG_ACTIVE_UNIT_PROJECT_FAILED = 0x4002;
     public static final int MSG_QUERY_UNIT_PROJECT_DETAIL_SUCCESS = 0x5001;
     public static final int MSG_QUERY_UNIT_PROJECT_DETAIL_FAILED = 0x5002;
-    public static final int MSG_GET_SIGN_CHECK_SUCCESS = 0x6001;
-    public static final int MSG_GET_SIGN_CHECK_FAILED = 0x6002;
+    public static final int MSG_ACTIVE_COMPONENT_SUCCESS = 0x6001;
+    public static final int MSG_ACTIVE_COMPONENT_FAILED = 0x6002;
     public static final int MSG_DELETE_SENSOR_CHECK_SUCCESS = 0x7001;
     public static final int MSG_DELETE_SENSOR_CHECK_FAILED = 0x7002;
     public static final int MSG_SEND_EXPLORE_SUCCESS = 0x8001;
@@ -408,6 +408,66 @@ public class MainService {
                 }
                 catch (IOException e) {
                     notifyMsg(handler, MSG_QUERY_UNIT_PROJECT_DETAIL_FAILED);
+                }
+            }
+        };
+
+        new Thread(networkTask).start();
+        return true;
+    }
+
+    // 激活构件
+    public boolean sendActiveComponent(final String id, final Handler handler) {
+        if (getLoginModel() == null || !getLoginModel().isLoginSuccess()) {
+            return false;
+        }
+
+        if (id.length() == 0) {
+            return false;
+        }
+
+        Runnable networkTask = new Runnable() {
+
+            @Override
+            public void run() {
+                try {
+                    String url = serverBaseUrl + "/APP.ashx?Type=ActiveComponent";
+
+                    FormBody body = new FormBody.Builder()
+                            .add("Token", getLoginModel().getToken())
+                            .add("ComponentID", id)
+                            .build();
+
+                    Request request = new Request.Builder()
+                            .url(url)
+                            .post(body)
+                            .build();
+
+                    Response response = httpClient.newCall(request).execute();
+                    if (response.isSuccessful()) {
+                        String responseStr = response.body().string();
+
+                        Log.i("MainService", responseStr);
+
+                        responseStr = responsePrevProcess(responseStr);
+
+                        Gson gson = new Gson();
+                        ActiveComponetResp res = gson.fromJson(responseStr, ActiveComponetResp.class);
+
+                        if (res != null && res.isSuccess()) {
+                            res.setID(id);
+                            notifyMsg(handler, MSG_ACTIVE_COMPONENT_SUCCESS, res);
+                        }
+                        else {
+                            notifyMsg(handler, MSG_ACTIVE_COMPONENT_FAILED);
+                        }
+                    }
+                    else {
+                        notifyMsg(handler, MSG_ACTIVE_COMPONENT_FAILED);
+                    }
+                }
+                catch (IOException e) {
+                    notifyMsg(handler, MSG_ACTIVE_COMPONENT_FAILED);
                 }
             }
         };
