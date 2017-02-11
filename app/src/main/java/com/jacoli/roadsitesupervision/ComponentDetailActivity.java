@@ -78,7 +78,7 @@ public class ComponentDetailActivity extends CommonActivity {
             button.setLayoutParams(layoutParams);
 
             button.setPadding(5,5,5,5);
-            button.setText(pzModel.getPZName() + "四季豆佛是东方红是东方红速度哈佛");
+            button.setText(pzModel.getPZName());
 
             button.setOnClickListener(new View.OnClickListener() {
                 @Override

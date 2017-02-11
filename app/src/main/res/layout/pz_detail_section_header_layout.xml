@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView
+    android:layout_width="match_parent"
+    android:layout_height="48dp"
+    android:textSize="24sp"
+    android:layout_marginStart="24dp"
+    android:id="@+id/textView"
+    android:text="section_header"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    />
