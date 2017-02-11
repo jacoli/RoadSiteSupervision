@@ -27,7 +27,7 @@ public class UnitProjectModel extends MsgResponseBase {
         private int Progress;
 
         // 旁站状态，0表示未旁站，2表示旁站完成
-        private String PZStatus;
+        private int PZStatus;
 
         // 抽检状态，0表示抽检未完成，2表示抽检完成
         private String CheckStatus;
@@ -72,11 +72,11 @@ public class UnitProjectModel extends MsgResponseBase {
             Progress = progress;
         }
 
-        public String getPZStatus() {
+        public int getPZStatus() {
             return PZStatus;
         }
 
-        public void setPZStatus(String PZStatus) {
+        public void setPZStatus(int PZStatus) {
             this.PZStatus = PZStatus;
         }
 
@@ -135,5 +135,18 @@ public class UnitProjectModel extends MsgResponseBase {
 
     public void setSubProjects(List<UnitProjectModel.SubProjectModel> subProjects) {
         SubProjects = subProjects;
+    }
+
+    // apis
+    public UnitProjectModel.ComponentModel queryComponentModelWithID(String ID) {
+        for (SubProjectModel subProjectModel : SubProjects) {
+            for (ComponentModel componentModel : subProjectModel.getComponents()) {
+                if (componentModel.getID().equals(ID)) {
+                    return componentModel;
+                }
+            }
+        }
+
+        return null;
     }
 }

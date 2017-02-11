@@ -2,6 +2,7 @@ package com.jacoli.roadsitesupervision;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
@@ -53,7 +54,7 @@ public class ProjectDetailActivity extends CommonActivity {
         }
 
         TextView projectNameTextView = (TextView) findViewById(R.id.project_name_text);
-        String projectName = "单位工程：" + model.getUnitProjectName();
+        String projectName = model.getUnitProjectName();
         projectNameTextView.setText(projectName);
 
         FlowLayout flowLayout = (FlowLayout) findViewById(R.id.flow_layout);
@@ -68,28 +69,27 @@ public class ProjectDetailActivity extends CommonActivity {
             layoutParams.setMargins(margin_h, margin_v, margin_h, margin_v);
             button.setLayoutParams(layoutParams);
 
-            String text = "" + unitProjectModel.getOrdinal();
-            button.setText(text);
+            button.setText(unitProjectModel.getName());
 
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (unitProjectModel.getProgress() == 1 || unitProjectModel.getProgress() == 2) {
-                        showSubProjectDetailActivity(unitProjectModel);
+
+                    if (unitProjectModel.getPZStatus() == 2) {
+                        showUnitProjectDetailActivity(unitProjectModel);
                     }
                     else {
-                        if (unitProjectModel.getPZStatus() == 2) {
-                            showSubProjectDetailActivity(unitProjectModel);
+                        if (unitProjectModel.getProgress() == 1 || unitProjectModel.getProgress() == 2) {
+                            showUnitProjectDetailActivity(unitProjectModel);
                         }
                         else {
                             AlertDialog.Builder builder = new AlertDialog.Builder(ProjectDetailActivity.this);
                             //builder.setTitle("是否开始施工");
-                            builder.setMessage("是否开始施工，编号：" + unitProjectModel.getOrdinal());
+                            builder.setMessage("是否开始施工，工程名称：" + unitProjectModel.getName());
 
                             builder.setPositiveButton("是", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int which) {
-                                    // TODO
                                     MainService.getInstance().sendActiveUnitProject(unitProjectModel.getID(), handler);
                                 }
                             });
@@ -145,12 +145,12 @@ public class ProjectDetailActivity extends CommonActivity {
 
     private void updateButtonWithStatus(Button button, int Progress, int PZStatus) {
         if (button != null) {
-            if (Progress == 1 || Progress == 2) {
-                button.setBackgroundColor(Color.GREEN);
+            if (PZStatus == 2) {
+                button.setBackgroundColor(Color.RED);
             }
             else {
-                if (PZStatus == 2) {
-                    button.setBackgroundColor(Color.RED);
+                if (Progress == 1 || Progress == 2) {
+                    button.setBackgroundColor(Color.GREEN);
                 }
                 else {
                     button.setBackgroundColor(Color.GRAY);
@@ -159,9 +159,10 @@ public class ProjectDetailActivity extends CommonActivity {
         }
     }
 
-    private void showSubProjectDetailActivity(ProjectDetailModel.UnitProjectModel unitProjectModel) {
-
-
+    private void showUnitProjectDetailActivity(ProjectDetailModel.UnitProjectModel unitProjectModel) {
+        Intent intent = new Intent(this ,UnitProjectDetailActivity.class);
+        intent.putExtra("id", unitProjectModel.getID());
+        startActivity(intent);
     }
 
     @Override
