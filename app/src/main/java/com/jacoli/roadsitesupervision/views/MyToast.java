@@ -13,13 +13,15 @@ public class MyToast {
     }
 
     public static void showMessage(Context context, String message) {
-        if (MyToast.getInstance().getToast() != null) {
-            MyToast.getInstance().getToast().cancel();
-        }
+        Toast.makeText(context,message, Toast.LENGTH_SHORT).show();
 
-        Toast toast = Toast.makeText(context,message, Toast.LENGTH_SHORT);
-        toast.show();
-        MyToast.getInstance().setToast(toast);
+//        if (MyToast.getInstance().getToast() != null) {
+//            MyToast.getInstance().getToast().cancel();
+//        }
+//
+//        Toast toast = Toast.makeText(context,message, Toast.LENGTH_SHORT);
+//        toast.show();
+//        MyToast.getInstance().setToast(toast);
     }
 
     private Toast toast;

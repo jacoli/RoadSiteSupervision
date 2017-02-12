@@ -1,5 +1,7 @@
 package com.jacoli.roadsitesupervision;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -40,6 +42,12 @@ public class PZDetailActivity extends CommonActivity {
         createTitleBar();
         titleBar.setLeftText("返回");
         titleBar.setTitle("施工旁站");
+        titleBar.setLeftClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
 
         Intent intent = getIntent();
         modelID = intent.getStringExtra("id");
@@ -70,6 +78,28 @@ public class PZDetailActivity extends CommonActivity {
     }
 
     @Override
+    public void onBackPressed() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("提示");
+        builder.setMessage("旁站数据可能未保存，是否仍要返回上一页");
+
+        builder.setPositiveButton("返回上一页", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int which) {
+                finish();
+            }
+        });
+
+        builder.setNegativeButton("留在当前页面", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int which) {
+            }
+        });
+
+        builder.create().show();
+    }
+
+    @Override
     public void onResponse(int msgCode, Object obj) {
         switch (msgCode) {
             case MainService.MSG_QUERY_OPERATOR_LIST_SUCCESS:
@@ -90,6 +120,7 @@ public class PZDetailActivity extends CommonActivity {
                 break;
             case MainService.MSG_SUBMIT_PZ_DETAIL_SUCCESS:
                 MyToast.showMessage(getBaseContext(), "提交旁站详情成功");
+                onSubmitSuccess();
                 break;
             case MainService.MSG_SUBMIT_PZ_DETAIL_FAILED:
                 Toast.makeText(getBaseContext(), "提交旁站详情失败", Toast.LENGTH_SHORT).show();
@@ -97,6 +128,27 @@ public class PZDetailActivity extends CommonActivity {
             default:
                 break;
         }
+    }
+
+    public void onSubmitSuccess() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("提示");
+        builder.setMessage("提交旁站数据成功，是否留在当前页面");
+
+        builder.setPositiveButton("是", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int which) {
+            }
+        });
+
+        builder.setNegativeButton("否", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int which) {
+                finish();
+            }
+        });
+
+        builder.create().show();
     }
 
     public void submit() {

@@ -59,14 +59,9 @@ public class CommonActivity extends Activity {
 
     public void createTitleBar() {
         titleBar = (TitleBar) findViewById(R.id.title_bar);
-
-        //titleBar.setImmersive(true);
-
-        //titleBar.setBackgroundColor(CommonActivity.getColor(getBaseContext(), R.color.bg_title_bar));
-
         titleBar.setBackgroundColor(ContextCompat.getColor(getBaseContext(), R.color.bg_title_bar));
 
-        //titleBar.setLeftImageResource(R.mipmap.back_green);
+        //titleBar.setLeftImageResource(R.drawable.ic_back_arrow);
         titleBar.setLeftText("返回");
         titleBar.setLeftTextColor(Color.WHITE);
         titleBar.setLeftClickListener(new View.OnClickListener() {
