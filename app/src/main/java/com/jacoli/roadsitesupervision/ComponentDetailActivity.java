@@ -23,6 +23,7 @@ import org.apmem.tools.layouts.FlowLayout;
 public class ComponentDetailActivity extends CommonActivity {
 
     private ComponentDetailModel model;
+    private String name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +42,11 @@ public class ComponentDetailActivity extends CommonActivity {
         else {
             Toast.makeText(getBaseContext(), "获取构件详情失败", Toast.LENGTH_SHORT).show();
         }
+
+        name = intent.getStringExtra("name");
+        String text = name + " 旁站情况:";
+        TextView textView = (TextView) findViewById(R.id.project_name_text);
+        textView.setText(text);
     }
 
     @Override
@@ -121,6 +127,8 @@ public class ComponentDetailActivity extends CommonActivity {
     private void showPZDetailActivity(ComponentDetailModel.PZModel pzModel) {
         Intent intent = new Intent(this ,PZDetailActivity.class);
         intent.putExtra("id", pzModel.getID());
+        intent.putExtra("name", pzModel.getPZName());
+        intent.putExtra("project_name", name);
         startActivity(intent);
     }
 }

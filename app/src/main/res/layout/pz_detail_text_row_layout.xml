@@ -14,8 +14,9 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:minHeight="200dp"
+        android:minHeight="100dp"
         android:background="@drawable/bg_editview"
+        android:gravity="top"
         android:padding="5dp"
         android:id="@+id/edit_text"
         android:hint="请输入"/>

@@ -43,6 +43,10 @@ public class UnitProjectDetailActivity extends CommonActivity {
         else {
             Toast.makeText(getBaseContext(), "获取单位工程详情失败", Toast.LENGTH_SHORT).show();
         }
+
+        String name = intent.getStringExtra("name") + " 旁站情况:";
+        TextView textView = (TextView) findViewById(R.id.project_name_text);
+        textView.setText(name);
     }
 
     @Override
@@ -76,7 +80,7 @@ public class UnitProjectDetailActivity extends CommonActivity {
 
         FlowLayout flowLayout = (FlowLayout) findViewById(R.id.flow_layout);
 
-        for (UnitProjectModel.SubProjectModel subProjectModel : model.getSubProjects()) {
+        for (final UnitProjectModel.SubProjectModel subProjectModel : model.getSubProjects()) {
             // header
             TextView textView = new TextView(this);
             textView.setText(subProjectModel.getName());
@@ -107,11 +111,11 @@ public class UnitProjectDetailActivity extends CommonActivity {
                     public void onClick(View v) {
 
                         if (componentModel.getPZStatus() == 2) {
-                            showComponentDetailActivity(componentModel);
+                            showComponentDetailActivity(subProjectModel, componentModel);
                         }
                         else {
                             if (componentModel.getProgress() == 1 || componentModel.getProgress() == 2) {
-                                showComponentDetailActivity(componentModel);
+                                showComponentDetailActivity(subProjectModel, componentModel);
                             }
                             else {
                                 AlertDialog.Builder builder = new AlertDialog.Builder(UnitProjectDetailActivity.this);
@@ -191,9 +195,10 @@ public class UnitProjectDetailActivity extends CommonActivity {
         }
     }
 
-    private void showComponentDetailActivity(UnitProjectModel.ComponentModel componentModel) {
+    private void showComponentDetailActivity(UnitProjectModel.SubProjectModel subProjectModel ,UnitProjectModel.ComponentModel componentModel) {
         Intent intent = new Intent(this ,ComponentDetailActivity.class);
         intent.putExtra("id", componentModel.getID());
+        intent.putExtra("name", subProjectModel.getName() + "(" + componentModel.getName() + ")");
         startActivity(intent);
     }
 }

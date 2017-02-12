@@ -27,11 +27,11 @@
             android:id="@+id/flow_layout">
 
             <TextView
-                android:id="@+id/operator_text"
+                android:id="@+id/project_name_text"
                 android:layout_width="match_parent"
                 android:layout_height="32dp"
                 android:textSize="24sp"
-                android:text="第2联旁站情况：" />
+                android:text="旁站情况：" />
 
             <View android:layout_height="2dp"
                 android:layout_width="match_parent"

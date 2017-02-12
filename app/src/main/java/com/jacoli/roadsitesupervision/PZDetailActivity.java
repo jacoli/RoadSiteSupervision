@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -30,6 +31,9 @@ import com.jacoli.roadsitesupervision.views.MyToast;
 
 import org.apmem.tools.layouts.FlowLayout;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class PZDetailActivity extends CommonActivity {
 
     private PZDetailModel model;
@@ -45,7 +49,7 @@ public class PZDetailActivity extends CommonActivity {
         titleBar.setTitle("施工旁站");
 
         Intent intent = getIntent();
-        String id = intent.getStringExtra("id");
+        final String id = intent.getStringExtra("id");
         if (MainService.getInstance().sendPZDetailQuery(id, handler)) {
             Toast.makeText(getBaseContext(), "获取旁站详情中", Toast.LENGTH_SHORT).show();
         }
@@ -54,6 +58,28 @@ public class PZDetailActivity extends CommonActivity {
         }
 
         MainService.getInstance().sendOperatorListQuery(handler);
+
+        Button submitBtn = (Button) findViewById(R.id.submit_btn);
+        submitBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Map<String, String> params = new HashMap<String, String>();
+
+                for (PZDetailModel.PZRowModel rowModel : model.getItems()) {
+                    params.put(rowModel.getID(), rowModel.getValue());
+                }
+
+                MainService.getInstance().sendSubmitPZContentDetail(id, params, handler);
+            }
+        });
+
+        String name = "旁站项目： " + intent.getStringExtra("name");
+        TextView textView = (TextView) findViewById(R.id.name_text);
+        textView.setText(name);
+
+        String projectName = "工序部位： " + intent.getStringExtra("project_name");
+        TextView projectNameTextView = (TextView) findViewById(R.id.project_name_text);
+        projectNameTextView.setText(projectName);
     }
 
     @Override
@@ -72,6 +98,12 @@ public class PZDetailActivity extends CommonActivity {
                 break;
             case MainService.MSG_QUERY_PZ_DETAIL_FAILED:
                 Toast.makeText(getBaseContext(), "获取旁站详情失败", Toast.LENGTH_SHORT).show();
+                break;
+            case MainService.MSG_SUBMIT_PZ_DETAIL_SUCCESS:
+                MyToast.showMessage(getBaseContext(), "提交旁站详情成功");
+                break;
+            case MainService.MSG_SUBMIT_PZ_DETAIL_FAILED:
+                Toast.makeText(getBaseContext(), "提交旁站详情失败", Toast.LENGTH_SHORT).show();
                 break;
             default:
                 break;
@@ -126,7 +158,7 @@ public class PZDetailActivity extends CommonActivity {
         }
     }
 
-    public void addIntEditableToLayout(TableLayout layout, PZDetailModel.PZRowModel rowModel) {
+    public void addIntEditableToLayout(TableLayout layout, final PZDetailModel.PZRowModel rowModel) {
         TableRow tableRow = (TableRow) getLayoutInflater().inflate(R.layout.pz_detail_int_input_row_layout, null);
         TextView titleView = (TextView) tableRow.findViewById(R.id.title_text_view);
         titleView.setText(rowModel.getSubName());
@@ -146,6 +178,10 @@ public class PZDetailActivity extends CommonActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
+                rowModel.setValue(s.toString());
+
+
+
 //                String text = s.toString();
 //
 //                boolean isValid = true;
@@ -246,7 +282,7 @@ public class PZDetailActivity extends CommonActivity {
         layout.addView(tableRow);
     }
 
-    public void addTextToLayout(TableLayout layout, PZDetailModel.PZRowModel rowModel) {
+    public void addTextToLayout(TableLayout layout, final PZDetailModel.PZRowModel rowModel) {
 
         LinearLayout tableRow = (LinearLayout) getLayoutInflater().inflate(R.layout.pz_detail_text_row_layout, null);
         TextView titleView = (TextView) tableRow.findViewById(R.id.title_text_view);
@@ -265,6 +301,8 @@ public class PZDetailActivity extends CommonActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
+                rowModel.setValue(s.toString());
+
 //                String text = s.toString();
 //
 //                boolean isValid = true;

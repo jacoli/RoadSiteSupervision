@@ -162,6 +162,7 @@ public class ProjectDetailActivity extends CommonActivity {
     private void showUnitProjectDetailActivity(ProjectDetailModel.UnitProjectModel unitProjectModel) {
         Intent intent = new Intent(this ,UnitProjectDetailActivity.class);
         intent.putExtra("id", unitProjectModel.getID());
+        intent.putExtra("name", unitProjectModel.getName());
         startActivity(intent);
     }
 
