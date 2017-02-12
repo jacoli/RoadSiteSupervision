@@ -1,41 +1,34 @@
 package com.jacoli.roadsitesupervision;
 
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.StrictMode;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.jacoli.roadsitesupervision.services.ActiveComponetResp;
+import java.util.HashMap;
+import java.util.Map;
 import com.jacoli.roadsitesupervision.services.MainService;
 import com.jacoli.roadsitesupervision.services.OperatorListModel;
 import com.jacoli.roadsitesupervision.services.PZDetailModel;
-import com.jacoli.roadsitesupervision.services.ProjectDetailModel;
-import com.jacoli.roadsitesupervision.services.UnitProjectModel;
 import com.jacoli.roadsitesupervision.views.MyToast;
-
-import org.apmem.tools.layouts.FlowLayout;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class PZDetailActivity extends CommonActivity {
 
+    private String modelID;
     private PZDetailModel model;
     private OperatorListModel operatorListModel;
 
@@ -49,8 +42,8 @@ public class PZDetailActivity extends CommonActivity {
         titleBar.setTitle("施工旁站");
 
         Intent intent = getIntent();
-        final String id = intent.getStringExtra("id");
-        if (MainService.getInstance().sendPZDetailQuery(id, handler)) {
+        modelID = intent.getStringExtra("id");
+        if (MainService.getInstance().sendPZDetailQuery(modelID, handler)) {
             Toast.makeText(getBaseContext(), "获取旁站详情中", Toast.LENGTH_SHORT).show();
         }
         else {
@@ -63,13 +56,7 @@ public class PZDetailActivity extends CommonActivity {
         submitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Map<String, String> params = new HashMap<String, String>();
-
-                for (PZDetailModel.PZRowModel rowModel : model.getItems()) {
-                    params.put(rowModel.getID(), rowModel.getValue());
-                }
-
-                MainService.getInstance().sendSubmitPZContentDetail(id, params, handler);
+            submit();
             }
         });
 
@@ -87,6 +74,7 @@ public class PZDetailActivity extends CommonActivity {
         switch (msgCode) {
             case MainService.MSG_QUERY_OPERATOR_LIST_SUCCESS:
                 operatorListModel = (OperatorListModel) obj;
+                initSpinerAfterFetchOperatorListSuccess();
                 break;
             case MainService.MSG_QUERY_OPERATOR_LIST_FAILED:
                 Toast.makeText(getBaseContext(), "获取操作人员列表失败", Toast.LENGTH_SHORT).show();
@@ -95,6 +83,7 @@ public class PZDetailActivity extends CommonActivity {
                 MyToast.showMessage(getBaseContext(), "获取旁站详情成功");
                 model = (PZDetailModel) obj;
                 initSubviewsAfterFetchSuccess();
+                initSpinerAfterFetchOperatorListSuccess();
                 break;
             case MainService.MSG_QUERY_PZ_DETAIL_FAILED:
                 Toast.makeText(getBaseContext(), "获取旁站详情失败", Toast.LENGTH_SHORT).show();
@@ -110,6 +99,130 @@ public class PZDetailActivity extends CommonActivity {
         }
     }
 
+    public void submit() {
+        if (model == null || modelID.length() <= 0) {
+            return;
+        }
+
+        try {
+            Map<String, String> params = new HashMap<>();
+            params.put("ZJY", model.getZJY());
+            params.put("ZZAQY", model.getZZAQY());
+            params.put("SYRY", model.getSYRY());
+
+            for (PZDetailModel.PZRowModel rowModel : model.getItems()) {
+                params.put(rowModel.getID(), rowModel.getValue());
+            }
+
+            MainService.getInstance().sendSubmitPZContentDetail(modelID, params, handler);
+        }
+        catch (Exception ex) {
+            Log.e("PZDetailActivity", ex.toString());
+        }
+    }
+
+    public void initSpinerAfterFetchOperatorListSuccess() {
+        if (operatorListModel == null || model == null) {
+            return;
+        }
+
+        if (!operatorListModel.getZJY().isEmpty()) {
+            // 初始化控件
+            Spinner spinner = (Spinner) findViewById(R.id.spinner0);
+
+            // 建立Adapter并且绑定数据源
+            ArrayAdapter<String> adapter=new ArrayAdapter<>(this,android.R.layout.simple_spinner_item, operatorListModel.getZJY());
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            //绑定 Adapter到控件
+            spinner .setAdapter(adapter);
+            spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view,
+                                           int pos, long id) {
+                    model.setZJY(operatorListModel.getZJY().get(pos));
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+                    // Another interface callback
+                }
+            });
+
+            try {
+                int index = operatorListModel.getZJY().indexOf(model.getZJY());
+                if (index >= 0 && index < spinner.getCount())
+                spinner.setSelection(index);
+            }
+            catch (Exception ex) {
+                Log.e("PZDetailActivity", ex.toString());
+            }
+        }
+
+        if (!operatorListModel.getZZAQY().isEmpty()) {
+            // 初始化控件
+            Spinner spinner = (Spinner) findViewById(R.id.spinner1);
+
+            // 建立Adapter并且绑定数据源
+            ArrayAdapter<String> adapter=new ArrayAdapter<>(this,android.R.layout.simple_spinner_item, operatorListModel.getZZAQY());
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            //绑定 Adapter到控件
+            spinner .setAdapter(adapter);
+            spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view,
+                                           int pos, long id) {
+                    model.setZZAQY(operatorListModel.getZZAQY().get(pos));
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+                    // Another interface callback
+                }
+            });
+
+            try {
+                int index = operatorListModel.getZJY().indexOf(model.getZZAQY());
+                if (index >= 0 && index < spinner.getCount())
+                    spinner.setSelection(index);
+            }
+            catch (Exception ex) {
+                Log.e("PZDetailActivity", ex.toString());
+            }
+        }
+
+        if (!operatorListModel.getSYRY().isEmpty()) {
+            // 初始化控件
+            Spinner spinner = (Spinner) findViewById(R.id.spinner2);
+
+            // 建立Adapter并且绑定数据源
+            ArrayAdapter<String> adapter=new ArrayAdapter<>(this,android.R.layout.simple_spinner_item, operatorListModel.getSYRY());
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            //绑定 Adapter到控件
+            spinner .setAdapter(adapter);
+            spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view,
+                                           int pos, long id) {
+                    model.setSYRY(operatorListModel.getSYRY().get(pos));
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+                    // Another interface callback
+                }
+            });
+
+            try {
+                int index = operatorListModel.getZJY().indexOf(model.getSYRY());
+                if (index >= 0 && index < spinner.getCount())
+                    spinner.setSelection(index);
+            }
+            catch (Exception ex) {
+                Log.e("PZDetailActivity", ex.toString());
+            }
+        }
+    }
+
     public void initSubviewsAfterFetchSuccess() {
         if (model == null) {
             return;
@@ -122,6 +235,7 @@ public class PZDetailActivity extends CommonActivity {
         LayoutInflater inflater = getLayoutInflater();
 
         for (PZDetailModel.PZRowModel rowModel : model.getItems()) {
+            // header
             if (rowModel.getName().equals(sectionHeaderTitle)) {
                 // do nothing here
             }
@@ -133,6 +247,7 @@ public class PZDetailActivity extends CommonActivity {
             }
             sectionHeaderTitle = rowModel.getName();
 
+            // rows
             switch (rowModel.getDataFormat()) {
                 case "0":
                     addIntEditableToLayout(tableLayout, rowModel);

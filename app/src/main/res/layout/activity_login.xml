@@ -58,6 +58,7 @@ tools:context=".LoginActivity">
                 android:hint="请填写登录帐号"
                 android:selectAllOnFocus="true"
                 android:maxLines="1"
+                android:singleLine="true"
                 />
 
         </LinearLayout>

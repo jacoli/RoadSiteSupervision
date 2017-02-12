@@ -15,4 +15,29 @@ public class OperatorListModel extends MsgResponseBase {
 
     // ZZAQY表示专职安全员姓名数组
     private List<String> ZZAQY;
+
+
+    public List<String> getSYRY() {
+        return SYRY;
+    }
+
+    public void setSYRY(List<String> SYRY) {
+        this.SYRY = SYRY;
+    }
+
+    public List<String> getZJY() {
+        return ZJY;
+    }
+
+    public void setZJY(List<String> ZJY) {
+        this.ZJY = ZJY;
+    }
+
+    public List<String> getZZAQY() {
+        return ZZAQY;
+    }
+
+    public void setZZAQY(List<String> ZZAQY) {
+        this.ZZAQY = ZZAQY;
+    }
 }

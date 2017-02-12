@@ -8,6 +8,47 @@ import java.util.List;
 
 public class PZDetailModel extends MsgResponseBase {
 
+    private String ZJY;
+
+    private String ZZAQY;
+
+    private String SYRY;
+
+    // Items表示旁站表格内容数据
+    private List<PZRowModel> items;
+
+    public String getZJY() {
+        return ZJY;
+    }
+
+    public void setZJY(String ZJY) {
+        this.ZJY = ZJY;
+    }
+
+    public String getZZAQY() {
+        return ZZAQY;
+    }
+
+    public void setZZAQY(String ZZAQY) {
+        this.ZZAQY = ZZAQY;
+    }
+
+    public String getSYRY() {
+        return SYRY;
+    }
+
+    public void setSYRY(String SYRY) {
+        this.SYRY = SYRY;
+    }
+
+    public List<PZRowModel> getItems() {
+        return items;
+    }
+
+    public void setItems(List<PZRowModel> items) {
+        this.items = items;
+    }
+
     public class PZRowModel {
         private String ID;
         private String Ordinal;
@@ -100,16 +141,5 @@ public class PZDetailModel extends MsgResponseBase {
         public void setValue(String value) {
             Value = value;
         }
-    }
-
-    // Items表示旁站表格内容数据
-    private List<PZRowModel> items;
-
-    public List<PZRowModel> getItems() {
-        return items;
-    }
-
-    public void setItems(List<PZRowModel> items) {
-        this.items = items;
     }
 }

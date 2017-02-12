@@ -10,6 +10,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="2"
+        android:padding="5dp"
         android:textSize="18sp"
         android:id="@+id/title_text_view"
         android:text="title_text_view"
