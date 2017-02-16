@@ -7,7 +7,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.jacoli.roadsitesupervision.MainActivity">
 
-    <com.jacoli.roadsitesupervision.TitleBar
+    <com.jacoli.roadsitesupervision.views.TitleBar
         android:id="@+id/title_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

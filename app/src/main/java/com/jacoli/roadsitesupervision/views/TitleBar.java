@@ -1,4 +1,4 @@
-package com.jacoli.roadsitesupervision;
+package com.jacoli.roadsitesupervision.views;
 
 import android.content.Context;
 import android.content.res.Resources;

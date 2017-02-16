@@ -1,25 +1,16 @@
 package com.jacoli.roadsitesupervision;
 
 import android.app.Activity;
-import android.content.Context;
 import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
-import android.graphics.Color;
-import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
-import android.app.Activity;
-import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
-import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
-import android.widget.Toast;
+
+import com.jacoli.roadsitesupervision.views.TitleBar;
+
 import java.lang.ref.WeakReference;
 
 public class CommonActivity extends Activity {
@@ -53,7 +44,24 @@ public class CommonActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Log.d("CommonActivity", "onCreate " + this);
     }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        Log.d("CommonActivity", "onStart " + this);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        Log.d("CommonActivity", "onStop " + this);
+    }
+
 
     public TitleBar titleBar;
 

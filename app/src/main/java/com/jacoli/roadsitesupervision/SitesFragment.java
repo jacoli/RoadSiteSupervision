@@ -1,8 +1,6 @@
 package com.jacoli.roadsitesupervision;
 
-import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
@@ -13,6 +11,7 @@ import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.jacoli.roadsitesupervision.services.MainService;
 import com.jacoli.roadsitesupervision.views.MyToast;
 
 
@@ -61,25 +60,30 @@ public class SitesFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //final String[] models = {"施工旁站", "质量巡视", "安全巡视", "环保巡视", "质量抽检"};
 
+                if (position < 0 || position > 4) {
+                    return;
+                }
+
                 MyToast.showMessage(getActivity(), models[position]);
 
+                Intent intent = new Intent(getActivity(), ProjectDetailActivity.class);
+                intent.putExtra("title", models[position]);
                 if (position == 0) {
-                    Intent intent = new Intent(getActivity(), ProjectDetailActivity.class);
-                    startActivity(intent);
+                    intent.putExtra("type", MainService.project_detail_type_pz);
                 }
                 else if (position == 1) {
+                    intent.putExtra("type", MainService.project_detail_type_quality_inspection);
                 }
                 else if (position == 2) {
+                    intent.putExtra("type", MainService.project_detail_type_safety_inspection);
                 }
                 else if (position == 3) {
+                    intent.putExtra("type", MainService.project_detail_type_environmental_inspection);
                 }
                 else if (position == 4) {
+                    intent.putExtra("type", MainService.project_detail_type_quality_sampling_inspection);
                 }
-                else {
-                    // invalid
-//                    Intent intent = new Intent(getActivity(), PlanListActivity.class);
-//                    startActivity(intent);
-                }
+                startActivity(intent);
             }
         });
 

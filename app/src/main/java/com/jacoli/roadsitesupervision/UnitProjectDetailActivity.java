@@ -141,6 +141,43 @@ public class UnitProjectDetailActivity extends CommonActivity {
                     }
                 });
 
+                button.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View v) {
+
+                        if (componentModel.getPZStatus() == 2) {
+                        }
+                        else {
+                            if (componentModel.getProgress() == 1 || componentModel.getProgress() == 2) {
+                                AlertDialog.Builder builder = new AlertDialog.Builder(UnitProjectDetailActivity.this);
+                                builder.setTitle("提示");
+                                builder.setMessage("是否已完成，构件名称：" + componentModel.getName());
+
+                                builder.setPositiveButton("是", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int which) {
+                                        // TODO
+                                        //MainService.getInstance().sendActiveComponent(componentModel.getID(), handler);
+                                    }
+                                });
+
+                                builder.setNegativeButton("否", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int which) {
+                                    }
+                                });
+
+                                builder.create().show();
+                            }
+                            else {
+
+                            }
+                        }
+
+                        return true;
+                    }
+                });
+
                 updateButtonWithStatus(button, componentModel.getProgress(), componentModel.getPZStatus());
 
                 button.setTag(componentModel.getID());

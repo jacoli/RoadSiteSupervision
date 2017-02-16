@@ -24,6 +24,19 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class MainService {
+
+    // 旁站
+    public static final int project_detail_type_pz = 0x1001;
+    // 质量巡视
+    public static final int project_detail_type_quality_inspection = 0x1002;
+    // 安全巡视
+    public static final int project_detail_type_safety_inspection = 0x1003;
+    // 环保巡视
+    public static final int project_detail_type_environmental_inspection = 0x1004;
+    // 质量抽检
+    public static final int project_detail_type_quality_sampling_inspection = 0x1005;
+
+
     public static final int MSG_LOGIN_SUCCESS = 0x1001;
     public static final int MSG_LOGIN_FAILED = 0x1002;
     public static final int MSG_LOGOUT_SUCCESS = 0x1003;
@@ -689,28 +702,26 @@ public class MainService {
                 try {
                     String url = serverBaseUrl + "/APP.ashx?Type=SubmitPZContentDetail";
 
-                    FormBody.Builder builder = new FormBody.Builder();
-                    builder.add("Token", getLoginModel().getToken())
-                            .add("PZContentID", id);
+                    MultipartBody.Builder builder = new MultipartBody.Builder()
+                            .setType(MultipartBody.FORM)
+                            .addFormDataPart("Token", getLoginModel().getToken())
+                            .addFormDataPart("PZContentID", id);
 
                     if (params != null) {
                         for (String key : params.keySet()) {
                             String value = params.get(key);
                             if (value != null) {
-                                builder.add(key, value);
+                                builder.addFormDataPart(key, value);
                             }
                         }
                     }
 
                     Log.i("MainService params = ", params.toString());
 
-                    FormBody body = builder.build();
                     Request request = new Request.Builder()
                             .url(url)
-                            .post(body)
+                            .post(builder.build())
                             .build();
-
-
 
                     Response response = httpClient.newCall(request).execute();
                     if (response.isSuccessful()) {

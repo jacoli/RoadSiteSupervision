@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context="com.jacoli.roadsitesupervision.UnitProjectDetailActivity">
 
-    <com.jacoli.roadsitesupervision.TitleBar
+    <com.jacoli.roadsitesupervision.views.TitleBar
         android:id="@+id/title_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

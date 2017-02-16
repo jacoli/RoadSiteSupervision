@@ -5,50 +5,95 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.jacoli.roadsitesupervision.services.ActiveUnitProjectResp;
 import com.jacoli.roadsitesupervision.services.MainService;
 import com.jacoli.roadsitesupervision.services.ProjectDetailModel;
 import com.jacoli.roadsitesupervision.services.Utils;
 import com.jacoli.roadsitesupervision.views.MyToast;
-
 import org.apmem.tools.layouts.FlowLayout;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
 
 public class ProjectDetailActivity extends CommonActivity {
 
     private ProjectDetailModel model;
+    private int type;
+    private List<View> itemViews;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_project_detail);
 
+        type = getIntent().getIntExtra("type", MainService.project_detail_type_pz);
+        itemViews = new ArrayList<>();
+
         createTitleBar();
         titleBar.setLeftText("返回");
-        titleBar.setTitle("施工旁站");
+        titleBar.setTitle(getIntent().getStringExtra("title"));
 
         TextView operatorTextView = (TextView) findViewById(R.id.operator_text);
         String operator = "检查人：" + MainService.getInstance().getLoginModel().getName();
         operatorTextView.setText(operator);
 
         TextView dateTextView = (TextView) findViewById(R.id.date_text);
-        String date = Utils.getCurrentDateStr();
+        String date = "日期：" + Utils.getCurrentDateStr();
         dateTextView.setText(date);
+    }
 
-        TextView weatherTextView = (TextView) findViewById(R.id.weather_text);
-        String weather = "天气：" + "晴" +  "气温：" + "30";
-        weatherTextView.setText(weather);
+    @Override
+    protected void onStart() {
+        super.onStart();
 
+        // send requests to update subviews
         if (!MainService.getInstance().sendProjectDetailQuery(handler)) {
-            MyToast.showMessage(getBaseContext(), "获取项目详情成功");
+            MyToast.showMessage(getBaseContext(), "获取项目详情失败");
+        }
+
+        // TODO get weather
+    }
+
+    @Override
+    public void onResponse(int msgCode, Object obj) {
+        switch (msgCode) {
+            case MainService.MSG_QUERY_PROJECT_DETAIL_SUCCESS:
+//                MyToast.showMessage(getBaseContext(), "获取项目详情成功");
+                model = (ProjectDetailModel) obj;
+                updateWeatherView();
+                updateUnitProjectItemViews();
+                break;
+            case MainService.MSG_QUERY_PROJECT_DETAIL_FAILED:
+                Toast.makeText(getBaseContext(), "获取项目详情失败", Toast.LENGTH_SHORT).show();
+                break;
+            case MainService.MSG_ACTIVE_UNIT_PROJECT_SUCCESS:
+                MyToast.showMessage(getBaseContext(), "激活工程成功");
+                ActiveUnitProjectResp resp = (ActiveUnitProjectResp) obj;
+                updateWithActiveUnitProjectResp(resp);
+                break;
+            case MainService.MSG_ACTIVE_UNIT_PROJECT_FAILED:
+                Toast.makeText(getBaseContext(), "激活工程失败", Toast.LENGTH_SHORT).show();
+                break;
+            default:
+                break;
         }
     }
 
-    public void initSubviewsAfterFetchSuccess() {
+    public void updateWeatherView() {
+        TextView weatherTextView = (TextView) findViewById(R.id.weather_text);
+        String weather = "天气：" + "晴" +  "气温：" + "30";
+        weatherTextView.setText(weather);
+    }
+
+    public void updateUnitProjectItemViews() {
         if (model == null) {
             return;
         }
@@ -58,6 +103,10 @@ public class ProjectDetailActivity extends CommonActivity {
         projectNameTextView.setText(projectName);
 
         FlowLayout flowLayout = (FlowLayout) findViewById(R.id.flow_layout);
+        for (View view : itemViews) {
+            flowLayout.removeView(view);
+        }
+        itemViews.clear();
         for (final ProjectDetailModel.UnitProjectModel unitProjectModel : model.getItems()) {
             Button button = new Button(this);
 
@@ -111,6 +160,7 @@ public class ProjectDetailActivity extends CommonActivity {
             button.setTag(unitProjectModel.getID());
 
             flowLayout.addView(button);
+            itemViews.add(button);
         }
 
         addBottomPaddingViewToFlowLayout(flowLayout);
@@ -123,6 +173,7 @@ public class ProjectDetailActivity extends CommonActivity {
         FlowLayout.LayoutParams layoutParams = new FlowLayout.LayoutParams(size, size);
         layoutParams.setNewLine(true);
         layout.addView(view, layoutParams);
+        itemViews.add(view);
     }
 
     private void updateWithActiveUnitProjectResp(ActiveUnitProjectResp resp) {
@@ -163,30 +214,9 @@ public class ProjectDetailActivity extends CommonActivity {
         Intent intent = new Intent(this ,UnitProjectDetailActivity.class);
         intent.putExtra("id", unitProjectModel.getID());
         intent.putExtra("name", unitProjectModel.getName());
+        intent.putExtra("type", type);
         startActivity(intent);
     }
 
-    @Override
-    public void onResponse(int msgCode, Object obj) {
-        switch (msgCode) {
-            case MainService.MSG_QUERY_PROJECT_DETAIL_SUCCESS:
-                MyToast.showMessage(getBaseContext(), "获取项目详情成功");
-                model = (ProjectDetailModel) obj;
-                initSubviewsAfterFetchSuccess();
-                break;
-            case MainService.MSG_QUERY_PROJECT_DETAIL_FAILED:
-                Toast.makeText(getBaseContext(), "获取项目详情失败", Toast.LENGTH_SHORT).show();
-                break;
-            case MainService.MSG_ACTIVE_UNIT_PROJECT_SUCCESS:
-                MyToast.showMessage(getBaseContext(), "激活工程成功");
-                ActiveUnitProjectResp resp = (ActiveUnitProjectResp) obj;
-                updateWithActiveUnitProjectResp(resp);
-                break;
-            case MainService.MSG_ACTIVE_UNIT_PROJECT_FAILED:
-                Toast.makeText(getBaseContext(), "激活工程失败", Toast.LENGTH_SHORT).show();
-                break;
-            default:
-                break;
-        }
-    }
+
 }
