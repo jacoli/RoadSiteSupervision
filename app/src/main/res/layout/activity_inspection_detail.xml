@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_inspection_detail"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.jacoli.roadsitesupervision.InspectionDetailActivity">
+
+    <com.jacoli.roadsitesupervision.views.TitleBar
+        android:id="@+id/title_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:text="巡视情况："
+        android:textSize="24sp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:layout_below="@+id/title_bar"
+        android:id="@+id/textView" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/submit_btn"
+        android:layout_below="@+id/textView"
+        android:padding="5dp"
+        android:hint="请输入巡视情况"
+        android:id="@+id/editText"
+        android:singleLine="false"
+        android:gravity="top"
+        android:inputType="textMultiLine"
+        android:scrollbars="vertical"
+        />
+
+    <Button
+        android:layout_width="164dp"
+        android:layout_height="40dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="16dp"
+        android:background="@color/colorPrimary"
+        android:text="提交／暂存"
+        android:id="@+id/submit_btn" />
+
+</RelativeLayout>

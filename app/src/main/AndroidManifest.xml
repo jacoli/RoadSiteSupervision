@@ -38,7 +38,8 @@
         <activity android:name=".ProjectDetailActivity" />
         <activity android:name=".UnitProjectDetailActivity" />
         <activity android:name=".ComponentDetailActivity" />
-        <activity android:name=".PZDetailActivity"></activity>
+        <activity android:name=".PZDetailActivity" />
+        <activity android:name=".InspectionDetailActivity"></activity>
     </application>
 
 </manifest>

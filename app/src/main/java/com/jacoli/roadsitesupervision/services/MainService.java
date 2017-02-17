@@ -57,11 +57,12 @@ public class MainService {
     public static final int MSG_QUERY_OPERATOR_LIST_FAILED = 0x8002;
     public static final int MSG_QUERY_PZ_DETAIL_SUCCESS = 0x9001;
     public static final int MSG_QUERY_PZ_DETAIL_FAILED = 0x9002;
-
-    public static final int MSG_LOAD_EXPLORE_PARAMS_META_SUCCESS = 0x10001;
-
     public static final int MSG_SUBMIT_PZ_DETAIL_SUCCESS = 0xa001;
     public static final int MSG_SUBMIT_PZ_DETAIL_FAILED = 0xa002;
+    public static final int MSG_FINISH_COMPONENT_SUCCESS = 0xb001;
+    public static final int MSG_FINISH_COMPONENT_FAILED = 0xb002;
+    public static final int MSG_SUBMIT_INSPECTION_DETAIL_SUCCESS = 0xc001;
+    public static final int MSG_SUBMIT_INSPECTION_DETAIL_FAILED = 0xc002;
 
     public String serverBaseUrl = "http://118.178.92.22:8001";
 
@@ -757,86 +758,155 @@ public class MainService {
         return true;
     }
 
+    // 标记构件施工完成
+    public boolean sendFinishComponent(final String id, final Handler handler) {
+        if (getLoginModel() == null || !getLoginModel().isLoginSuccess()) {
+            return false;
+        }
+
+        if (id.length() == 0) {
+            return false;
+        }
+
+        Runnable networkTask = new Runnable() {
+
+            @Override
+            public void run() {
+                try {
+                    String url = serverBaseUrl + "/APP.ashx?Type=CompleteComponent";
+
+                    FormBody body = new FormBody.Builder()
+                            .add("Token", getLoginModel().getToken())
+                            .add("ComponentID", id)
+                            .build();
+
+                    Request request = new Request.Builder()
+                            .url(url)
+                            .post(body)
+                            .build();
+
+                    Response response = httpClient.newCall(request).execute();
+                    if (response.isSuccessful()) {
+                        String responseStr = response.body().string();
+
+                        Log.i("MainService", responseStr);
+
+                        responseStr = responsePrevProcess(responseStr);
+
+                        Gson gson = new Gson();
+                        FinishComponentResp res = gson.fromJson(responseStr, FinishComponentResp.class);
+
+                        if (res != null && res.isSuccess()) {
+                            res.setID(id);
+                            notifyMsg(handler, MSG_FINISH_COMPONENT_SUCCESS, res);
+                        }
+                        else {
+                            notifyMsg(handler, MSG_FINISH_COMPONENT_FAILED);
+                        }
+                    }
+                    else {
+                        notifyMsg(handler, MSG_FINISH_COMPONENT_FAILED);
+                    }
+                }
+                catch (IOException e) {
+                    notifyMsg(handler, MSG_FINISH_COMPONENT_FAILED);
+                }
+            }
+        };
+
+        new Thread(networkTask).start();
+        return true;
+    }
+
+    // 提交旁站详情
+    public boolean sendSubmitInspectionDetail(final String id, final Map<String, String> params, final Handler handler) {
+        if (getLoginModel() == null || !getLoginModel().isLoginSuccess()) {
+            return false;
+        }
+
+        if (id.length() == 0) {
+            return false;
+        }
+
+        Runnable networkTask = new Runnable() {
+
+            @Override
+            public void run() {
+                try {
+                    String url = serverBaseUrl + "/APP.ashx?Type=SubmitProjectPatrolAPP";
+
+                    MultipartBody.Builder builder = new MultipartBody.Builder()
+                            .setType(MultipartBody.FORM)
+                            .addFormDataPart("Token", getLoginModel().getToken())
+                            .addFormDataPart("ProjectID", id);
+
+                    if (params != null) {
+                        for (String key : params.keySet()) {
+                            String value = params.get(key);
+                            if (value != null) {
+                                builder.addFormDataPart(key, value);
+                            }
+                        }
+                    }
+
+                    Log.i("MainService params = ", params.toString());
+
+                    Request request = new Request.Builder()
+                            .url(url)
+                            .post(builder.build())
+                            .build();
+
+                    Response response = httpClient.newCall(request).execute();
+                    if (response.isSuccessful()) {
+                        String responseStr = response.body().string();
+
+                        Log.i("MainService", responseStr);
+
+                        responseStr = responsePrevProcess(responseStr);
+
+                        //responseStr = "{\"Status\":0,\"Msg\":\"OK\",\"ProjectName\":\"杭州到宁波\",\"LineName\":\"杭千高速\",\"ControlStartStack\":\"K0+-760\",\"ControlEndStack\":\"K2+720\",\"GZ1\":\"K1+100\",\"GZ1Lon\":\"\",\"GZ1Lat\":\"\",\"SchemeImage\":\"http://139.196.200.114:80/Maintain/rule/SchemeImage/1-12.png\",\"SignCount\":\"12\",\"items\":[{\"SignNumber\":\"b32\",\"SignName\":\"解除限速60\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-1-12-5.png\",\"StackNumber\":\"K0+-760\"},{\"SignNumber\":\"b38\",\"SignName\":\"解除禁止超车\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-1-14.png\",\"StackNumber\":\"K0+-760\"},{\"SignNumber\":\"b3\",\"SignName\":\"施工长度标志\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-1-3.png\",\"StackNumber\":\"K1+100\"},{\"SignNumber\":\"b47\",\"SignName\":\"附设警示灯的路栏\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-3-6.png\",\"StackNumber\":\"K1+100\"},{\"SignNumber\":\"b14\",\"SignName\":\"向右导向\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-1-7-2.png\",\"StackNumber\":\"K1+160\"},{\"SignNumber\":\"b5\",\"SignName\":\"两车道向右变一车道\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-1-5-1.png\",\"StackNumber\":\"K1+595\"},{\"SignNumber\":\"b36\",\"SignName\":\"解除限速20\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-1-12-9.png\",\"StackNumber\":\"K1+595\"},{\"SignNumber\":\"b50\",\"SignName\":\"夜间语音提示设施\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-3-9.png\",\"StackNumber\":\"K1+595\"},{\"SignNumber\":\"b54\",\"SignName\":\"警示频闪灯\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-3-11.png\",\"StackNumber\":\"K1+595\"},{\"SignNumber\":\"b23\",\"SignName\":\"限速60\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-1-11-5.png\",\"StackNumber\":\"K1+770\"},{\"SignNumber\":\"b21\",\"SignName\":\"限速80\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-1-11-3.png\",\"StackNumber\":\"K1+970\"},{\"SignNumber\":\"b2\",\"SignName\":\"施工距离标志\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-1-2.png\",\"StackNumber\":\"K2+720\"}]}";
+                        Gson gson = new Gson();
+                        MsgResponseBase res = gson.fromJson(responseStr, MsgResponseBase.class);
+
+                        if (res != null && res.isSuccess()) {
+                            // 通知UI
+                            notifyMsg(handler, MSG_SUBMIT_INSPECTION_DETAIL_SUCCESS, res);
+                        }
+                        else {
+                            notifyMsg(handler, MSG_SUBMIT_INSPECTION_DETAIL_FAILED);
+                        }
+                    }
+                    else {
+                        notifyMsg(handler, MSG_SUBMIT_INSPECTION_DETAIL_FAILED);
+                    }
+                }
+                catch (IOException e) {
+                    notifyMsg(handler, MSG_SUBMIT_INSPECTION_DETAIL_FAILED);
+                }
+            }
+        };
+
+        new Thread(networkTask).start();
+        return true;
+    }
 
 
-//    public boolean sendExplor(Map<String, String> params, final Handler handler) {
-//        if (getLoginModel() == null || !getLoginModel().isLoginSuccess()) {
-//            return false;
-//        }
+
+//    提交当日项目巡视情况（APP）
+//    阿里云地址：http://118.178.92.22:8001/APP.ashx?Type=SubmitProjectPatrolAPP
+//    POST参数
+//            Token=xxxxxxx&ProjectID=xxxxx&PatrolType=0&Situation=情况很好& Weather=xxxx&AirTep=xxxx&DelFile=0,2,5
+//    POST文件：照片列表，可以上传多个文件
+//    ProjectID：项目ID
+//    PatrolType：巡视类型，0质量巡视，1安全巡视，2环保巡视
+//    Situation：巡视情况
+//    Weather：天气
+//    AirTep：气温（必须数值）
+//    DelFile:欲删除的原有照片的序号数组。如为空或不存在则表示无需删除任何原有照片。
+//    服务器返回：{"Status":0,"Msg":"OK"}
 //
-//        String exploredInfo = "";
-//        if (params != null) {
-//            for (String itemKey : params.keySet()) {
-//                String value = params.get(itemKey);
-//                if (value == null) {
-//                    value = "";
-//                }
-//
-//                String exploreItemInfo = itemKey + "=" + value + "\n";
-//
-//                exploredInfo += exploreItemInfo;
-//            }
-//
-//        }
-//
-//        Log.i("MainService", exploredInfo);
-//
-//        final String exploredInfoToSend = exploredInfo;
-//
-//        Runnable networkTask = new Runnable() {
-//            @Override
-//            public void run() {
-//                try {
-//                    String url = serverBaseUrl + "/APP.ashx?Type=SubmitPZContentDetail";
-//
-//                    Map<String, String> fileHeader = new HashMap<>();
-//                    fileHeader.put("Content-Disposition", "form-data; name=\"File1\"; filename=\"takan.txt\"");
-//
-//                    //MediaType textPlain = MediaType.parse("text/plain; charset=utf-8");
-//                    MediaType textPlain = MediaType.parse("text/plain; charset=gb2312");
-//
-//                    RequestBody body = new MultipartBody.Builder()
-//                            .setType(MultipartBody.FORM)
-//                            .addPart(Headers.of("Content-Disposition", "form-data; name=\"Token\""),
-//                                    RequestBody.create(null, getLoginModel().getToken()))
-//                            .addPart(Headers.of(fileHeader),
-//                                    RequestBody.create(textPlain, exploredInfoToSend))
-//                            .build();
-//
-//                    Request request = new Request.Builder()
-//                            .url(url)
-//                            .post(body)
-//                            .build();
-//
-//                    Response response = httpClient.newCall(request).execute();
-//                    if (response.isSuccessful()) {
-//                        String responseStr = response.body().string();
-//
-//                        Log.i("MainService", responseStr);
-//
-//                        responseStr = responsePrevProcess(responseStr);
-//
-//                        Gson gson = new Gson();
-//                        MsgResponseBase res = gson.fromJson(responseStr, MsgResponseBase.class);
-//
-//                        if (res != null && res.isSuccess()) {
-//                            notifyMsg(handler, MSG_SEND_EXPLORE_SUCCESS);
-//                        }
-//                        else {
-//                            notifyMsg(handler, MSG_SEND_EXPLORE_FAILED);
-//                        }
-//                    }
-//                    else {
-//                        notifyMsg(handler, MSG_SEND_EXPLORE_FAILED);
-//                    }
-//                }
-//                catch (IOException | JsonSyntaxException e) {
-//                    notifyMsg(handler, MSG_SEND_EXPLORE_FAILED);
-//                }
-//            }
-//        };
-//
-//        new Thread(networkTask).start();
-//        return true;
-//    }
+//    注：提交当前日期的巡视情况，如果记录不存在则新增，如果已存在就修改。
+
+
+
 }

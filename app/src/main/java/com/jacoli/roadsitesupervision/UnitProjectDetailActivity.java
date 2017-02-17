@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.jacoli.roadsitesupervision.services.ActiveComponetResp;
 import com.jacoli.roadsitesupervision.services.ActiveUnitProjectResp;
+import com.jacoli.roadsitesupervision.services.FinishComponentResp;
 import com.jacoli.roadsitesupervision.services.MainService;
 import com.jacoli.roadsitesupervision.services.ProjectDetailModel;
 import com.jacoli.roadsitesupervision.services.UnitProjectModel;
@@ -25,15 +26,18 @@ import org.apmem.tools.layouts.FlowLayout;
 public class UnitProjectDetailActivity extends CommonActivity {
 
     private UnitProjectModel model;
+    private int type;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_unit_project_detail);
 
+        type = getIntent().getIntExtra("type", MainService.project_detail_type_pz);
+
         createTitleBar();
         titleBar.setLeftText("返回");
-        titleBar.setTitle("施工旁站");
+        titleBar.setTitle(getIntent().getStringExtra("title"));
 
         Intent intent = getIntent();
         String id = intent.getStringExtra("id");
@@ -61,12 +65,20 @@ public class UnitProjectDetailActivity extends CommonActivity {
                 Toast.makeText(getBaseContext(), "获取单位工程详情失败", Toast.LENGTH_SHORT).show();
                 break;
             case MainService.MSG_ACTIVE_COMPONENT_SUCCESS:
-                MyToast.showMessage(getBaseContext(), "激活构件成功");
+                //MyToast.showMessage(getBaseContext(), "激活构件成功");
                 ActiveComponetResp resp = (ActiveComponetResp) obj;
                 updateWithActiveComponentResp(resp);
                 break;
             case MainService.MSG_ACTIVE_COMPONENT_FAILED:
                 Toast.makeText(getBaseContext(), "激活构件失败", Toast.LENGTH_SHORT).show();
+                break;
+            case MainService.MSG_FINISH_COMPONENT_SUCCESS:
+                //MyToast.showMessage(getBaseContext(), "激活构件成功");
+                FinishComponentResp resp2 = (FinishComponentResp) obj;
+                updateWithFinishComponentResp(resp2);
+                break;
+            case MainService.MSG_FINISH_COMPONENT_FAILED:
+                Toast.makeText(getBaseContext(), "标记构件完成失败", Toast.LENGTH_SHORT).show();
                 break;
             default:
                 break;
@@ -156,8 +168,7 @@ public class UnitProjectDetailActivity extends CommonActivity {
                                 builder.setPositiveButton("是", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int which) {
-                                        // TODO
-                                        //MainService.getInstance().sendActiveComponent(componentModel.getID(), handler);
+                                        MainService.getInstance().sendFinishComponent(componentModel.getID(), handler);
                                     }
                                 });
 
@@ -216,6 +227,24 @@ public class UnitProjectDetailActivity extends CommonActivity {
         updateButtonWithStatus(button, resp.getProgress(), resp.getPZStatus());
     }
 
+    private void updateWithFinishComponentResp(FinishComponentResp resp) {
+        if (resp == null) {
+            return;
+        }
+
+        // update model
+        UnitProjectModel.ComponentModel componentModel = model.queryComponentModelWithID(resp.getID());
+        if (componentModel != null) {
+            componentModel.setProgress(resp.getProgress());
+            componentModel.setPZStatus(resp.getPZStatus());
+        }
+
+        // update view
+        FlowLayout flowLayout = (FlowLayout) findViewById(R.id.flow_layout);
+        Button button = (Button) flowLayout.findViewWithTag(resp.getID());
+        updateButtonWithStatus(button, resp.getProgress(), resp.getPZStatus());
+    }
+
     private void updateButtonWithStatus(Button button, int Progress, int PZStatus) {
         if (button != null) {
             if (PZStatus == 2) {
@@ -233,9 +262,32 @@ public class UnitProjectDetailActivity extends CommonActivity {
     }
 
     private void showComponentDetailActivity(UnitProjectModel.SubProjectModel subProjectModel ,UnitProjectModel.ComponentModel componentModel) {
-        Intent intent = new Intent(this ,ComponentDetailActivity.class);
-        intent.putExtra("id", componentModel.getID());
-        intent.putExtra("name", subProjectModel.getName() + "(" + componentModel.getName() + ")");
-        startActivity(intent);
+
+        switch (type) {
+            case MainService.project_detail_type_pz: {
+                Intent intent = new Intent(this, ComponentDetailActivity.class);
+                intent.putExtra("id", componentModel.getID());
+                intent.putExtra("name", subProjectModel.getName() + "(" + componentModel.getName() + ")");
+                intent.putExtra("title", getIntent().getStringExtra("title"));
+                startActivity(intent);
+                break;
+            }
+            case MainService.project_detail_type_quality_inspection:
+            case MainService.project_detail_type_safety_inspection:
+            case MainService.project_detail_type_environmental_inspection: {
+                Intent intent = new Intent(this, InspectionDetailActivity.class);
+                intent.putExtra("id", componentModel.getID());
+                intent.putExtra("name", subProjectModel.getName() + "(" + componentModel.getName() + ")");
+                intent.putExtra("title", getIntent().getStringExtra("title"));
+                intent.putExtra("type", type);
+                startActivity(intent);
+                break;
+            }
+            case MainService.project_detail_type_quality_sampling_inspection: {
+                break;
+            }
+            default:
+                break;
+        }
     }
 }
