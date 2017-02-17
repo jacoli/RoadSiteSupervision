@@ -11,7 +11,7 @@ public class MainActivity extends CommonActivity {
 
     private TodoListFragment todoListFragment;
     private SitesFragment sitesFragment;
-    private InformationsFragment informationsFragment;
+    private InformationFragment informationFragment;
     private SettingsFragment settingsFragment;
 
     @Override
@@ -68,13 +68,13 @@ public class MainActivity extends CommonActivity {
             case R.id.tab_informations:
                 titleBar.setTitle("信息查询");
 
-                if (informationsFragment == null) {
+                if (informationFragment == null) {
                     // 如果MessageFragment为空，则创建一个并添加到界面上
-                    informationsFragment = new InformationsFragment();
-                    transaction.add(R.id.contentContainer, informationsFragment);
+                    informationFragment = new InformationFragment();
+                    transaction.add(R.id.contentContainer, informationFragment);
                 } else {
                     // 如果MessageFragment不为空，则直接将它显示出来
-                    transaction.show(informationsFragment);
+                    transaction.show(informationFragment);
                 }
                 break;
             case R.id.tab_settings:
@@ -102,8 +102,8 @@ public class MainActivity extends CommonActivity {
         if (sitesFragment != null) {
             transaction.hide(sitesFragment);
         }
-        if (informationsFragment != null) {
-            transaction.hide(informationsFragment);
+        if (informationFragment != null) {
+            transaction.hide(informationFragment);
         }
         if (settingsFragment != null) {
             transaction.hide(settingsFragment);

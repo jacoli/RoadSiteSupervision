@@ -67,7 +67,7 @@ public class CommonActivity extends Activity {
 
     public void createTitleBar() {
         titleBar = (TitleBar) findViewById(R.id.title_bar);
-        titleBar.setBackgroundColor(ContextCompat.getColor(getBaseContext(), R.color.bg_title_bar));
+        titleBar.setBackgroundColor(ContextCompat.getColor(getBaseContext(), R.color.primary_dark));
 
         //titleBar.setLeftImageResource(R.drawable.ic_back_arrow);
         titleBar.setLeftText("返回");
