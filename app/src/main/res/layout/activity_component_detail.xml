@@ -35,7 +35,7 @@
 
             <View android:layout_height="2dp"
                 android:layout_width="match_parent"
-                android:background="@color/colorDivider"/>
+                android:background="@color/divider"/>
 
         </org.apmem.tools.layouts.FlowLayout>
 

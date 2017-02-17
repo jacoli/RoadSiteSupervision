@@ -31,6 +31,15 @@ public class InspectionDetailActivity extends CommonActivity {
         createTitleBar();
         titleBar.setLeftText("返回");
         titleBar.setTitle(getIntent().getStringExtra("title"));
+        titleBar.setLeftClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+
+        EditText editText = (EditText) findViewById(R.id.editText);
+        editText.clearFocus();
 
         Button submitBtn = (Button) findViewById(R.id.submit_btn);
         submitBtn.setOnClickListener(new View.OnClickListener() {
@@ -111,7 +120,15 @@ public class InspectionDetailActivity extends CommonActivity {
             EditText editText = (EditText) findViewById(R.id.editText);
             params.put("Situation", editText.getText().toString());
 
-
+            if (type == MainService.project_detail_type_quality_inspection) {
+                params.put("PatrolType", "0");
+            }
+            else if (type == MainService.project_detail_type_safety_inspection) {
+                params.put("PatrolType", "1");
+            }
+            else if (type == MainService.project_detail_type_environmental_inspection) {
+                params.put("PatrolType", "2");
+            }
 
             MainService.getInstance().sendSubmitInspectionDetail(id, params, handler);
         }

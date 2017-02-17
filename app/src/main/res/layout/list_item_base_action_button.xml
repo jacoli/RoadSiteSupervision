@@ -8,7 +8,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="@color/list_item_text_high"
+        android:textColor="@color/primary_text"
         android:text="actionName"
         android:layout_centerVertical="true"
         android:layout_marginStart="32dp"
