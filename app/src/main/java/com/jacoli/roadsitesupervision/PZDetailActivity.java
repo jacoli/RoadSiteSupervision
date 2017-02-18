@@ -23,14 +23,12 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import java.util.HashMap;
 import java.util.Map;
 import com.jacoli.roadsitesupervision.services.MainService;
 import com.jacoli.roadsitesupervision.services.OperatorListModel;
 import com.jacoli.roadsitesupervision.services.PZDetailModel;
 import com.jacoli.roadsitesupervision.views.MyToast;
-
 import org.apmem.tools.layouts.FlowLayout;
 
 public class PZDetailActivity extends CommonActivity {
@@ -170,6 +168,8 @@ public class PZDetailActivity extends CommonActivity {
             for (PZDetailModel.PZRowModel rowModel : model.getItems()) {
                 params.put(rowModel.getID(), rowModel.getValue());
             }
+
+            // TODO other params
 
             MainService.getInstance().sendSubmitPZContentDetail(modelID, params, handler);
         }
@@ -330,7 +330,7 @@ public class PZDetailActivity extends CommonActivity {
         }
     }
 
-    public void addIntEditableToLayout(TableLayout layout, final PZDetailModel.PZRowModel rowModel) {
+    public void addNumberInputToLayout(TableLayout layout, final PZDetailModel.PZRowModel rowModel, boolean isDecimal) {
         TableRow tableRow = (TableRow) getLayoutInflater().inflate(R.layout.pz_detail_int_input_row_layout, null);
         TextView titleView = (TextView) tableRow.findViewById(R.id.title_text_view);
         titleView.setText(rowModel.getSubName());
@@ -338,6 +338,12 @@ public class PZDetailActivity extends CommonActivity {
         unitView.setText(rowModel.getDescription());
 
         EditText editText = (EditText)tableRow.findViewById(R.id.edit_text);
+        if (isDecimal) {
+            editText.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+        }
+        else {
+            editText.setInputType(InputType.TYPE_CLASS_NUMBER);
+        }
         editText.setText(rowModel.getValue());
         editText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -351,41 +357,6 @@ public class PZDetailActivity extends CommonActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 rowModel.setValue(s.toString());
-
-
-
-//                String text = s.toString();
-//
-//                boolean isValid = true;
-//
-//                try {
-//                    double value = Double.valueOf(text);
-//
-//                    if (item.getMinValue() != null) {
-//                        double minValue = Double.valueOf(item.getMinValue());
-//                        if (value < minValue) {
-//                            isValid = false;
-//                        }
-//                    }
-//
-//                    if (item.getMaxValue() != null) {
-//                        double maxValue = Integer.valueOf(item.getMaxValue());
-//                        if (value > maxValue) {
-//                            isValid = false;
-//                        }
-//                    }
-//
-//                } catch (NumberFormatException e) {
-//                    Log.e("", e.toString());
-//                    isValid = false;
-//                } finally {
-//                }
-//
-//                if (isValid) {
-//                model.getParams().put(item.getItemKey(), s.toString());
-//                } else {
-//                    MyToast.showMessage(getBaseContext(), "参数错误");
-//                }
             }
         });
 
@@ -394,8 +365,12 @@ public class PZDetailActivity extends CommonActivity {
         layout.addView(tableRow);
     }
 
+    public void addIntEditableToLayout(TableLayout layout, final PZDetailModel.PZRowModel rowModel) {
+        addNumberInputToLayout(layout, rowModel, false);
+    }
+
     public void addDoubleEditableToLayout(TableLayout layout, PZDetailModel.PZRowModel rowModel) {
-        addIntEditableToLayout(layout, rowModel);
+        addNumberInputToLayout(layout, rowModel, true);
     }
 
     public void addCheckToLayout(TableLayout layout, final PZDetailModel.PZRowModel rowModel) {
@@ -514,8 +489,6 @@ public class PZDetailActivity extends CommonActivity {
 
         layout.addView(tableRow);
     }
-
-
 
     public void addAryInputToLayout(TableLayout layout, final PZDetailModel.PZRowModel rowModel, boolean isDecimal) {
         FlowLayout flowLayout = (FlowLayout) getLayoutInflater().inflate(R.layout.pz_detail_array_input_row_layout, null);
