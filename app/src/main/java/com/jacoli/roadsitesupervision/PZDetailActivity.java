@@ -5,10 +5,12 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -21,12 +23,15 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import java.util.HashMap;
 import java.util.Map;
 import com.jacoli.roadsitesupervision.services.MainService;
 import com.jacoli.roadsitesupervision.services.OperatorListModel;
 import com.jacoli.roadsitesupervision.services.PZDetailModel;
 import com.jacoli.roadsitesupervision.views.MyToast;
+
+import org.apmem.tools.layouts.FlowLayout;
 
 public class PZDetailActivity extends CommonActivity {
 
@@ -510,11 +515,74 @@ public class PZDetailActivity extends CommonActivity {
         layout.addView(tableRow);
     }
 
+
+
+    public void addAryInputToLayout(TableLayout layout, final PZDetailModel.PZRowModel rowModel, boolean isDecimal) {
+        FlowLayout flowLayout = (FlowLayout) getLayoutInflater().inflate(R.layout.pz_detail_array_input_row_layout, null);
+
+        TextView textView = new TextView(this);
+        FlowLayout.LayoutParams layoutParams = new FlowLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        layoutParams.setNewLine(true);
+        textView.setLayoutParams(layoutParams);
+        int padding = getResources().getDimensionPixelSize(R.dimen.text_view_padding);
+        textView.setPadding(padding, padding, padding, padding);
+        textView.setTextSize(18);
+        String text = rowModel.getSubName() + " (单位：" + rowModel.getDescription() + ")";
+        textView.setText(text);
+
+        flowLayout.addView(textView);
+
+        int maxNum = 0;
+        String[] values = {};
+        try {
+            maxNum = Integer.parseInt(rowModel.getArrayMaxNum());
+            values = rowModel.getValue().split(";");
+        }
+        catch (Exception ex) {
+            Log.e("", ex.toString());
+        }
+
+        for (int i = 0; i < maxNum; ++i) {
+            EditText editText = (EditText) getLayoutInflater().inflate(R.layout.pz_detail_array_edit_view, null);
+            if (isDecimal) {
+                editText.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+            }
+            else {
+                editText.setInputType(InputType.TYPE_CLASS_NUMBER);
+            }
+
+            if (i < values.length) {
+                editText.setText(values[i]);
+            }
+
+            final int index = i;
+
+            editText.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    rowModel.setMultiValue(s.toString(), index);
+                }
+            });
+
+            flowLayout.addView(editText);
+        }
+
+        layout.addView(flowLayout);
+    }
+
     public void addIntAryToLayout(TableLayout layout, PZDetailModel.PZRowModel rowModel) {
-        // TODO
+        addAryInputToLayout(layout, rowModel, false);
     }
 
     public void addDoubleAryToLayout(TableLayout layout, PZDetailModel.PZRowModel rowModel) {
-        // TODO
+        addAryInputToLayout(layout, rowModel, true);
     }
 }

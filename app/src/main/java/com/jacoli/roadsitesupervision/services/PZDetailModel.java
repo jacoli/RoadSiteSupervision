@@ -1,5 +1,7 @@
 package com.jacoli.roadsitesupervision.services;
 
+import android.util.Log;
+
 import java.util.List;
 
 /**
@@ -140,6 +142,38 @@ public class PZDetailModel extends MsgResponseBase {
 
         public void setValue(String value) {
             Value = value;
+        }
+
+        public void setMultiValue(String value, int index) {
+            int maxNum = 0;
+            String[] values = {};
+            try {
+                maxNum = Integer.parseInt(getArrayMaxNum());
+                values = getValue().split(";");
+            }
+            catch (Exception ex) {
+                Log.e("", ex.toString());
+            }
+
+            if (index < maxNum) {
+                String newValue = "";
+
+                for (int i = 0; i < maxNum; ++i) {
+                    if (i == index) {
+                        newValue += value + ";";
+                    }
+                    else {
+                        if (i < values.length) {
+                            newValue += values[i] + ";";
+                        }
+                        else {
+                            newValue += ";";
+                        }
+                    }
+                }
+
+                setValue(newValue);
+            }
         }
     }
 }
