@@ -42,13 +42,7 @@
                 android:padding="5dp"
                 android:text="日期：" />
 
-            <TextView
-                android:id="@+id/weather_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="16sp"
-                android:padding="5dp"
-                android:text="天气：" />
+            <include layout="@layout/weather_temperature_layout" />
 
             <View android:layout_height="2dp"
                 android:layout_width="match_parent"

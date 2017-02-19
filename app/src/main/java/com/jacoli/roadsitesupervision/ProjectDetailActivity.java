@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.jacoli.roadsitesupervision.services.ActiveUnitProjectResp;
@@ -88,9 +89,11 @@ public class ProjectDetailActivity extends CommonActivity {
     }
 
     public void updateWeatherView() {
-        TextView weatherTextView = (TextView) findViewById(R.id.weather_text);
-        String weather = "天气：" + "晴" +  "气温：" + "30";
-        weatherTextView.setText(weather);
+        EditText editText = (EditText) findViewById(R.id.edit_text_weather);
+        editText.setText("晴");
+
+        EditText editText1 = (EditText) findViewById(R.id.edit_text_temperature);
+        editText1.setText("28.5");
     }
 
     public void updateUnitProjectItemViews() {

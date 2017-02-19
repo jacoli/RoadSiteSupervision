@@ -11,16 +11,13 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 import com.jacoli.roadsitesupervision.services.MainService;
 import com.jacoli.roadsitesupervision.views.MyToast;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import me.iwf.photopicker.PhotoPicker;
 import me.iwf.photopicker.PhotoPreview;
 
@@ -28,9 +25,7 @@ public class InspectionDetailActivity extends CommonActivity {
 
     private String id;
     private int type;
-
     private PhotoAdapter photoAdapter;
-
     private ArrayList<String> selectedPhotos = new ArrayList<>();
 
     @Override
@@ -40,6 +35,9 @@ public class InspectionDetailActivity extends CommonActivity {
 
         type = getIntent().getIntExtra("type", MainService.project_detail_type_pz);
         id = getIntent().getStringExtra("id");
+
+        selectedPhotos.add("http://www.2cto.com/uploadfile/Collfiles/20150604/20150604082509219.png");
+        selectedPhotos.add("http://images2015.cnblogs.com/blog/933778/201604/933778-20160422190330257-1034408415.jpg");
 
         createTitleBar();
         titleBar.setLeftText("返回");
@@ -61,8 +59,6 @@ public class InspectionDetailActivity extends CommonActivity {
                 submit();
             }
         });
-
-
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         photoAdapter = new PhotoAdapter(this, selectedPhotos);
@@ -89,16 +85,13 @@ public class InspectionDetailActivity extends CommonActivity {
                         }
                     }
                 }));
-
-
-
     }
 
     @Override
     public void onBackPressed() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("提示");
-        builder.setMessage("旁站数据可能未保存，是否仍要返回上一页");
+        builder.setMessage("巡视情况可能未保存，是否仍要返回上一页");
 
         builder.setPositiveButton("返回上一页", new DialogInterface.OnClickListener() {
             @Override
@@ -120,11 +113,11 @@ public class InspectionDetailActivity extends CommonActivity {
     public void onResponse(int msgCode, Object obj) {
         switch (msgCode) {
             case MainService.MSG_SUBMIT_INSPECTION_DETAIL_SUCCESS:
-                MyToast.showMessage(getBaseContext(), "提交旁站详情成功");
+                //MyToast.showMessage(getBaseContext(), "提交旁站详情成功");
                 onSubmitSuccess();
                 break;
             case MainService.MSG_SUBMIT_INSPECTION_DETAIL_FAILED:
-                Toast.makeText(getBaseContext(), "提交旁站详情失败", Toast.LENGTH_SHORT).show();
+                MyToast.showMessage(getBaseContext(), "提交巡视情况失败");
                 break;
             default:
                 break;
@@ -134,7 +127,7 @@ public class InspectionDetailActivity extends CommonActivity {
     public void onSubmitSuccess() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("提示");
-        builder.setMessage("提交旁站数据成功，是否留在当前页面");
+        builder.setMessage("提交巡视情况成功，是否留在当前页面");
 
         builder.setPositiveButton("是", new DialogInterface.OnClickListener() {
             @Override
@@ -194,7 +187,6 @@ public class InspectionDetailActivity extends CommonActivity {
             selectedPhotos.clear();
 
             if (photos != null) {
-
                 selectedPhotos.addAll(photos);
             }
             photoAdapter.notifyDataSetChanged();
