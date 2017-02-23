@@ -118,78 +118,27 @@ public class UnitProjectDetailActivity extends CommonActivity {
 
                 button.setText(componentModel.getName());
 
-                button.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-                        if (componentModel.getPZStatus() == 2) {
-                            showComponentDetailActivity(subProjectModel, componentModel);
-                        }
-                        else {
-                            if (componentModel.getProgress() == 1 || componentModel.getProgress() == 2) {
-                                showComponentDetailActivity(subProjectModel, componentModel);
-                            }
-                            else {
-                                AlertDialog.Builder builder = new AlertDialog.Builder(UnitProjectDetailActivity.this);
-                                builder.setTitle("提示");
-                                builder.setMessage("是否开始施工，构件名称：" + componentModel.getName());
-
-                                builder.setPositiveButton("是", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialogInterface, int which) {
-                                        MainService.getInstance().sendActiveComponent(componentModel.getID(), handler);
-                                    }
-                                });
-
-                                builder.setNegativeButton("否", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialogInterface, int which) {
-                                    }
-                                });
-
-                                builder.create().show();
-                            }
-                        }
+                switch (type) {
+                    case MainService.project_detail_type_pz: {
+                        updateButtonWithStatus(button, componentModel.getProgress(), componentModel.getPZStatus());
+                        updateButtonActionsForPZ(button, subProjectModel, componentModel);
+                        break;
                     }
-                });
-
-                button.setOnLongClickListener(new View.OnLongClickListener() {
-                    @Override
-                    public boolean onLongClick(View v) {
-
-                        if (componentModel.getPZStatus() == 2) {
-                        }
-                        else {
-                            if (componentModel.getProgress() == 1 || componentModel.getProgress() == 2) {
-                                AlertDialog.Builder builder = new AlertDialog.Builder(UnitProjectDetailActivity.this);
-                                builder.setTitle("提示");
-                                builder.setMessage("是否已完成，构件名称：" + componentModel.getName());
-
-                                builder.setPositiveButton("是", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialogInterface, int which) {
-                                        MainService.getInstance().sendFinishComponent(componentModel.getID(), handler);
-                                    }
-                                });
-
-                                builder.setNegativeButton("否", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialogInterface, int which) {
-                                    }
-                                });
-
-                                builder.create().show();
-                            }
-                            else {
-
-                            }
-                        }
-
-                        return true;
+                    case MainService.project_detail_type_quality_inspection:
+                    case MainService.project_detail_type_safety_inspection:
+                    case MainService.project_detail_type_environmental_inspection: {
+                        updateButtonWithStatus(button, componentModel.getProgress(), componentModel.getPZStatus());
+                        updateButtonActionsForInspections(button, subProjectModel, componentModel);
+                        break;
                     }
-                });
-
-                updateButtonWithStatus(button, componentModel.getProgress(), componentModel.getPZStatus());
+                    case MainService.project_detail_type_quality_sampling_inspection: {
+                        updateButtonStatusForQualitySamplingInspection(button, componentModel.getProgress(), componentModel.getCheckStatus());
+                        updateButtonActionsForQualitySamplingInspection(button, subProjectModel, componentModel);
+                        break;
+                    }
+                    default:
+                        break;
+                }
 
                 button.setTag(componentModel.getID());
 
@@ -245,6 +194,7 @@ public class UnitProjectDetailActivity extends CommonActivity {
         updateButtonWithStatus(button, resp.getProgress(), resp.getPZStatus());
     }
 
+    // 旁站模式、巡视模式，按钮状态
     private void updateButtonWithStatus(Button button, int Progress, int PZStatus) {
         if (button != null) {
             if (PZStatus == 2) {
@@ -259,6 +209,157 @@ public class UnitProjectDetailActivity extends CommonActivity {
                 }
             }
         }
+    }
+
+    // 抽检模式，按钮状态
+    private void updateButtonStatusForQualitySamplingInspection(Button button, int Progress, String CheckStatus) {
+        if (button != null) {
+            if (CheckStatus.equals("2")) {
+                button.setBackgroundColor(Color.RED);
+            }
+            else {
+                if (Progress == 1 || Progress == 2) {
+                    button.setBackgroundColor(Color.GREEN);
+                }
+                else {
+                    button.setBackgroundColor(Color.GRAY);
+                }
+            }
+        }
+    }
+
+    private void alertToActiveComponent(final UnitProjectModel.ComponentModel componentModel) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("提示");
+        builder.setMessage("构件 " + componentModel.getName() + " ,是否开始施工?");
+
+        builder.setPositiveButton("是", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int which) {
+                MainService.getInstance().sendActiveComponent(componentModel.getID(), handler);
+            }
+        });
+
+        builder.setNegativeButton("否", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int which) {
+            }
+        });
+
+        builder.create().show();
+    }
+
+    private void alertToFinishComponent(final UnitProjectModel.ComponentModel componentModel) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("提示");
+        builder.setMessage("构件 " + componentModel.getName() + " ,是否已完成?");
+
+        builder.setPositiveButton("是", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int which) {
+                MainService.getInstance().sendFinishComponent(componentModel.getID(), handler);
+            }
+        });
+
+        builder.setNegativeButton("否", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int which) {
+            }
+        });
+
+        builder.create().show();
+    }
+
+    // 旁站模式，按钮操作事件处理
+    private void updateButtonActionsForPZ(Button button, final UnitProjectModel.SubProjectModel subProjectModel, final UnitProjectModel.ComponentModel componentModel) {
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (componentModel.getPZStatus() == 2) {
+                    showComponentDetailActivity(subProjectModel, componentModel);
+                }
+                else {
+                    if (componentModel.getProgress() == 1 || componentModel.getProgress() == 2) {
+                        showComponentDetailActivity(subProjectModel, componentModel);
+                    }
+                    else {
+                        alertToActiveComponent(componentModel);
+                    }
+                }
+            }
+        });
+
+        button.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                return true;
+            }
+        });
+    }
+
+    // 巡视模式，按钮操作事件处理
+    private void updateButtonActionsForInspections(Button button, final UnitProjectModel.SubProjectModel subProjectModel, final UnitProjectModel.ComponentModel componentModel) {
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (componentModel.getPZStatus() == 2) {
+                    showComponentDetailActivity(subProjectModel, componentModel);
+                }
+                else {
+                    if (componentModel.getProgress() == 1 || componentModel.getProgress() == 2) {
+                        showComponentDetailActivity(subProjectModel, componentModel);
+                    }
+                    else {
+                        alertToActiveComponent(componentModel);
+                    }
+                }
+            }
+        });
+
+        button.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                if (componentModel.getPZStatus() == 2) {
+                }
+                else {
+                    if (componentModel.getProgress() == 1 || componentModel.getProgress() == 2) {
+                        alertToFinishComponent(componentModel);
+                    }
+                    else {
+                    }
+                }
+
+                return true;
+            }
+        });
+    }
+
+    // 抽检模式，按钮操作事件处理
+    private void updateButtonActionsForQualitySamplingInspection(Button button, final UnitProjectModel.SubProjectModel subProjectModel, final UnitProjectModel.ComponentModel componentModel) {
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (componentModel.getCheckStatus().equals("2")) {
+                    showComponentDetailActivity(subProjectModel, componentModel);
+                }
+                else {
+                    if (componentModel.getProgress() == 1 || componentModel.getProgress() == 2) {
+                        showComponentDetailActivity(subProjectModel, componentModel);
+                    }
+                    else {
+                        alertToActiveComponent(componentModel);
+                    }
+                }
+            }
+        });
+
+        button.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                return true;
+            }
+        });
     }
 
     private void showComponentDetailActivity(UnitProjectModel.SubProjectModel subProjectModel ,UnitProjectModel.ComponentModel componentModel) {
@@ -284,6 +385,12 @@ public class UnitProjectDetailActivity extends CommonActivity {
                 break;
             }
             case MainService.project_detail_type_quality_sampling_inspection: {
+                Intent intent = new Intent(this, SamplingInspectionActivity.class);
+                intent.putExtra("id", componentModel.getID());
+                intent.putExtra("name", subProjectModel.getName() + "(" + componentModel.getName() + ")");
+                intent.putExtra("title", getIntent().getStringExtra("title"));
+                intent.putExtra("type", type);
+                startActivity(intent);
                 break;
             }
             default:

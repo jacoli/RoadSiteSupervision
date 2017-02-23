@@ -18,9 +18,8 @@
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
-
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
 
     <application
@@ -43,16 +42,14 @@
         <activity android:name=".UnitProjectDetailActivity" />
         <activity android:name=".ComponentDetailActivity" />
         <activity android:name=".PZDetailActivity" />
-        <activity android:name=".InspectionDetailActivity"></activity>
-
-
-        <activity android:name="me.iwf.photopicker.PhotoPickerActivity"
-            android:theme="@style/Theme.AppCompat.NoActionBar"
-            />
-
-        <activity android:name="me.iwf.photopicker.PhotoPagerActivity"
-            android:theme="@style/Theme.AppCompat.NoActionBar"/>
-
+        <activity android:name=".InspectionDetailActivity" />
+        <activity
+            android:name="me.iwf.photopicker.PhotoPickerActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
+        <activity
+            android:name="me.iwf.photopicker.PhotoPagerActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
+        <activity android:name=".SamplingInspectionActivity"></activity>
     </application>
 
 </manifest>

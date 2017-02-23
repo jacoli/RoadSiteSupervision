@@ -149,7 +149,7 @@ public class PZDetailModel extends MsgResponseBase {
             String[] values = {};
             try {
                 maxNum = Integer.parseInt(getArrayMaxNum());
-                values = getValue().split(";");
+                values = getValue().split(Utils.MultipartSeparator);
             }
             catch (Exception ex) {
                 Log.e("", ex.toString());
@@ -160,14 +160,14 @@ public class PZDetailModel extends MsgResponseBase {
 
                 for (int i = 0; i < maxNum; ++i) {
                     if (i == index) {
-                        newValue += value + ";";
+                        newValue += value + Utils.MultipartSeparator;
                     }
                     else {
                         if (i < values.length) {
-                            newValue += values[i] + ";";
+                            newValue += values[i] + Utils.MultipartSeparator;
                         }
                         else {
-                            newValue += ";";
+                            newValue += Utils.MultipartSeparator;
                         }
                     }
                 }

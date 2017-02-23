@@ -14,6 +14,8 @@ import java.util.Date;
  */
 public class Utils {
 
+    static public String MultipartSeparator = ",";
+
     static public boolean isCurrentTimeExpired(String expiredTime) {
         if (expiredTime == null || expiredTime.length() < "yyyy-MM-dd HH:mm:ss".length()) {
             return true; // 默认为过期。

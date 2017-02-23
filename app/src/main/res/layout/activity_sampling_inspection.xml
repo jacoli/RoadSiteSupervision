@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_inspection_detail"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.jacoli.roadsitesupervision.SamplingInspectionActivity">
+
+    <com.jacoli.roadsitesupervision.views.TitleBar
+        android:id="@+id/title_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:textSize="24sp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:id="@+id/textView"
+        android:text="巡视情况："/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:padding="5dp"
+        android:id="@+id/editText"
+        android:singleLine="false"
+        android:gravity="top"
+        android:inputType="textMultiLine"
+        android:scrollbars="vertical"
+        android:hint="请输入巡视情况"
+        />
+
+    <TextView
+        android:textSize="18sp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:id="@+id/textView2"
+        android:text="选择图片："/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="10dp"
+        android:layout_weight="1"
+        />
+
+    <Button
+        android:layout_width="164dp"
+        android:layout_height="40dp"
+        android:layout_margin="16dp"
+        android:layout_gravity="center"
+        android:background="@color/accent"
+        android:text="提交／暂存"
+        android:id="@+id/submit_btn" />
+
+</LinearLayout>

@@ -5,7 +5,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -19,10 +18,7 @@ import com.jacoli.roadsitesupervision.views.MyToast;
 import org.apmem.tools.layouts.FlowLayout;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 
 public class ProjectDetailActivity extends CommonActivity {
 
@@ -110,7 +106,7 @@ public class ProjectDetailActivity extends CommonActivity {
             flowLayout.removeView(view);
         }
         itemViews.clear();
-        for (final ProjectDetailModel.UnitProjectModel unitProjectModel : model.getItems()) {
+        for (ProjectDetailModel.UnitProjectModel unitProjectModel : model.getItems()) {
             Button button = new Button(this);
 
             int size = getResources().getDimensionPixelSize(R.dimen.project_detail_button_size);
@@ -123,42 +119,15 @@ public class ProjectDetailActivity extends CommonActivity {
 
             button.setText(unitProjectModel.getName());
 
-            button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
 
-                    if (unitProjectModel.getPZStatus() == 2) {
-                        showUnitProjectDetailActivity(unitProjectModel);
-                    }
-                    else {
-                        if (unitProjectModel.getProgress() == 1 || unitProjectModel.getProgress() == 2) {
-                            showUnitProjectDetailActivity(unitProjectModel);
-                        }
-                        else {
-                            AlertDialog.Builder builder = new AlertDialog.Builder(ProjectDetailActivity.this);
-                            builder.setTitle("提示");
-                            builder.setMessage("是否开始施工，工程名称：" + unitProjectModel.getName());
-
-                            builder.setPositiveButton("是", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int which) {
-                                    MainService.getInstance().sendActiveUnitProject(unitProjectModel.getID(), handler);
-                                }
-                            });
-
-                            builder.setNegativeButton("否", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int which) {
-                                }
-                            });
-
-                            builder.create().show();
-                        }
-                    }
-                }
-            });
-
-            updateButtonWithStatus(button, unitProjectModel.getProgress(), unitProjectModel.getPZStatus());
+            if (type == MainService.project_detail_type_quality_sampling_inspection) {
+                updateButtonStatusForQualitySamplingInspection(button, unitProjectModel.getProgress(), unitProjectModel.getCheckStatus());
+                updateButtonActionsForQualitySamplingInspection(button, unitProjectModel);
+            }
+            else {
+                updateButtonStatus(button, unitProjectModel.getProgress(), unitProjectModel.getPZStatus());
+                updateButtonActions(button, unitProjectModel);
+            }
 
             button.setTag(unitProjectModel.getID());
 
@@ -194,10 +163,11 @@ public class ProjectDetailActivity extends CommonActivity {
         // update view
         FlowLayout flowLayout = (FlowLayout) findViewById(R.id.flow_layout);
         Button button = (Button) flowLayout.findViewWithTag(resp.getID());
-        updateButtonWithStatus(button, resp.getProgress(), resp.getPZStatus());
+        updateButtonStatus(button, resp.getProgress(), resp.getPZStatus());
     }
 
-    private void updateButtonWithStatus(Button button, int Progress, int PZStatus) {
+    // 旁站模式、巡视模式，按钮状态
+    private void updateButtonStatus(Button button, int Progress, int PZStatus) {
         if (button != null) {
             if (PZStatus == 2) {
                 button.setBackgroundColor(Color.RED);
@@ -211,6 +181,86 @@ public class ProjectDetailActivity extends CommonActivity {
                 }
             }
         }
+    }
+
+    // 抽检模式，按钮状态
+    private void updateButtonStatusForQualitySamplingInspection(Button button, int Progress, String CheckStatus) {
+        if (button != null && CheckStatus != null) {
+            if (CheckStatus.equals("2")) {
+                button.setBackgroundColor(Color.RED);
+            }
+            else {
+                if (Progress == 1 || Progress == 2) {
+                    button.setBackgroundColor(Color.GREEN);
+                }
+                else {
+                    button.setBackgroundColor(Color.GRAY);
+                }
+            }
+        }
+    }
+
+    // 旁站模式、巡视模式，按钮操作事件处理
+    private void updateButtonActions(Button button, final ProjectDetailModel.UnitProjectModel unitProjectModel) {
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (unitProjectModel.getPZStatus() == 2) {
+                    showUnitProjectDetailActivity(unitProjectModel);
+                }
+                else {
+                    if (unitProjectModel.getProgress() == 1 || unitProjectModel.getProgress() == 2) {
+                        showUnitProjectDetailActivity(unitProjectModel);
+                    }
+                    else {
+                        alertToActiveUnitProject(unitProjectModel);
+                    }
+                }
+            }
+        });
+    }
+
+    // 抽检模式，按钮操作事件处理
+    private void updateButtonActionsForQualitySamplingInspection(Button button, final ProjectDetailModel.UnitProjectModel unitProjectModel) {
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (unitProjectModel.getCheckStatus().equals("2")) {
+                    showUnitProjectDetailActivity(unitProjectModel);
+                }
+                else {
+                    if (unitProjectModel.getProgress() == 1 || unitProjectModel.getProgress() == 2) {
+                        showUnitProjectDetailActivity(unitProjectModel);
+                    }
+                    else {
+                        alertToActiveUnitProject(unitProjectModel);
+                    }
+                }
+            }
+        });
+    }
+
+    private void alertToActiveUnitProject(final ProjectDetailModel.UnitProjectModel unitProjectModel) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("提示");
+        builder.setMessage("单位工程 " + unitProjectModel.getName() + " ,是否开始施工？");
+
+        builder.setPositiveButton("是", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int which) {
+                MainService.getInstance().sendActiveUnitProject(unitProjectModel.getID(), handler);
+            }
+        });
+
+        builder.setNegativeButton("否", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int which) {
+            }
+        });
+
+        builder.create().show();
     }
 
     private void showUnitProjectDetailActivity(ProjectDetailModel.UnitProjectModel unitProjectModel) {

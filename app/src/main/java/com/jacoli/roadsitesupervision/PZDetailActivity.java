@@ -28,6 +28,7 @@ import java.util.Map;
 import com.jacoli.roadsitesupervision.services.MainService;
 import com.jacoli.roadsitesupervision.services.OperatorListModel;
 import com.jacoli.roadsitesupervision.services.PZDetailModel;
+import com.jacoli.roadsitesupervision.services.Utils;
 import com.jacoli.roadsitesupervision.views.MyToast;
 import org.apmem.tools.layouts.FlowLayout;
 
@@ -509,7 +510,7 @@ public class PZDetailActivity extends CommonActivity {
         String[] values = {};
         try {
             maxNum = Integer.parseInt(rowModel.getArrayMaxNum());
-            values = rowModel.getValue().split(";");
+            values = rowModel.getValue().split(Utils.MultipartSeparator);
         }
         catch (Exception ex) {
             Log.e("", ex.toString());
