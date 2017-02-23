@@ -39,10 +39,6 @@ public class MainService {
 
     public static final int MSG_LOGIN_SUCCESS = 0x1001;
     public static final int MSG_LOGIN_FAILED = 0x1002;
-    public static final int MSG_LOGOUT_SUCCESS = 0x1003;
-    public static final int MSG_LOGOUT_FAILED = 0x1004;
-    public static final int MSG_QUERY_PROJECTS_SUCCESS = 0x2001;
-    public static final int MSG_QUERY_PROJECTS_FAILED = 0x2002;
     public static final int MSG_QUERY_PROJECT_DETAIL_SUCCESS = 0x3001;
     public static final int MSG_QUERY_PROJECT_DETAIL_FAILED = 0x3002;
     public static final int MSG_ACTIVE_UNIT_PROJECT_SUCCESS = 0x4001;
@@ -63,6 +59,10 @@ public class MainService {
     public static final int MSG_FINISH_COMPONENT_FAILED = 0xb002;
     public static final int MSG_SUBMIT_INSPECTION_DETAIL_SUCCESS = 0xc001;
     public static final int MSG_SUBMIT_INSPECTION_DETAIL_FAILED = 0xc002;
+    public static final int MSG_QUERY_COMPONENT_SAMPLING_INSPECTION_SUCCESS = 0xd001;
+    public static final int MSG_QUERY_COMPONENT_SAMPLING_INSPECTION_FAILED = 0xd002;
+    public static final int MSG_SUBMIT_COMPONENT_SAMPLING_INSPECTION_SUCCESS = 0xd003;
+    public static final int MSG_SUBMIT_COMPONENT_SAMPLING_INSPECTION_FAILED = 0xd004;
 
     public String serverBaseUrl = "http://118.178.92.22:8001";
 
@@ -290,7 +290,6 @@ public class MainService {
 
                         responseStr = responsePrevProcess(responseStr);
 
-                        //responseStr = "{\"Status\":0,\"Msg\":\"OK\",\"ProjectName\":\"杭州到宁波\",\"LineName\":\"杭千高速\",\"ControlStartStack\":\"K0+-760\",\"ControlEndStack\":\"K2+720\",\"GZ1\":\"K1+100\",\"GZ1Lon\":\"\",\"GZ1Lat\":\"\",\"SchemeImage\":\"http://139.196.200.114:80/Maintain/rule/SchemeImage/1-12.png\",\"SignCount\":\"12\",\"items\":[{\"SignNumber\":\"b32\",\"SignName\":\"解除限速60\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-1-12-5.png\",\"StackNumber\":\"K0+-760\"},{\"SignNumber\":\"b38\",\"SignName\":\"解除禁止超车\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-1-14.png\",\"StackNumber\":\"K0+-760\"},{\"SignNumber\":\"b3\",\"SignName\":\"施工长度标志\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-1-3.png\",\"StackNumber\":\"K1+100\"},{\"SignNumber\":\"b47\",\"SignName\":\"附设警示灯的路栏\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-3-6.png\",\"StackNumber\":\"K1+100\"},{\"SignNumber\":\"b14\",\"SignName\":\"向右导向\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-1-7-2.png\",\"StackNumber\":\"K1+160\"},{\"SignNumber\":\"b5\",\"SignName\":\"两车道向右变一车道\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-1-5-1.png\",\"StackNumber\":\"K1+595\"},{\"SignNumber\":\"b36\",\"SignName\":\"解除限速20\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-1-12-9.png\",\"StackNumber\":\"K1+595\"},{\"SignNumber\":\"b50\",\"SignName\":\"夜间语音提示设施\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-3-9.png\",\"StackNumber\":\"K1+595\"},{\"SignNumber\":\"b54\",\"SignName\":\"警示频闪灯\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-3-11.png\",\"StackNumber\":\"K1+595\"},{\"SignNumber\":\"b23\",\"SignName\":\"限速60\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-1-11-5.png\",\"StackNumber\":\"K1+770\"},{\"SignNumber\":\"b21\",\"SignName\":\"限速80\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-1-11-3.png\",\"StackNumber\":\"K1+970\"},{\"SignNumber\":\"b2\",\"SignName\":\"施工距离标志\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-1-2.png\",\"StackNumber\":\"K2+720\"}]}";
                         Gson gson = new Gson();
                         ProjectDetailModel res = gson.fromJson(responseStr, ProjectDetailModel.class);
 
@@ -412,7 +411,6 @@ public class MainService {
 
                         responseStr = responsePrevProcess(responseStr);
 
-                        //responseStr = "{\"Status\":0,\"Msg\":\"OK\",\"ProjectName\":\"杭州到宁波\",\"LineName\":\"杭千高速\",\"ControlStartStack\":\"K0+-760\",\"ControlEndStack\":\"K2+720\",\"GZ1\":\"K1+100\",\"GZ1Lon\":\"\",\"GZ1Lat\":\"\",\"SchemeImage\":\"http://139.196.200.114:80/Maintain/rule/SchemeImage/1-12.png\",\"SignCount\":\"12\",\"items\":[{\"SignNumber\":\"b32\",\"SignName\":\"解除限速60\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-1-12-5.png\",\"StackNumber\":\"K0+-760\"},{\"SignNumber\":\"b38\",\"SignName\":\"解除禁止超车\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-1-14.png\",\"StackNumber\":\"K0+-760\"},{\"SignNumber\":\"b3\",\"SignName\":\"施工长度标志\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-1-3.png\",\"StackNumber\":\"K1+100\"},{\"SignNumber\":\"b47\",\"SignName\":\"附设警示灯的路栏\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-3-6.png\",\"StackNumber\":\"K1+100\"},{\"SignNumber\":\"b14\",\"SignName\":\"向右导向\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-1-7-2.png\",\"StackNumber\":\"K1+160\"},{\"SignNumber\":\"b5\",\"SignName\":\"两车道向右变一车道\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-1-5-1.png\",\"StackNumber\":\"K1+595\"},{\"SignNumber\":\"b36\",\"SignName\":\"解除限速20\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-1-12-9.png\",\"StackNumber\":\"K1+595\"},{\"SignNumber\":\"b50\",\"SignName\":\"夜间语音提示设施\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-3-9.png\",\"StackNumber\":\"K1+595\"},{\"SignNumber\":\"b54\",\"SignName\":\"警示频闪灯\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-3-11.png\",\"StackNumber\":\"K1+595\"},{\"SignNumber\":\"b23\",\"SignName\":\"限速60\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-1-11-5.png\",\"StackNumber\":\"K1+770\"},{\"SignNumber\":\"b21\",\"SignName\":\"限速80\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-1-11-3.png\",\"StackNumber\":\"K1+970\"},{\"SignNumber\":\"b2\",\"SignName\":\"施工距离标志\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-1-2.png\",\"StackNumber\":\"K2+720\"}]}";
                         Gson gson = new Gson();
                         UnitProjectModel res = gson.fromJson(responseStr, UnitProjectModel.class);
 
@@ -533,7 +531,6 @@ public class MainService {
 
                         responseStr = responsePrevProcess(responseStr);
 
-                        //responseStr = "{\"Status\":0,\"Msg\":\"OK\",\"ProjectName\":\"杭州到宁波\",\"LineName\":\"杭千高速\",\"ControlStartStack\":\"K0+-760\",\"ControlEndStack\":\"K2+720\",\"GZ1\":\"K1+100\",\"GZ1Lon\":\"\",\"GZ1Lat\":\"\",\"SchemeImage\":\"http://139.196.200.114:80/Maintain/rule/SchemeImage/1-12.png\",\"SignCount\":\"12\",\"items\":[{\"SignNumber\":\"b32\",\"SignName\":\"解除限速60\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-1-12-5.png\",\"StackNumber\":\"K0+-760\"},{\"SignNumber\":\"b38\",\"SignName\":\"解除禁止超车\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-1-14.png\",\"StackNumber\":\"K0+-760\"},{\"SignNumber\":\"b3\",\"SignName\":\"施工长度标志\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-1-3.png\",\"StackNumber\":\"K1+100\"},{\"SignNumber\":\"b47\",\"SignName\":\"附设警示灯的路栏\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-3-6.png\",\"StackNumber\":\"K1+100\"},{\"SignNumber\":\"b14\",\"SignName\":\"向右导向\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-1-7-2.png\",\"StackNumber\":\"K1+160\"},{\"SignNumber\":\"b5\",\"SignName\":\"两车道向右变一车道\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-1-5-1.png\",\"StackNumber\":\"K1+595\"},{\"SignNumber\":\"b36\",\"SignName\":\"解除限速20\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-1-12-9.png\",\"StackNumber\":\"K1+595\"},{\"SignNumber\":\"b50\",\"SignName\":\"夜间语音提示设施\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-3-9.png\",\"StackNumber\":\"K1+595\"},{\"SignNumber\":\"b54\",\"SignName\":\"警示频闪灯\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-3-11.png\",\"StackNumber\":\"K1+595\"},{\"SignNumber\":\"b23\",\"SignName\":\"限速60\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-1-11-5.png\",\"StackNumber\":\"K1+770\"},{\"SignNumber\":\"b21\",\"SignName\":\"限速80\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-1-11-3.png\",\"StackNumber\":\"K1+970\"},{\"SignNumber\":\"b2\",\"SignName\":\"施工距离标志\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-1-2.png\",\"StackNumber\":\"K2+720\"}]}";
                         Gson gson = new Gson();
                         ComponentDetailModel res = gson.fromJson(responseStr, ComponentDetailModel.class);
 
@@ -589,7 +586,6 @@ public class MainService {
 
                         responseStr = responsePrevProcess(responseStr);
 
-                        //responseStr = "{\"Status\":0,\"Msg\":\"OK\",\"ProjectName\":\"杭州到宁波\",\"LineName\":\"杭千高速\",\"ControlStartStack\":\"K0+-760\",\"ControlEndStack\":\"K2+720\",\"GZ1\":\"K1+100\",\"GZ1Lon\":\"\",\"GZ1Lat\":\"\",\"SchemeImage\":\"http://139.196.200.114:80/Maintain/rule/SchemeImage/1-12.png\",\"SignCount\":\"12\",\"items\":[{\"SignNumber\":\"b32\",\"SignName\":\"解除限速60\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-1-12-5.png\",\"StackNumber\":\"K0+-760\"},{\"SignNumber\":\"b38\",\"SignName\":\"解除禁止超车\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-1-14.png\",\"StackNumber\":\"K0+-760\"},{\"SignNumber\":\"b3\",\"SignName\":\"施工长度标志\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-1-3.png\",\"StackNumber\":\"K1+100\"},{\"SignNumber\":\"b47\",\"SignName\":\"附设警示灯的路栏\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-3-6.png\",\"StackNumber\":\"K1+100\"},{\"SignNumber\":\"b14\",\"SignName\":\"向右导向\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-1-7-2.png\",\"StackNumber\":\"K1+160\"},{\"SignNumber\":\"b5\",\"SignName\":\"两车道向右变一车道\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-1-5-1.png\",\"StackNumber\":\"K1+595\"},{\"SignNumber\":\"b36\",\"SignName\":\"解除限速20\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-1-12-9.png\",\"StackNumber\":\"K1+595\"},{\"SignNumber\":\"b50\",\"SignName\":\"夜间语音提示设施\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-3-9.png\",\"StackNumber\":\"K1+595\"},{\"SignNumber\":\"b54\",\"SignName\":\"警示频闪灯\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-3-11.png\",\"StackNumber\":\"K1+595\"},{\"SignNumber\":\"b23\",\"SignName\":\"限速60\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-1-11-5.png\",\"StackNumber\":\"K1+770\"},{\"SignNumber\":\"b21\",\"SignName\":\"限速80\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-1-11-3.png\",\"StackNumber\":\"K1+970\"},{\"SignNumber\":\"b2\",\"SignName\":\"施工距离标志\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-1-2.png\",\"StackNumber\":\"K2+720\"}]}";
                         Gson gson = new Gson();
                         OperatorListModel res = gson.fromJson(responseStr, OperatorListModel.class);
 
@@ -649,7 +645,6 @@ public class MainService {
                         Log.i("MainService", responseStr);
 
                         responseStr = responsePrevProcess(responseStr);
-                        //responseStr = "{\"Status\":0,\"Msg\":\"OK\",\"ProjectName\":\"杭州到宁波\",\"LineName\":\"杭千高速\",\"ControlStartStack\":\"K0+-760\",\"ControlEndStack\":\"K2+720\",\"GZ1\":\"K1+100\",\"GZ1Lon\":\"\",\"GZ1Lat\":\"\",\"SchemeImage\":\"http://139.196.200.114:80/Maintain/rule/SchemeImage/1-12.png\",\"SignCount\":\"12\",\"items\":[{\"SignNumber\":\"b32\",\"SignName\":\"解除限速60\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-1-12-5.png\",\"StackNumber\":\"K0+-760\"},{\"SignNumber\":\"b38\",\"SignName\":\"解除禁止超车\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-1-14.png\",\"StackNumber\":\"K0+-760\"},{\"SignNumber\":\"b3\",\"SignName\":\"施工长度标志\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-1-3.png\",\"StackNumber\":\"K1+100\"},{\"SignNumber\":\"b47\",\"SignName\":\"附设警示灯的路栏\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-3-6.png\",\"StackNumber\":\"K1+100\"},{\"SignNumber\":\"b14\",\"SignName\":\"向右导向\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-1-7-2.png\",\"StackNumber\":\"K1+160\"},{\"SignNumber\":\"b5\",\"SignName\":\"两车道向右变一车道\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-1-5-1.png\",\"StackNumber\":\"K1+595\"},{\"SignNumber\":\"b36\",\"SignName\":\"解除限速20\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-1-12-9.png\",\"StackNumber\":\"K1+595\"},{\"SignNumber\":\"b50\",\"SignName\":\"夜间语音提示设施\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-3-9.png\",\"StackNumber\":\"K1+595\"},{\"SignNumber\":\"b54\",\"SignName\":\"警示频闪灯\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-3-11.png\",\"StackNumber\":\"K1+595\"},{\"SignNumber\":\"b23\",\"SignName\":\"限速60\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-1-11-5.png\",\"StackNumber\":\"K1+770\"},{\"SignNumber\":\"b21\",\"SignName\":\"限速80\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-1-11-3.png\",\"StackNumber\":\"K1+970\"},{\"SignNumber\":\"b2\",\"SignName\":\"施工距离标志\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-1-2.png\",\"StackNumber\":\"K2+720\"}]}";
 
                         try {
                             Gson gson = new GsonBuilder()
@@ -732,7 +727,6 @@ public class MainService {
 
                         responseStr = responsePrevProcess(responseStr);
 
-                        //responseStr = "{\"Status\":0,\"Msg\":\"OK\",\"ProjectName\":\"杭州到宁波\",\"LineName\":\"杭千高速\",\"ControlStartStack\":\"K0+-760\",\"ControlEndStack\":\"K2+720\",\"GZ1\":\"K1+100\",\"GZ1Lon\":\"\",\"GZ1Lat\":\"\",\"SchemeImage\":\"http://139.196.200.114:80/Maintain/rule/SchemeImage/1-12.png\",\"SignCount\":\"12\",\"items\":[{\"SignNumber\":\"b32\",\"SignName\":\"解除限速60\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-1-12-5.png\",\"StackNumber\":\"K0+-760\"},{\"SignNumber\":\"b38\",\"SignName\":\"解除禁止超车\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-1-14.png\",\"StackNumber\":\"K0+-760\"},{\"SignNumber\":\"b3\",\"SignName\":\"施工长度标志\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-1-3.png\",\"StackNumber\":\"K1+100\"},{\"SignNumber\":\"b47\",\"SignName\":\"附设警示灯的路栏\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-3-6.png\",\"StackNumber\":\"K1+100\"},{\"SignNumber\":\"b14\",\"SignName\":\"向右导向\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-1-7-2.png\",\"StackNumber\":\"K1+160\"},{\"SignNumber\":\"b5\",\"SignName\":\"两车道向右变一车道\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-1-5-1.png\",\"StackNumber\":\"K1+595\"},{\"SignNumber\":\"b36\",\"SignName\":\"解除限速20\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-1-12-9.png\",\"StackNumber\":\"K1+595\"},{\"SignNumber\":\"b50\",\"SignName\":\"夜间语音提示设施\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-3-9.png\",\"StackNumber\":\"K1+595\"},{\"SignNumber\":\"b54\",\"SignName\":\"警示频闪灯\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-3-11.png\",\"StackNumber\":\"K1+595\"},{\"SignNumber\":\"b23\",\"SignName\":\"限速60\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-1-11-5.png\",\"StackNumber\":\"K1+770\"},{\"SignNumber\":\"b21\",\"SignName\":\"限速80\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-1-11-3.png\",\"StackNumber\":\"K1+970\"},{\"SignNumber\":\"b2\",\"SignName\":\"施工距离标志\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-1-2.png\",\"StackNumber\":\"K2+720\"}]}";
                         Gson gson = new Gson();
                         MsgResponseBase res = gson.fromJson(responseStr, MsgResponseBase.class);
 
@@ -818,7 +812,7 @@ public class MainService {
         return true;
     }
 
-    // 提交旁站详情
+    // 提交巡视详情
     public boolean sendSubmitInspectionDetail(final String id, final Map<String, String> params, final Handler handler) {
         if (getLoginModel() == null || !getLoginModel().isLoginSuccess()) {
             return false;
@@ -864,7 +858,6 @@ public class MainService {
 
                         responseStr = responsePrevProcess(responseStr);
 
-                        //responseStr = "{\"Status\":0,\"Msg\":\"OK\",\"ProjectName\":\"杭州到宁波\",\"LineName\":\"杭千高速\",\"ControlStartStack\":\"K0+-760\",\"ControlEndStack\":\"K2+720\",\"GZ1\":\"K1+100\",\"GZ1Lon\":\"\",\"GZ1Lat\":\"\",\"SchemeImage\":\"http://139.196.200.114:80/Maintain/rule/SchemeImage/1-12.png\",\"SignCount\":\"12\",\"items\":[{\"SignNumber\":\"b32\",\"SignName\":\"解除限速60\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-1-12-5.png\",\"StackNumber\":\"K0+-760\"},{\"SignNumber\":\"b38\",\"SignName\":\"解除禁止超车\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-1-14.png\",\"StackNumber\":\"K0+-760\"},{\"SignNumber\":\"b3\",\"SignName\":\"施工长度标志\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-1-3.png\",\"StackNumber\":\"K1+100\"},{\"SignNumber\":\"b47\",\"SignName\":\"附设警示灯的路栏\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-3-6.png\",\"StackNumber\":\"K1+100\"},{\"SignNumber\":\"b14\",\"SignName\":\"向右导向\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-1-7-2.png\",\"StackNumber\":\"K1+160\"},{\"SignNumber\":\"b5\",\"SignName\":\"两车道向右变一车道\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-1-5-1.png\",\"StackNumber\":\"K1+595\"},{\"SignNumber\":\"b36\",\"SignName\":\"解除限速20\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-1-12-9.png\",\"StackNumber\":\"K1+595\"},{\"SignNumber\":\"b50\",\"SignName\":\"夜间语音提示设施\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-3-9.png\",\"StackNumber\":\"K1+595\"},{\"SignNumber\":\"b54\",\"SignName\":\"警示频闪灯\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-3-11.png\",\"StackNumber\":\"K1+595\"},{\"SignNumber\":\"b23\",\"SignName\":\"限速60\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-1-11-5.png\",\"StackNumber\":\"K1+770\"},{\"SignNumber\":\"b21\",\"SignName\":\"限速80\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-1-11-3.png\",\"StackNumber\":\"K1+970\"},{\"SignNumber\":\"b2\",\"SignName\":\"施工距离标志\",\"SignImageURL\":\"http://139.196.200.114:80/Maintain/rule/SignImage/WEB/A-1-2.png\",\"StackNumber\":\"K2+720\"}]}";
                         Gson gson = new Gson();
                         MsgResponseBase res = gson.fromJson(responseStr, MsgResponseBase.class);
 
@@ -890,23 +883,145 @@ public class MainService {
         return true;
     }
 
+    // 获取构件抽检详情
+    public boolean sendQueryComponentSamplingInspection(final String id, final Handler handler) {
+        if (getLoginModel() == null || !getLoginModel().isLoginSuccess()) {
+            return false;
+        }
 
+        if (id.length() == 0) {
+            return false;
+        }
 
-//    提交当日项目巡视情况（APP）
-//    阿里云地址：http://118.178.92.22:8001/APP.ashx?Type=SubmitProjectPatrolAPP
-//    POST参数
-//            Token=xxxxxxx&ProjectID=xxxxx&PatrolType=0&Situation=情况很好& Weather=xxxx&AirTep=xxxx&DelFile=0,2,5
-//    POST文件：照片列表，可以上传多个文件
-//    ProjectID：项目ID
-//    PatrolType：巡视类型，0质量巡视，1安全巡视，2环保巡视
-//    Situation：巡视情况
-//    Weather：天气
-//    AirTep：气温（必须数值）
-//    DelFile:欲删除的原有照片的序号数组。如为空或不存在则表示无需删除任何原有照片。
-//    服务器返回：{"Status":0,"Msg":"OK"}
-//
-//    注：提交当前日期的巡视情况，如果记录不存在则新增，如果已存在就修改。
+        Runnable networkTask = new Runnable() {
 
+            @Override
+            public void run() {
+                try {
+                    String url = serverBaseUrl + "/APP.ashx?Type=GetComponentCheckData";
 
+                    FormBody body = new FormBody.Builder()
+                            .add("Token", getLoginModel().getToken())
+                            .add("ComponentID", id)
+                            .build();
+
+                    Request request = new Request.Builder()
+                            .url(url)
+                            .post(body)
+                            .build();
+
+                    Response response = httpClient.newCall(request).execute();
+                    if (response.isSuccessful()) {
+                        String responseStr = response.body().string();
+
+                        Log.i("MainService", responseStr);
+
+                        responseStr = responsePrevProcess(responseStr);
+
+                        try {
+                            Gson gson = new GsonBuilder()
+                                    .registerTypeAdapterFactory(new NullStringToEmptyAdapterFactory())
+                                    .setDateFormat("yyyy-MM-dd'T'HH:mm:ss")
+                                    .create();
+
+                            SamplingInspectionModel res = gson.fromJson(responseStr, SamplingInspectionModel.class);
+
+                            if (res != null && res.isSuccess()) {
+                                // 通知UI
+                                notifyMsg(handler, MSG_QUERY_COMPONENT_SAMPLING_INSPECTION_SUCCESS, res);
+                            }
+                            else {
+                                notifyMsg(handler, MSG_QUERY_COMPONENT_SAMPLING_INSPECTION_FAILED);
+                            }
+                        }
+                        catch (Exception ex) {
+                            Log.e("MainService", ex.toString());
+                            notifyMsg(handler, MSG_QUERY_COMPONENT_SAMPLING_INSPECTION_FAILED);
+                        }
+                    }
+                    else {
+                        notifyMsg(handler, MSG_QUERY_COMPONENT_SAMPLING_INSPECTION_FAILED);
+                    }
+                }
+                catch (IOException e) {
+                    notifyMsg(handler, MSG_QUERY_COMPONENT_SAMPLING_INSPECTION_FAILED);
+                }
+            }
+        };
+
+        new Thread(networkTask).start();
+        return true;
+    }
+
+    // 提交抽检详情
+    public boolean sendSubmitComponentSamplingInspection(final String id, final Map<String, String> params, final Handler handler) {
+        if (getLoginModel() == null || !getLoginModel().isLoginSuccess()) {
+            return false;
+        }
+
+        if (id.length() == 0) {
+            return false;
+        }
+
+        Runnable networkTask = new Runnable() {
+
+            @Override
+            public void run() {
+                try {
+                    String url = serverBaseUrl + "/APP.ashx?Type=SubmitComponentCheckData";
+
+                    MultipartBody.Builder builder = new MultipartBody.Builder()
+                            .setType(MultipartBody.FORM)
+                            .addFormDataPart("Token", getLoginModel().getToken())
+                            .addFormDataPart("ComponentID", id);
+
+                    if (params != null) {
+                        for (String key : params.keySet()) {
+                            String value = params.get(key);
+                            if (value != null) {
+                                builder.addFormDataPart(key, value);
+                            }
+                        }
+                    }
+
+                    Log.i("MainService params = ", params.toString());
+
+                    Request request = new Request.Builder()
+                            .url(url)
+                            .post(builder.build())
+                            .build();
+
+                    Response response = httpClient.newCall(request).execute();
+                    if (response.isSuccessful()) {
+                        String responseStr = response.body().string();
+
+                        Log.i("MainService", responseStr);
+
+                        responseStr = responsePrevProcess(responseStr);
+
+                        Gson gson = new Gson();
+                        MsgResponseBase res = gson.fromJson(responseStr, MsgResponseBase.class);
+
+                        if (res != null && res.isSuccess()) {
+                            // 通知UI
+                            notifyMsg(handler, MSG_SUBMIT_COMPONENT_SAMPLING_INSPECTION_SUCCESS, res);
+                        }
+                        else {
+                            notifyMsg(handler, MSG_SUBMIT_COMPONENT_SAMPLING_INSPECTION_FAILED);
+                        }
+                    }
+                    else {
+                        notifyMsg(handler, MSG_SUBMIT_COMPONENT_SAMPLING_INSPECTION_FAILED);
+                    }
+                }
+                catch (IOException e) {
+                    notifyMsg(handler, MSG_SUBMIT_COMPONENT_SAMPLING_INSPECTION_FAILED);
+                }
+            }
+        };
+
+        new Thread(networkTask).start();
+        return true;
+    }
 
 }
