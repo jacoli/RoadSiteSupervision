@@ -8,8 +8,8 @@
     android:background="@drawable/bg_item_photo">
 
     <TextView
-        android:textSize="32dp"
-        android:text="+"
+        android:textSize="20dp"
+        android:text="选择\n图片"
         android:gravity="center"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

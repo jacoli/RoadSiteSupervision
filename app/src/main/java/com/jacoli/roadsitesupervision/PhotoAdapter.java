@@ -53,22 +53,31 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PhotoViewHol
 
   @Override
   public void onBindViewHolder(final PhotoViewHolder holder, final int position) {
+      if (getItemViewType(position) == TYPE_PHOTO) {
 
-    if (getItemViewType(position) == TYPE_PHOTO) {
-      Uri uri = Uri.fromFile(new File(photoPaths.get(position)));
+          String url = photoPaths.get(position);
 
-      boolean canLoadImage = AndroidLifecycleUtils.canLoadImage(holder.ivPhoto.getContext());
+          Uri uri;
 
-      if (canLoadImage) {
-        Glide.with(mContext)
-                .load(uri)
-                .centerCrop()
-                .thumbnail(0.1f)
-                .placeholder(R.drawable.__picker_ic_photo_black_48dp)
-                .error(R.drawable.__picker_ic_broken_image_black_48dp)
-                .into(holder.ivPhoto);
+          if (url.contains("https") || url.contains("http")) {
+              uri = Uri.parse(url);
+          }
+          else {
+              uri = Uri.fromFile(new File(photoPaths.get(position)));
+          }
+
+          boolean canLoadImage = AndroidLifecycleUtils.canLoadImage(holder.ivPhoto.getContext());
+
+          if (canLoadImage) {
+              Glide.with(mContext)
+                      .load(uri)
+                      .centerCrop()
+                      .thumbnail(0.1f)
+                      .placeholder(R.drawable.__picker_ic_photo_black_48dp)
+                      .error(R.drawable.__picker_ic_broken_image_black_48dp)
+                      .into(holder.ivPhoto);
+          }
       }
-    }
   }
 
 

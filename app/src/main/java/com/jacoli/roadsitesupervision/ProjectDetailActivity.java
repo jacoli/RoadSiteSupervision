@@ -119,7 +119,6 @@ public class ProjectDetailActivity extends CommonActivity {
 
             button.setText(unitProjectModel.getName());
 
-
             if (type == MainService.project_detail_type_quality_sampling_inspection) {
                 updateButtonStatusForQualitySamplingInspection(button, unitProjectModel.getProgress(), unitProjectModel.getCheckStatus());
                 updateButtonActionsForQualitySamplingInspection(button, unitProjectModel);

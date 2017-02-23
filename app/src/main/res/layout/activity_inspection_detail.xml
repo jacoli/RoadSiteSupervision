@@ -10,9 +10,7 @@
     <com.jacoli.roadsitesupervision.views.TitleBar
         android:id="@+id/title_bar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true" />
+        android:layout_height="wrap_content" />
 
     <TextView
         android:textSize="24sp"

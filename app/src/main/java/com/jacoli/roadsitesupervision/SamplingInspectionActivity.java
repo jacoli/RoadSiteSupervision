@@ -12,7 +12,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.jacoli.roadsitesupervision.services.ImageUrlModel;
 import com.jacoli.roadsitesupervision.services.MainService;
+import com.jacoli.roadsitesupervision.services.SamplingInspectionModel;
 import com.jacoli.roadsitesupervision.views.MyToast;
 
 import java.util.ArrayList;
@@ -28,6 +30,7 @@ public class SamplingInspectionActivity extends CommonActivity {
     private int type;
     private PhotoAdapter photoAdapter;
     private ArrayList<String> selectedPhotos = new ArrayList<>();
+    private SamplingInspectionModel model;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,6 +89,11 @@ public class SamplingInspectionActivity extends CommonActivity {
                         }
                     }
                 }));
+
+        //
+        if (MainService.getInstance().sendQueryComponentSamplingInspection(id, handler)) {
+            MyToast.showMessage(this, "正在查询抽检情况...");
+        }
     }
 
     @Override
@@ -113,22 +121,44 @@ public class SamplingInspectionActivity extends CommonActivity {
     @Override
     public void onResponse(int msgCode, Object obj) {
         switch (msgCode) {
-            case MainService.MSG_SUBMIT_INSPECTION_DETAIL_SUCCESS:
+            case MainService.MSG_QUERY_COMPONENT_SAMPLING_INSPECTION_SUCCESS:
                 //MyToast.showMessage(getBaseContext(), "提交旁站详情成功");
+                model = (SamplingInspectionModel) obj;
+                onQuerySuccess();
+                break;
+            case MainService.MSG_QUERY_COMPONENT_SAMPLING_INSPECTION_FAILED:
+                MyToast.showMessage(getBaseContext(), "获取抽检情况失败");
+                break;
+            case MainService.MSG_SUBMIT_COMPONENT_SAMPLING_INSPECTION_SUCCESS:
                 onSubmitSuccess();
                 break;
-            case MainService.MSG_SUBMIT_INSPECTION_DETAIL_FAILED:
-                MyToast.showMessage(getBaseContext(), "提交巡视情况失败");
+            case MainService.MSG_SUBMIT_COMPONENT_SAMPLING_INSPECTION_FAILED:
+                MyToast.showMessage(getBaseContext(), "提交抽检情况失败");
                 break;
             default:
                 break;
         }
     }
 
+    public void onQuerySuccess() {
+        if (model.getIsExist().equalsIgnoreCase("true") || model.getIsExist().equalsIgnoreCase("y")) {
+            EditText editText = (EditText) findViewById(R.id.editText);
+            editText.setText(model.getSituation());
+
+            for (ImageUrlModel imageUrlModel : model.getPhotoList()) {
+                if (imageUrlModel.getWebPath().length() > 0) {
+                    selectedPhotos.add(imageUrlModel.getWebPath());
+                }
+            }
+
+            photoAdapter.notifyDataSetChanged();
+        }
+    }
+
     public void onSubmitSuccess() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("提示");
-        builder.setMessage("提交巡视情况成功，是否留在当前页面");
+        builder.setMessage("提交抽检情况成功，是否留在当前页面");
 
         builder.setPositiveButton("是", new DialogInterface.OnClickListener() {
             @Override
