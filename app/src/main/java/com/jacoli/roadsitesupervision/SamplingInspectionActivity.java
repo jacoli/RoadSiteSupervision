@@ -185,20 +185,7 @@ public class SamplingInspectionActivity extends CommonActivity {
             Map<String, String> params = new HashMap<>();
             // TODO
 
-            EditText editText = (EditText) findViewById(R.id.editText);
-            params.put("Situation", editText.getText().toString());
-
-            if (type == MainService.project_detail_type_quality_inspection) {
-                params.put("PatrolType", "0");
-            }
-            else if (type == MainService.project_detail_type_safety_inspection) {
-                params.put("PatrolType", "1");
-            }
-            else if (type == MainService.project_detail_type_environmental_inspection) {
-                params.put("PatrolType", "2");
-            }
-
-            MainService.getInstance().sendSubmitInspectionDetail(id, params, handler);
+            MainService.getInstance().sendSubmitComponentSamplingInspection(id, params, handler);
         }
         catch (Exception ex) {
             Log.e("InspectionDetail", ex.toString());
