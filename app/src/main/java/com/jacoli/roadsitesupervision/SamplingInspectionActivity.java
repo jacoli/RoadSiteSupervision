@@ -3,7 +3,6 @@ package com.jacoli.roadsitesupervision;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
@@ -13,19 +12,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-
 import com.jacoli.roadsitesupervision.services.ImageUrlModel;
 import com.jacoli.roadsitesupervision.services.MainService;
 import com.jacoli.roadsitesupervision.services.SamplingInspectionModel;
-import com.jacoli.roadsitesupervision.services.StringNullAdapter;
 import com.jacoli.roadsitesupervision.services.Utils;
 import com.jacoli.roadsitesupervision.views.MyToast;
-
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
 import me.iwf.photopicker.PhotoPicker;
 import me.iwf.photopicker.PhotoPreview;
 
@@ -62,6 +55,8 @@ public class SamplingInspectionActivity extends CommonActivity {
         editText.clearFocus();
         editText.setVisibility(View.INVISIBLE);
 
+        setupImagePicker();
+
         Button submitBtn = (Button) findViewById(R.id.submit_btn);
         submitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -70,11 +65,18 @@ public class SamplingInspectionActivity extends CommonActivity {
             }
         });
 
+        //
+        if (MainService.getInstance().sendQueryComponentSamplingInspection(id, handler)) {
+            MyToast.showMessage(this, "正在查询抽检情况...");
+        }
+    }
+
+    private void setupImagePicker() {
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         photoAdapter = new PhotoAdapter(this, selectedPhotos);
         recyclerView.setVisibility(View.INVISIBLE);
 
-        recyclerView.setLayoutManager(new StaggeredGridLayoutManager(4, OrientationHelper.VERTICAL));
+        recyclerView.setLayoutManager(new StaggeredGridLayoutManager(3, OrientationHelper.VERTICAL));
         recyclerView.setAdapter(photoAdapter);
 
         recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(this,
@@ -96,11 +98,6 @@ public class SamplingInspectionActivity extends CommonActivity {
                         }
                     }
                 }));
-
-        //
-        if (MainService.getInstance().sendQueryComponentSamplingInspection(id, handler)) {
-            MyToast.showMessage(this, "正在查询抽检情况...");
-        }
     }
 
     @Override

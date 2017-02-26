@@ -11,8 +11,14 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.jacoli.roadsitesupervision.services.ImageUrlModel;
+import com.jacoli.roadsitesupervision.services.InspectionDetailModel;
 import com.jacoli.roadsitesupervision.services.MainService;
+import com.jacoli.roadsitesupervision.services.SamplingInspectionModel;
+import com.jacoli.roadsitesupervision.services.Utils;
 import com.jacoli.roadsitesupervision.views.MyToast;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,11 +28,11 @@ import me.iwf.photopicker.PhotoPicker;
 import me.iwf.photopicker.PhotoPreview;
 
 public class InspectionDetailActivity extends CommonActivity {
-
     private String id;
     private int type;
     private PhotoAdapter photoAdapter;
     private ArrayList<String> selectedPhotos = new ArrayList<>();
+    private InspectionDetailModel model;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,8 +52,15 @@ public class InspectionDetailActivity extends CommonActivity {
             }
         });
 
+        TextView textView = (TextView) findViewById(R.id.name_text);
+        String nameText = "工序部位：" + getIntent().getStringExtra("name");
+        textView.setText(nameText);
+
         EditText editText = (EditText) findViewById(R.id.editText);
         editText.clearFocus();
+        editText.setVisibility(View.INVISIBLE);
+
+        setupImagePicker();
 
         Button submitBtn = (Button) findViewById(R.id.submit_btn);
         submitBtn.setOnClickListener(new View.OnClickListener() {
@@ -57,10 +70,18 @@ public class InspectionDetailActivity extends CommonActivity {
             }
         });
 
+        //
+        if (MainService.getInstance().sendQueryComponentInspectionDetail(id, getPatrolType(), handler)) {
+            MyToast.showMessage(this, "正在查询抽检情况...");
+        }
+    }
+
+    private void setupImagePicker() {
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         photoAdapter = new PhotoAdapter(this, selectedPhotos);
+        recyclerView.setVisibility(View.INVISIBLE);
 
-        recyclerView.setLayoutManager(new StaggeredGridLayoutManager(4, OrientationHelper.VERTICAL));
+        recyclerView.setLayoutManager(new StaggeredGridLayoutManager(3, OrientationHelper.VERTICAL));
         recyclerView.setAdapter(photoAdapter);
 
         recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(this,
@@ -109,6 +130,14 @@ public class InspectionDetailActivity extends CommonActivity {
     @Override
     public void onResponse(int msgCode, Object obj) {
         switch (msgCode) {
+            case MainService.MSG_QUERY_INSPECTION_DETAIL_SUCCESS:
+                MyToast.showMessage(getBaseContext(), "获取抽检情况成功");
+                model = (InspectionDetailModel) obj;
+                onQuerySuccess();
+                break;
+            case MainService.MSG_QUERY_INSPECTION_DETAIL_FAILED:
+                MyToast.showMessage(getBaseContext(), "获取抽检情况失败");
+                break;
             case MainService.MSG_SUBMIT_INSPECTION_DETAIL_SUCCESS:
                 //MyToast.showMessage(getBaseContext(), "提交旁站详情成功");
                 onSubmitSuccess();
@@ -119,6 +148,27 @@ public class InspectionDetailActivity extends CommonActivity {
             default:
                 break;
         }
+    }
+
+    public void onQuerySuccess() {
+        if (model.getIsExist().equalsIgnoreCase("true") || model.getIsExist().equalsIgnoreCase("y")) {
+            EditText editText = (EditText) findViewById(R.id.editText);
+            editText.setText(model.getSituation());
+
+            for (ImageUrlModel imageUrlModel : model.getPhotoList()) {
+                if (imageUrlModel.getWebPath().length() > 0) {
+                    selectedPhotos.add(imageUrlModel.getWebPath());
+                }
+            }
+
+            photoAdapter.notifyDataSetChanged();
+        }
+
+        EditText editText = (EditText) findViewById(R.id.editText);
+        editText.setVisibility(View.VISIBLE);
+
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        recyclerView.setVisibility(View.VISIBLE);
     }
 
     public void onSubmitSuccess() {
@@ -142,29 +192,64 @@ public class InspectionDetailActivity extends CommonActivity {
         builder.create().show();
     }
 
+    private String getPatrolType() {
+        if (type == MainService.project_detail_type_quality_inspection) {
+            return "0";
+        }
+        else if (type == MainService.project_detail_type_safety_inspection) {
+            return "1";
+        }
+        else if (type == MainService.project_detail_type_environmental_inspection) {
+            return "2";
+        }
+
+        return "0";
+    }
+
     public void submit() {
         if (id == null || id.length() < 0) {
             return;
         }
 
         try {
-            Map<String, String> params = new HashMap<>();
-            // TODO
-
             EditText editText = (EditText) findViewById(R.id.editText);
-            params.put("Situation", editText.getText().toString());
 
-            if (type == MainService.project_detail_type_quality_inspection) {
-                params.put("PatrolType", "0");
-            }
-            else if (type == MainService.project_detail_type_safety_inspection) {
-                params.put("PatrolType", "1");
-            }
-            else if (type == MainService.project_detail_type_environmental_inspection) {
-                params.put("PatrolType", "2");
+            List<String> imgUrls = new ArrayList<>();
+            for (String imgUrl : selectedPhotos) {
+                if (imgUrl.startsWith("https") || imgUrl.startsWith("http")) {
+                }
+                else {
+                    imgUrls.add(imgUrl);
+                }
             }
 
-            MainService.getInstance().sendSubmitInspectionDetail(id, params, handler);
+            String delFiles = "";
+
+            if (model != null && (model.getIsExist().equalsIgnoreCase("true") || model.getIsExist().equalsIgnoreCase("y"))) {
+                for (ImageUrlModel imageUrlModel : model.getPhotoList()) {
+                    if (imageUrlModel.getWebPath().length() > 0) {
+
+                        boolean isImgUrlDel = true;
+
+                        for (String imgUrl : selectedPhotos) {
+
+                            if (imgUrl.startsWith("https") || imgUrl.startsWith("http")) {
+                                if (imgUrl.equals(imageUrlModel.getWebPath())) {
+                                    isImgUrlDel = false;
+                                    break;
+                                }
+                            }
+                        }
+
+                        if (isImgUrlDel) {
+                            delFiles += imageUrlModel.getOrdinal() + Utils.MultipartSeparator;
+                        }
+                    }
+                }
+            }
+
+            MainService.getInstance().sendSubmitInspectionDetail(id, getPatrolType(),
+                    editText.getText().toString(), delFiles, imgUrls, handler);
         }
         catch (Exception ex) {
             Log.e("InspectionDetail", ex.toString());

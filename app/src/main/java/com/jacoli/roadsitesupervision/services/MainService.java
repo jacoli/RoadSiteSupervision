@@ -59,8 +59,10 @@ public class MainService {
     public static final int MSG_SUBMIT_PZ_DETAIL_FAILED = 0xa002;
     public static final int MSG_FINISH_COMPONENT_SUCCESS = 0xb001;
     public static final int MSG_FINISH_COMPONENT_FAILED = 0xb002;
-    public static final int MSG_SUBMIT_INSPECTION_DETAIL_SUCCESS = 0xc001;
-    public static final int MSG_SUBMIT_INSPECTION_DETAIL_FAILED = 0xc002;
+    public static final int MSG_QUERY_INSPECTION_DETAIL_SUCCESS = 0xc001;
+    public static final int MSG_QUERY_INSPECTION_DETAIL_FAILED = 0xc002;
+    public static final int MSG_SUBMIT_INSPECTION_DETAIL_SUCCESS = 0xc003;
+    public static final int MSG_SUBMIT_INSPECTION_DETAIL_FAILED = 0xc004;
     public static final int MSG_QUERY_COMPONENT_SAMPLING_INSPECTION_SUCCESS = 0xd001;
     public static final int MSG_QUERY_COMPONENT_SAMPLING_INSPECTION_FAILED = 0xd002;
     public static final int MSG_SUBMIT_COMPONENT_SAMPLING_INSPECTION_SUCCESS = 0xd003;
@@ -814,8 +816,85 @@ public class MainService {
         return true;
     }
 
+    // 获取巡视详情
+    public boolean sendQueryComponentInspectionDetail(final String id, final String type, final Handler handler) {
+        if (getLoginModel() == null || !getLoginModel().isLoginSuccess()) {
+            return false;
+        }
+
+        if (id.length() == 0) {
+            return false;
+        }
+
+        Runnable networkTask = new Runnable() {
+
+            @Override
+            public void run() {
+                try {
+                    String url = serverBaseUrl + "/APP.ashx?Type=GetProjectPatrolDay";
+
+                    FormBody body = new FormBody.Builder()
+                            .add("Token", getLoginModel().getToken())
+                            .add("ProjectID", id)
+                            .add("PatrolType", type)
+                            .build();
+
+                    Request request = new Request.Builder()
+                            .url(url)
+                            .post(body)
+                            .build();
+
+                    Response response = httpClient.newCall(request).execute();
+                    if (response.isSuccessful()) {
+                        String responseStr = response.body().string();
+
+                        Log.i("MainService", responseStr);
+
+                        responseStr = responsePrevProcess(responseStr);
+
+                        try {
+                            Gson gson = new GsonBuilder()
+                                    .registerTypeAdapterFactory(new NullStringToEmptyAdapterFactory())
+                                    .setDateFormat("yyyy-MM-dd'T'HH:mm:ss")
+                                    .create();
+
+                            InspectionDetailModel res = gson.fromJson(responseStr, InspectionDetailModel.class);
+
+                            if (res != null && res.isSuccess()) {
+                                // 通知UI
+                                notifyMsg(handler, MSG_QUERY_INSPECTION_DETAIL_SUCCESS, res);
+                            }
+                            else {
+                                notifyMsg(handler, MSG_QUERY_INSPECTION_DETAIL_FAILED);
+                            }
+                        }
+                        catch (Exception ex) {
+                            Log.e("MainService", ex.toString());
+                            notifyMsg(handler, MSG_QUERY_INSPECTION_DETAIL_FAILED);
+                        }
+                    }
+                    else {
+                        notifyMsg(handler, MSG_QUERY_INSPECTION_DETAIL_FAILED);
+                    }
+                }
+                catch (IOException e) {
+                    Log.e("MainService", e.toString());
+                    notifyMsg(handler, MSG_QUERY_INSPECTION_DETAIL_FAILED);
+                }
+            }
+        };
+
+        new Thread(networkTask).start();
+        return true;
+    }
+
     // 提交巡视详情
-    public boolean sendSubmitInspectionDetail(final String id, final Map<String, String> params, final Handler handler) {
+    public boolean sendSubmitInspectionDetail(final String id,
+                                              final String type,
+                                              final String Situation,
+                                              final String delFiles,
+                                              final List<String> imgUrls,
+                                              final Handler handler) {
         if (getLoginModel() == null || !getLoginModel().isLoginSuccess()) {
             return false;
         }
@@ -834,18 +913,16 @@ public class MainService {
                     MultipartBody.Builder builder = new MultipartBody.Builder()
                             .setType(MultipartBody.FORM)
                             .addFormDataPart("Token", getLoginModel().getToken())
-                            .addFormDataPart("ProjectID", id);
+                            .addFormDataPart("ProjectID", id)
+                            .addFormDataPart("PatrolType", type)
+                            .addFormDataPart("Situation", Situation == null ? "" : Situation);
 
-                    if (params != null) {
-                        for (String key : params.keySet()) {
-                            String value = params.get(key);
-                            if (value != null) {
-                                builder.addFormDataPart(key, value);
-                            }
-                        }
+                    for (String imgUrl : imgUrls) {
+                        builder.addPart(Headers.of("Content-Disposition", "form-data; filename=\"img.png\""),
+                                RequestBody.create(MediaType.parse("image/png"), new File(imgUrl)));
                     }
 
-                    Log.i("MainService params = ", params.toString());
+                    builder.addFormDataPart("DelFile", delFiles);
 
                     Request request = new Request.Builder()
                             .url(url)
