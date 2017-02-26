@@ -15,10 +15,23 @@
         android:layout_height="wrap_content" />
 
     <TextView
-        android:textSize="24sp"
+        android:id="@+id/name_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="10dp"
+        android:textSize="20sp"
+        android:padding="5dp"
+        android:text="工序部位：" />
+
+    <View android:layout_height="2dp"
+        android:layout_width="match_parent"
+        android:layout_marginBottom="10dp"
+        android:background="@color/divider"/>
+
+    <TextView
+        android:textSize="18sp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="20dp"
         android:id="@+id/textView"
         android:text="抽检情况："/>
 
@@ -26,9 +39,9 @@
 
     <EditText
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:padding="5dp"
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        android:padding="10dp"
         android:id="@+id/editText"
         android:singleLine="false"
         android:gravity="top"
@@ -37,20 +50,12 @@
         android:hint="请输入巡视情况"
         />
 
-    <TextView
-        android:textSize="18sp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:id="@+id/textView2"
-        android:text="选择图片："/>
-
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="10dp"
-        android:layout_weight="1"
+        android:layout_height="0dp"
+        android:layout_margin="5dp"
+        android:layout_weight="3"
         />
 
     <Button

@@ -3,6 +3,7 @@ package com.jacoli.roadsitesupervision;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
@@ -11,10 +12,13 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.jacoli.roadsitesupervision.services.ImageUrlModel;
 import com.jacoli.roadsitesupervision.services.MainService;
 import com.jacoli.roadsitesupervision.services.SamplingInspectionModel;
+import com.jacoli.roadsitesupervision.services.StringNullAdapter;
+import com.jacoli.roadsitesupervision.services.Utils;
 import com.jacoli.roadsitesupervision.views.MyToast;
 
 import java.util.ArrayList;
@@ -40,9 +44,6 @@ public class SamplingInspectionActivity extends CommonActivity {
         type = getIntent().getIntExtra("type", MainService.project_detail_type_pz);
         id = getIntent().getStringExtra("id");
 
-        selectedPhotos.add("http://www.2cto.com/uploadfile/Collfiles/20150604/20150604082509219.png");
-        selectedPhotos.add("http://images2015.cnblogs.com/blog/933778/201604/933778-20160422190330257-1034408415.jpg");
-
         createTitleBar();
         titleBar.setLeftText("返回");
         titleBar.setTitle(getIntent().getStringExtra("title"));
@@ -53,8 +54,13 @@ public class SamplingInspectionActivity extends CommonActivity {
             }
         });
 
+        TextView textView = (TextView) findViewById(R.id.name_text);
+        String nameText = "工序部位：" + getIntent().getStringExtra("name");
+        textView.setText(nameText);
+
         EditText editText = (EditText) findViewById(R.id.editText);
         editText.clearFocus();
+        editText.setVisibility(View.INVISIBLE);
 
         Button submitBtn = (Button) findViewById(R.id.submit_btn);
         submitBtn.setOnClickListener(new View.OnClickListener() {
@@ -66,6 +72,7 @@ public class SamplingInspectionActivity extends CommonActivity {
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         photoAdapter = new PhotoAdapter(this, selectedPhotos);
+        recyclerView.setVisibility(View.INVISIBLE);
 
         recyclerView.setLayoutManager(new StaggeredGridLayoutManager(4, OrientationHelper.VERTICAL));
         recyclerView.setAdapter(photoAdapter);
@@ -122,7 +129,7 @@ public class SamplingInspectionActivity extends CommonActivity {
     public void onResponse(int msgCode, Object obj) {
         switch (msgCode) {
             case MainService.MSG_QUERY_COMPONENT_SAMPLING_INSPECTION_SUCCESS:
-                //MyToast.showMessage(getBaseContext(), "提交旁站详情成功");
+                MyToast.showMessage(getBaseContext(), "获取抽检情况成功");
                 model = (SamplingInspectionModel) obj;
                 onQuerySuccess();
                 break;
@@ -153,6 +160,12 @@ public class SamplingInspectionActivity extends CommonActivity {
 
             photoAdapter.notifyDataSetChanged();
         }
+
+        EditText editText = (EditText) findViewById(R.id.editText);
+        editText.setVisibility(View.VISIBLE);
+
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        recyclerView.setVisibility(View.VISIBLE);
     }
 
     public void onSubmitSuccess() {
@@ -182,10 +195,44 @@ public class SamplingInspectionActivity extends CommonActivity {
         }
 
         try {
-            Map<String, String> params = new HashMap<>();
-            // TODO
+            EditText editText = (EditText) findViewById(R.id.editText);
 
-            MainService.getInstance().sendSubmitComponentSamplingInspection(id, params, handler);
+            List<String> imgUrls = new ArrayList<>();
+            for (String imgUrl : selectedPhotos) {
+                if (imgUrl.startsWith("https") || imgUrl.startsWith("http")) {
+                }
+                else {
+                    imgUrls.add(imgUrl);
+                }
+            }
+
+            String delFiles = "";
+
+            if (model != null && (model.getIsExist().equalsIgnoreCase("true") || model.getIsExist().equalsIgnoreCase("y"))) {
+                for (ImageUrlModel imageUrlModel : model.getPhotoList()) {
+                    if (imageUrlModel.getWebPath().length() > 0) {
+
+                        boolean isImgUrlDel = true;
+
+                        for (String imgUrl : selectedPhotos) {
+
+                            if (imgUrl.startsWith("https") || imgUrl.startsWith("http")) {
+                                if (imgUrl.equals(imageUrlModel.getWebPath())) {
+                                    isImgUrlDel = false;
+                                    break;
+                                }
+                            }
+                        }
+
+                        if (isImgUrlDel) {
+                            delFiles += imageUrlModel.getOrdinal() + Utils.MultipartSeparator;
+                        }
+                    }
+                }
+            }
+
+            MainService.getInstance().sendSubmitComponentSamplingInspection(id,
+                    editText.getText().toString(), delFiles, imgUrls, handler);
         }
         catch (Exception ex) {
             Log.e("InspectionDetail", ex.toString());

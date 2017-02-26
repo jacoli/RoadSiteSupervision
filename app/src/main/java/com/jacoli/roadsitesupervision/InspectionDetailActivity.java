@@ -36,9 +36,6 @@ public class InspectionDetailActivity extends CommonActivity {
         type = getIntent().getIntExtra("type", MainService.project_detail_type_pz);
         id = getIntent().getStringExtra("id");
 
-        selectedPhotos.add("http://www.2cto.com/uploadfile/Collfiles/20150604/20150604082509219.png");
-        selectedPhotos.add("http://images2015.cnblogs.com/blog/933778/201604/933778-20160422190330257-1034408415.jpg");
-
         createTitleBar();
         titleBar.setLeftText("返回");
         titleBar.setTitle(getIntent().getStringExtra("title"));

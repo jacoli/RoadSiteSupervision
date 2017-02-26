@@ -8,8 +8,10 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -954,7 +956,11 @@ public class MainService {
     }
 
     // 提交抽检详情
-    public boolean sendSubmitComponentSamplingInspection(final String id, final Map<String, String> params, final Handler handler) {
+    public boolean sendSubmitComponentSamplingInspection(final String id,
+                                                         final String Situation,
+                                                         final String delFiles,
+                                                         final List<String> imgUrls,
+                                                         final Handler handler) {
         if (getLoginModel() == null || !getLoginModel().isLoginSuccess()) {
             return false;
         }
@@ -973,18 +979,15 @@ public class MainService {
                     MultipartBody.Builder builder = new MultipartBody.Builder()
                             .setType(MultipartBody.FORM)
                             .addFormDataPart("Token", getLoginModel().getToken())
-                            .addFormDataPart("ComponentID", id);
+                            .addFormDataPart("ComponentID", id)
+                            .addFormDataPart("Situation", Situation == null ? "" : Situation);
 
-                    if (params != null) {
-                        for (String key : params.keySet()) {
-                            String value = params.get(key);
-                            if (value != null) {
-                                builder.addFormDataPart(key, value);
-                            }
-                        }
+                    for (String imgUrl : imgUrls) {
+                        builder.addPart(Headers.of("Content-Disposition", "form-data; filename=\"img.png\""),
+                                RequestBody.create(MediaType.parse("image/png"), new File(imgUrl)));
                     }
 
-                    Log.i("MainService params = ", params.toString());
+                    builder.addFormDataPart("DelFile", delFiles);
 
                     Request request = new Request.Builder()
                             .url(url)
@@ -1015,6 +1018,7 @@ public class MainService {
                     }
                 }
                 catch (IOException e) {
+                    Log.e("MainService", e.toString());
                     notifyMsg(handler, MSG_SUBMIT_COMPONENT_SAMPLING_INSPECTION_FAILED);
                 }
             }

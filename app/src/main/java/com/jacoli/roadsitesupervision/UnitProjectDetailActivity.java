@@ -362,39 +362,34 @@ public class UnitProjectDetailActivity extends CommonActivity {
         });
     }
 
-    private void showComponentDetailActivity(UnitProjectModel.SubProjectModel subProjectModel ,UnitProjectModel.ComponentModel componentModel) {
-
+    private void showComponentDetailActivity(UnitProjectModel.SubProjectModel subProjectModel,
+                                             UnitProjectModel.ComponentModel componentModel) {
+        Intent intent = null;
         switch (type) {
             case MainService.project_detail_type_pz: {
-                Intent intent = new Intent(this, ComponentDetailActivity.class);
-                intent.putExtra("id", componentModel.getID());
-                intent.putExtra("name", subProjectModel.getName() + "(" + componentModel.getName() + ")");
-                intent.putExtra("title", getIntent().getStringExtra("title"));
-                startActivity(intent);
+                intent = new Intent(this, ComponentDetailActivity.class);
                 break;
             }
             case MainService.project_detail_type_quality_inspection:
             case MainService.project_detail_type_safety_inspection:
             case MainService.project_detail_type_environmental_inspection: {
-                Intent intent = new Intent(this, InspectionDetailActivity.class);
-                intent.putExtra("id", componentModel.getID());
-                intent.putExtra("name", subProjectModel.getName() + "(" + componentModel.getName() + ")");
-                intent.putExtra("title", getIntent().getStringExtra("title"));
-                intent.putExtra("type", type);
-                startActivity(intent);
+                intent = new Intent(this, InspectionDetailActivity.class);
                 break;
             }
             case MainService.project_detail_type_quality_sampling_inspection: {
-                Intent intent = new Intent(this, SamplingInspectionActivity.class);
-                intent.putExtra("id", componentModel.getID());
-                intent.putExtra("name", subProjectModel.getName() + "(" + componentModel.getName() + ")");
-                intent.putExtra("title", getIntent().getStringExtra("title"));
-                intent.putExtra("type", type);
-                startActivity(intent);
+                intent = new Intent(this, SamplingInspectionActivity.class);
                 break;
             }
             default:
                 break;
+        }
+
+        if (intent != null) {
+            intent.putExtra("id", componentModel.getID());
+            intent.putExtra("name", getIntent().getStringExtra("name") + "-" + subProjectModel.getName() + "-" + componentModel.getName());
+            intent.putExtra("title", getIntent().getStringExtra("title"));
+            intent.putExtra("type", type);
+            startActivity(intent);
         }
     }
 }

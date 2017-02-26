@@ -270,6 +270,4 @@ public class ProjectDetailActivity extends CommonActivity {
         intent.putExtra("type", type);
         startActivity(intent);
     }
-
-
 }
