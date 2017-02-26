@@ -199,6 +199,10 @@ public class SamplingInspectionActivity extends CommonActivity {
                 if (imgUrl.startsWith("https") || imgUrl.startsWith("http")) {
                 }
                 else {
+//                    String ImgUrlSmall = imgUrl + ".small";
+//                    CommonActivity.compressPicture(imgUrl, ImgUrlSmall);
+//                    imgUrls.add(ImgUrlSmall);
+
                     imgUrls.add(imgUrl);
                 }
             }
