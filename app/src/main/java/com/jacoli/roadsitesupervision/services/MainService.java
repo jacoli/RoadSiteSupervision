@@ -85,7 +85,7 @@ public class MainService {
     public static final int MSG_QUERY_WEATHER_SUCCESS = 0xf001;
     public static final int MSG_QUERY_WEATHER_FAILED = 0xf002;
 
-    public String serverBaseUrl = "http://118.178.92.22:8001";
+    public String serverBaseUrl = "http://118.178.92.22:8002";
 
     private OkHttpClient httpClient;
     private LoginModel loginModel;
