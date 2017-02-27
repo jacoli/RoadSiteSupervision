@@ -104,7 +104,7 @@ public class SamplingInspectionActivity extends CommonActivity {
     public void onBackPressed() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("提示");
-        builder.setMessage("巡视情况可能未保存，是否仍要返回上一页");
+        builder.setMessage("抽检情况可能未保存，是否仍要返回上一页");
 
         builder.setPositiveButton("返回上一页", new DialogInterface.OnClickListener() {
             @Override
@@ -126,7 +126,7 @@ public class SamplingInspectionActivity extends CommonActivity {
     public void onResponse(int msgCode, Object obj) {
         switch (msgCode) {
             case MainService.MSG_QUERY_COMPONENT_SAMPLING_INSPECTION_SUCCESS:
-                MyToast.showMessage(getBaseContext(), "获取抽检情况成功");
+                //MyToast.showMessage(getBaseContext(), "获取抽检情况成功");
                 model = (SamplingInspectionModel) obj;
                 onQuerySuccess();
                 break;
@@ -199,11 +199,10 @@ public class SamplingInspectionActivity extends CommonActivity {
                 if (imgUrl.startsWith("https") || imgUrl.startsWith("http")) {
                 }
                 else {
-//                    String ImgUrlSmall = imgUrl + ".small";
-//                    CommonActivity.compressPicture(imgUrl, ImgUrlSmall);
-//                    imgUrls.add(ImgUrlSmall);
-
-                    imgUrls.add(imgUrl);
+                    String imgUrlSmall = getCacheDir() + "/tmp" + selectedPhotos.indexOf(imgUrl) + ".jpg";
+                    Log.d("ImageUrl", imgUrlSmall);
+                    CommonActivity.compressPicture(imgUrl, imgUrlSmall);
+                    imgUrls.add(imgUrlSmall);
                 }
             }
 

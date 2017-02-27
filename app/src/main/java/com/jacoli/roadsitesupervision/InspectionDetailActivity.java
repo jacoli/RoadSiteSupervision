@@ -12,18 +12,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.jacoli.roadsitesupervision.services.ImageUrlModel;
 import com.jacoli.roadsitesupervision.services.InspectionDetailModel;
 import com.jacoli.roadsitesupervision.services.MainService;
-import com.jacoli.roadsitesupervision.services.SamplingInspectionModel;
 import com.jacoli.roadsitesupervision.services.Utils;
 import com.jacoli.roadsitesupervision.views.MyToast;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import me.iwf.photopicker.PhotoPicker;
 import me.iwf.photopicker.PhotoPreview;
 
@@ -72,7 +67,7 @@ public class InspectionDetailActivity extends CommonActivity {
 
         //
         if (MainService.getInstance().sendQueryComponentInspectionDetail(id, getPatrolType(), handler)) {
-            MyToast.showMessage(this, "正在查询抽检情况...");
+            MyToast.showMessage(this, "正在查询巡视情况...");
         }
     }
 
@@ -219,7 +214,10 @@ public class InspectionDetailActivity extends CommonActivity {
                 if (imgUrl.startsWith("https") || imgUrl.startsWith("http")) {
                 }
                 else {
-                    imgUrls.add(imgUrl);
+                    String imgUrlSmall = getCacheDir() + "/tmp" + selectedPhotos.indexOf(imgUrl) + ".jpg";
+                    Log.d("ImageUrl", imgUrlSmall);
+                    CommonActivity.compressPicture(imgUrl, imgUrlSmall);
+                    imgUrls.add(imgUrlSmall);
                 }
             }
 

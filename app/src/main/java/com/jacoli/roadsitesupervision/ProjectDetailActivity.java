@@ -56,7 +56,8 @@ public class ProjectDetailActivity extends CommonActivity {
             MyToast.showMessage(getBaseContext(), "获取项目详情失败");
         }
 
-        // TODO get weather
+        // get weather
+        MainService.getInstance().sendQueryWeather(MainService.getInstance().getLoginModel().getProjectID(), handler);
     }
 
     @Override
@@ -70,6 +71,12 @@ public class ProjectDetailActivity extends CommonActivity {
                 break;
             case MainService.MSG_QUERY_PROJECT_DETAIL_FAILED:
                 Toast.makeText(getBaseContext(), "获取项目详情失败", Toast.LENGTH_SHORT).show();
+                break;
+            case MainService.MSG_QUERY_WEATHER_SUCCESS:
+                updateWeatherView();
+                break;
+            case MainService.MSG_QUERY_WEATHER_FAILED:
+                Toast.makeText(getBaseContext(), "获取天气失败", Toast.LENGTH_SHORT).show();
                 break;
             case MainService.MSG_ACTIVE_UNIT_PROJECT_SUCCESS:
                 MyToast.showMessage(getBaseContext(), "激活工程成功");
@@ -85,11 +92,12 @@ public class ProjectDetailActivity extends CommonActivity {
     }
 
     public void updateWeatherView() {
-        EditText editText = (EditText) findViewById(R.id.edit_text_weather);
-        editText.setText("晴");
-
-        EditText editText1 = (EditText) findViewById(R.id.edit_text_temperature);
-        editText1.setText("28.5");
+        TextView dateTextView = (TextView) findViewById(R.id.weather_text);
+        String date = "天气：" + MainService.getInstance().getWeatherModel().getWeather()
+                + "   气温："
+                + MainService.getInstance().getWeatherModel().getAirTep()
+                + "℃";
+        dateTextView.setText(date);
     }
 
     public void updateUnitProjectItemViews() {
@@ -116,6 +124,7 @@ public class ProjectDetailActivity extends CommonActivity {
             FlowLayout.LayoutParams layoutParams = new FlowLayout.LayoutParams(size, size);
             layoutParams.setMargins(margin_h, margin_v, margin_h, margin_v);
             button.setLayoutParams(layoutParams);
+            button.setTextSize(12);
 
             button.setText(unitProjectModel.getName());
 
@@ -244,7 +253,7 @@ public class ProjectDetailActivity extends CommonActivity {
     private void alertToActiveUnitProject(final ProjectDetailModel.UnitProjectModel unitProjectModel) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("提示");
-        builder.setMessage("单位工程 " + unitProjectModel.getName() + " ,是否开始施工？");
+        builder.setMessage(unitProjectModel.getName() + "\n是否开始施工？");
 
         builder.setPositiveButton("是", new DialogInterface.OnClickListener() {
             @Override

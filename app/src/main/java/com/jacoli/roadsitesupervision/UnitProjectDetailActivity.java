@@ -228,10 +228,11 @@ public class UnitProjectDetailActivity extends CommonActivity {
         }
     }
 
-    private void alertToActiveComponent(final UnitProjectModel.ComponentModel componentModel) {
+    private void alertToActiveComponent(final UnitProjectModel.SubProjectModel subProjectModel, final UnitProjectModel.ComponentModel componentModel) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("提示");
-        builder.setMessage("构件 " + componentModel.getName() + " ,是否开始施工?");
+        String text = getIntent().getStringExtra("name") + "-" + subProjectModel.getName() + "-" + componentModel.getName();
+        builder.setMessage(text + "\n是否开始施工?");
 
         builder.setPositiveButton("是", new DialogInterface.OnClickListener() {
             @Override
@@ -249,10 +250,11 @@ public class UnitProjectDetailActivity extends CommonActivity {
         builder.create().show();
     }
 
-    private void alertToFinishComponent(final UnitProjectModel.ComponentModel componentModel) {
+    private void alertToFinishComponent(final UnitProjectModel.SubProjectModel subProjectModel, final UnitProjectModel.ComponentModel componentModel) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("提示");
-        builder.setMessage("构件 " + componentModel.getName() + " ,是否已完成?");
+        String text = getIntent().getStringExtra("name") + "-" + subProjectModel.getName() + "-" + componentModel.getName();
+        builder.setMessage(text + "\n是否已完成?");
 
         builder.setPositiveButton("是", new DialogInterface.OnClickListener() {
             @Override
@@ -283,7 +285,7 @@ public class UnitProjectDetailActivity extends CommonActivity {
                         showComponentDetailActivity(subProjectModel, componentModel);
                     }
                     else {
-                        alertToActiveComponent(componentModel);
+                        alertToActiveComponent(subProjectModel, componentModel);
                     }
                 }
             }
@@ -311,7 +313,7 @@ public class UnitProjectDetailActivity extends CommonActivity {
                         showComponentDetailActivity(subProjectModel, componentModel);
                     }
                     else {
-                        alertToActiveComponent(componentModel);
+                        alertToActiveComponent(subProjectModel, componentModel);
                     }
                 }
             }
@@ -324,7 +326,7 @@ public class UnitProjectDetailActivity extends CommonActivity {
                 }
                 else {
                     if (componentModel.getProgress() == 1 || componentModel.getProgress() == 2) {
-                        alertToFinishComponent(componentModel);
+                        alertToFinishComponent(subProjectModel, componentModel);
                     }
                     else {
                     }
@@ -348,7 +350,7 @@ public class UnitProjectDetailActivity extends CommonActivity {
                         showComponentDetailActivity(subProjectModel, componentModel);
                     }
                     else {
-                        alertToActiveComponent(componentModel);
+                        alertToActiveComponent(subProjectModel, componentModel);
                     }
                 }
             }

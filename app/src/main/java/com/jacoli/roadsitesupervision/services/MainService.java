@@ -82,11 +82,16 @@ public class MainService {
     public static final int MSG_QUERY_COMPONENT_SAMPLING_INSPECTION_FAILED = 0xd002;
     public static final int MSG_SUBMIT_COMPONENT_SAMPLING_INSPECTION_SUCCESS = 0xd003;
     public static final int MSG_SUBMIT_COMPONENT_SAMPLING_INSPECTION_FAILED = 0xd004;
+    public static final int MSG_QUERY_WEATHER_SUCCESS = 0xf001;
+    public static final int MSG_QUERY_WEATHER_FAILED = 0xf002;
 
     public String serverBaseUrl = "http://118.178.92.22:8001";
 
     private OkHttpClient httpClient;
     private LoginModel loginModel;
+    private WeatherModel weatherModel;
+
+    public WeatherModel getWeatherModel() { return weatherModel; }
 
     private static MainService ourInstance = new MainService();
 
@@ -96,6 +101,10 @@ public class MainService {
 
     private MainService() {
         httpClient = new OkHttpClient();
+
+        weatherModel = new WeatherModel();
+        weatherModel.setWeather("");
+        weatherModel.setAirTep("");
     }
 
     public boolean setServerAddress(String address, String port) {
@@ -720,7 +729,9 @@ public class MainService {
                     MultipartBody.Builder builder = new MultipartBody.Builder()
                             .setType(MultipartBody.FORM)
                             .addFormDataPart("Token", getLoginModel().getToken())
-                            .addFormDataPart("PZContentID", id);
+                            .addFormDataPart("PZContentID", id)
+                            .addFormDataPart("Weather", weatherModel.getWeather())
+                            .addFormDataPart("AirTep", weatherModel.getAirTep());
 
                     if (params != null) {
                         for (String key : params.keySet()) {
@@ -930,7 +941,9 @@ public class MainService {
                             .addFormDataPart("Token", getLoginModel().getToken())
                             .addFormDataPart("ProjectID", id)
                             .addFormDataPart("PatrolType", type)
-                            .addFormDataPart("Situation", Situation == null ? "" : Situation);
+                            .addFormDataPart("Situation", Situation == null ? "" : Situation)
+                            .addFormDataPart("Weather", weatherModel.getWeather())
+                            .addFormDataPart("AirTep", weatherModel.getAirTep());
 
                     for (String imgUrl : imgUrls) {
                         builder.addPart(Headers.of("Content-Disposition", "form-data; filename=\"img.png\""),
@@ -1072,7 +1085,9 @@ public class MainService {
                             .setType(MultipartBody.FORM)
                             .addFormDataPart("Token", getLoginModel().getToken())
                             .addFormDataPart("ComponentID", id)
-                            .addFormDataPart("Situation", Situation == null ? "" : Situation);
+                            .addFormDataPart("Situation", Situation == null ? "" : Situation)
+                            .addFormDataPart("Weather", weatherModel.getWeather())
+                            .addFormDataPart("AirTep", weatherModel.getAirTep());
 
                     for (String imgUrl : imgUrls) {
                         builder.addPart(Headers.of("Content-Disposition", "form-data; filename=\"img.png\""),
@@ -1112,6 +1127,77 @@ public class MainService {
                 catch (IOException e) {
                     Log.e("MainService", e.toString());
                     notifyMsg(handler, MSG_SUBMIT_COMPONENT_SAMPLING_INSPECTION_FAILED);
+                }
+            }
+        };
+
+        new Thread(networkTask).start();
+        return true;
+    }
+
+    // 获取天气
+    public boolean sendQueryWeather(final String id, final Handler handler) {
+        if (getLoginModel() == null || !getLoginModel().isLoginSuccess()) {
+            return false;
+        }
+
+        if (id.length() == 0) {
+            return false;
+        }
+
+        Runnable networkTask = new Runnable() {
+
+            @Override
+            public void run() {
+                try {
+                    String url = serverBaseUrl + "/APP.ashx?Type=GetWeather";
+
+                    FormBody body = new FormBody.Builder()
+                            .add("Token", getLoginModel().getToken())
+                            .add("ProjectID", id)
+                            .build();
+
+                    Request request = new Request.Builder()
+                            .url(url)
+                            .post(body)
+                            .build();
+
+                    Response response = httpClient.newCall(request).execute();
+                    if (response.isSuccessful()) {
+                        String responseStr = response.body().string();
+
+                        Log.i("MainService", responseStr);
+
+                        responseStr = responsePrevProcess(responseStr);
+
+                        try {
+                            Gson gson = new GsonBuilder()
+                                    .registerTypeAdapterFactory(new NullStringToEmptyAdapterFactory())
+                                    .setDateFormat("yyyy-MM-dd'T'HH:mm:ss")
+                                    .create();
+
+                            WeatherModel res = gson.fromJson(responseStr, WeatherModel.class);
+
+                            if (res != null && res.isSuccess()) {
+                                // 通知UI
+                                weatherModel = res;
+                                notifyMsg(handler, MSG_QUERY_WEATHER_SUCCESS, res);
+                            }
+                            else {
+                                notifyMsg(handler, MSG_QUERY_WEATHER_FAILED);
+                            }
+                        }
+                        catch (Exception ex) {
+                            Log.e("MainService", ex.toString());
+                            notifyMsg(handler, MSG_QUERY_WEATHER_FAILED);
+                        }
+                    }
+                    else {
+                        notifyMsg(handler, MSG_QUERY_WEATHER_FAILED);
+                    }
+                }
+                catch (IOException e) {
+                    notifyMsg(handler, MSG_QUERY_WEATHER_FAILED);
                 }
             }
         };
