@@ -23,7 +23,6 @@ import me.iwf.photopicker.PhotoPicker;
 import me.iwf.photopicker.PhotoPreview;
 
 public class InspectionDetailActivity extends CommonActivity {
-    private String id;
     private int type;
     private PhotoAdapter photoAdapter;
     private ArrayList<String> selectedPhotos = new ArrayList<>();
@@ -35,7 +34,6 @@ public class InspectionDetailActivity extends CommonActivity {
         setContentView(R.layout.activity_inspection_detail);
 
         type = getIntent().getIntExtra("type", MainService.project_detail_type_pz);
-        id = getIntent().getStringExtra("id");
 
         createTitleBar();
         titleBar.setLeftText("返回");
@@ -46,10 +44,6 @@ public class InspectionDetailActivity extends CommonActivity {
                 onBackPressed();
             }
         });
-
-        TextView textView = (TextView) findViewById(R.id.name_text);
-        String nameText = "工序部位：" + getIntent().getStringExtra("name");
-        textView.setText(nameText);
 
         EditText editText = (EditText) findViewById(R.id.editText);
         editText.clearFocus();
@@ -66,7 +60,7 @@ public class InspectionDetailActivity extends CommonActivity {
         });
 
         //
-        if (MainService.getInstance().sendQueryComponentInspectionDetail(id, getPatrolType(), handler)) {
+        if (MainService.getInstance().sendQueryComponentInspectionDetail(MainService.getInstance().getLoginModel().getProjectID(), getPatrolType(), handler)) {
             MyToast.showMessage(this, "正在查询巡视情况...");
         }
     }
@@ -202,10 +196,6 @@ public class InspectionDetailActivity extends CommonActivity {
     }
 
     public void submit() {
-        if (id == null || id.length() < 0) {
-            return;
-        }
-
         try {
             EditText editText = (EditText) findViewById(R.id.editText);
 
@@ -246,7 +236,7 @@ public class InspectionDetailActivity extends CommonActivity {
                 }
             }
 
-            MainService.getInstance().sendSubmitInspectionDetail(id, getPatrolType(),
+            MainService.getInstance().sendSubmitInspectionDetail(MainService.getInstance().getLoginModel().getProjectID(), getPatrolType(),
                     editText.getText().toString(), delFiles, imgUrls, handler);
         }
         catch (Exception ex) {

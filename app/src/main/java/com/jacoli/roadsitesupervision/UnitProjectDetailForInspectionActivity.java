@@ -23,7 +23,7 @@ import com.jacoli.roadsitesupervision.views.MyToast;
 
 import org.apmem.tools.layouts.FlowLayout;
 
-public class UnitProjectDetailActivity extends CommonActivity {
+public class UnitProjectDetailForInspectionActivity extends CommonActivity {
 
     private UnitProjectModel model;
     private int type;
@@ -31,7 +31,7 @@ public class UnitProjectDetailActivity extends CommonActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_unit_project_detail);
+        setContentView(R.layout.activity_unit_project_detail_for_inspection);
 
         type = getIntent().getIntExtra("type", MainService.project_detail_type_pz);
 
@@ -48,16 +48,17 @@ public class UnitProjectDetailActivity extends CommonActivity {
             Toast.makeText(getBaseContext(), "获取单位工程详情失败", Toast.LENGTH_SHORT).show();
         }
 
-        if (type == MainService.project_detail_type_pz) {
-            String name = intent.getStringExtra("name") + "  旁站情况:";
-            TextView textView = (TextView) findViewById(R.id.project_name_text);
-            textView.setText(name);
-        }
-        else {
-            String name = intent.getStringExtra("name") + "  抽检情况:";
-            TextView textView = (TextView) findViewById(R.id.project_name_text);
-            textView.setText(name);
-        }
+        String name = intent.getStringExtra("name") + "  巡视情况:";
+        TextView textView = (TextView) findViewById(R.id.project_name_text);
+        textView.setText(name);
+
+        Button submitBtn = (Button) findViewById(R.id.submit_btn);
+        submitBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showComponentDetailActivity();
+            }
+        });
     }
 
     @Override
@@ -125,27 +126,8 @@ public class UnitProjectDetailActivity extends CommonActivity {
 
                 button.setText(componentModel.getName());
 
-                switch (type) {
-                    case MainService.project_detail_type_pz: {
-                        updateButtonWithStatus(button, componentModel.getProgress(), componentModel.getPZStatus());
-                        updateButtonActionsForPZ(button, subProjectModel, componentModel);
-                        break;
-                    }
-                    case MainService.project_detail_type_quality_inspection:
-                    case MainService.project_detail_type_safety_inspection:
-                    case MainService.project_detail_type_environmental_inspection: {
-                        updateButtonWithStatus(button, componentModel.getProgress(), componentModel.getPZStatus());
-                        updateButtonActionsForInspections(button, subProjectModel, componentModel);
-                        break;
-                    }
-                    case MainService.project_detail_type_quality_sampling_inspection: {
-                        updateButtonStatusForQualitySamplingInspection(button, componentModel.getProgress(), componentModel.getCheckStatus());
-                        updateButtonActionsForQualitySamplingInspection(button, subProjectModel, componentModel);
-                        break;
-                    }
-                    default:
-                        break;
-                }
+                updateButtonWithStatus(button, componentModel.getProgress(), componentModel.getPZStatus());
+                updateButtonActionsForInspections(button, subProjectModel, componentModel);
 
                 button.setTag(componentModel.getID());
 
@@ -204,33 +186,14 @@ public class UnitProjectDetailActivity extends CommonActivity {
     // 旁站模式、巡视模式，按钮状态
     private void updateButtonWithStatus(Button button, int Progress, int PZStatus) {
         if (button != null) {
-            if (PZStatus == 2) {
+            if (Progress == 2) {
                 button.setBackgroundColor(Color.RED);
             }
-            else {
-                if (Progress == 1 || Progress == 2) {
-                    button.setBackgroundColor(Color.GREEN);
-                }
-                else {
-                    button.setBackgroundColor(Color.GRAY);
-                }
-            }
-        }
-    }
-
-    // 抽检模式，按钮状态
-    private void updateButtonStatusForQualitySamplingInspection(Button button, int Progress, String CheckStatus) {
-        if (button != null) {
-            if (CheckStatus.equals("2")) {
-                button.setBackgroundColor(Color.RED);
+            else if (Progress == 1) {
+                button.setBackgroundColor(Color.GREEN);
             }
             else {
-                if (Progress == 1 || Progress == 2) {
-                    button.setBackgroundColor(Color.GREEN);
-                }
-                else {
-                    button.setBackgroundColor(Color.GRAY);
-                }
+                button.setBackgroundColor(Color.GRAY);
             }
         }
     }
@@ -279,126 +242,29 @@ public class UnitProjectDetailActivity extends CommonActivity {
         builder.create().show();
     }
 
-    // 旁站模式，按钮操作事件处理
-    private void updateButtonActionsForPZ(Button button, final UnitProjectModel.SubProjectModel subProjectModel, final UnitProjectModel.ComponentModel componentModel) {
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (componentModel.getPZStatus() == 2) {
-                    showComponentDetailActivity(subProjectModel, componentModel);
-                }
-                else {
-                    if (componentModel.getProgress() == 1 || componentModel.getProgress() == 2) {
-                        showComponentDetailActivity(subProjectModel, componentModel);
-                    }
-                    else {
-                        alertToActiveComponent(subProjectModel, componentModel);
-                    }
-                }
-            }
-        });
-
-        button.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                return true;
-            }
-        });
-    }
-
     // 巡视模式，按钮操作事件处理
     private void updateButtonActionsForInspections(Button button, final UnitProjectModel.SubProjectModel subProjectModel, final UnitProjectModel.ComponentModel componentModel) {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (componentModel.getProgress() == 2) {
 
-                if (componentModel.getPZStatus() == 2) {
-                    showComponentDetailActivity(subProjectModel, componentModel);
+                }
+                else if (componentModel.getProgress() == 1) {
+                    alertToFinishComponent(subProjectModel, componentModel);
                 }
                 else {
-                    if (componentModel.getProgress() == 1 || componentModel.getProgress() == 2) {
-                        showComponentDetailActivity(subProjectModel, componentModel);
-                    }
-                    else {
-                        alertToActiveComponent(subProjectModel, componentModel);
-                    }
+                    alertToActiveComponent(subProjectModel, componentModel);
                 }
-            }
-        });
-
-        button.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                if (componentModel.getPZStatus() == 2) {
-                }
-                else {
-                    if (componentModel.getProgress() == 1 || componentModel.getProgress() == 2) {
-                        alertToFinishComponent(subProjectModel, componentModel);
-                    }
-                    else {
-                    }
-                }
-
-                return true;
             }
         });
     }
 
-    // 抽检模式，按钮操作事件处理
-    private void updateButtonActionsForQualitySamplingInspection(Button button, final UnitProjectModel.SubProjectModel subProjectModel, final UnitProjectModel.ComponentModel componentModel) {
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (componentModel.getCheckStatus().equals("2")) {
-                    showComponentDetailActivity(subProjectModel, componentModel);
-                }
-                else {
-                    if (componentModel.getProgress() == 1 || componentModel.getProgress() == 2) {
-                        showComponentDetailActivity(subProjectModel, componentModel);
-                    }
-                    else {
-                        alertToActiveComponent(subProjectModel, componentModel);
-                    }
-                }
-            }
-        });
-
-        button.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                return true;
-            }
-        });
-    }
-
-    private void showComponentDetailActivity(UnitProjectModel.SubProjectModel subProjectModel,
-                                             UnitProjectModel.ComponentModel componentModel) {
-        Intent intent = null;
-        switch (type) {
-            case MainService.project_detail_type_pz: {
-                intent = new Intent(this, ComponentDetailActivity.class);
-                break;
-            }
-            case MainService.project_detail_type_quality_inspection:
-            case MainService.project_detail_type_safety_inspection:
-            case MainService.project_detail_type_environmental_inspection: {
-                intent = new Intent(this, InspectionDetailActivity.class);
-                break;
-            }
-            case MainService.project_detail_type_quality_sampling_inspection: {
-                intent = new Intent(this, SamplingInspectionActivity.class);
-                break;
-            }
-            default:
-                break;
-        }
-
-        if (intent != null) {
-            intent.putExtra("id", componentModel.getID());
-            intent.putExtra("name", getIntent().getStringExtra("name") + "-" + subProjectModel.getName() + "-" + componentModel.getName());
-            intent.putExtra("title", getIntent().getStringExtra("title"));
-            intent.putExtra("type", type);
-            startActivity(intent);
-        }
+    private void showComponentDetailActivity() {
+        Intent intent = new Intent(this ,InspectionDetailActivity.class);
+        intent.putExtra("title", getIntent().getStringExtra("title"));
+        intent.putExtra("type", type);
+        startActivity(intent);
     }
 }
+

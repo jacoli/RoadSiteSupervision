@@ -130,19 +130,20 @@ tools:context=".LoginActivity">
 
     <TextView
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="30dp"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="版本号：V1.0"
+        android:gravity="center"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:id="@+id/version_text"/>
 
     <Button
-        android:layout_width="wrap_content"
+        android:layout_width="64dp"
         android:layout_height="30dp"
+        android:gravity="center"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginBottom="-7dp"
         android:layout_marginEnd="10dp"
         android:background="@android:color/white"
         android:text="服务器"

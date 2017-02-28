@@ -49,7 +49,9 @@
         <activity
             android:name="me.iwf.photopicker.PhotoPagerActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
-        <activity android:name=".SamplingInspectionActivity"></activity>
+        <activity android:name=".SamplingInspectionActivity" />
+        <activity android:name=".UnitProjectDetailForInspectionActivity" />
+        <activity android:name=".ProjectDetailForInspectionActivity"></activity>
     </application>
 
 </manifest>

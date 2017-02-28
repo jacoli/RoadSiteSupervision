@@ -20,7 +20,7 @@ import org.apmem.tools.layouts.FlowLayout;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProjectDetailActivity extends CommonActivity {
+public class ProjectDetailForInspectionActivity extends CommonActivity {
 
     private ProjectDetailModel model;
     private int type;
@@ -29,7 +29,7 @@ public class ProjectDetailActivity extends CommonActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_project_detail);
+        setContentView(R.layout.activity_project_detail_for_inspection);
 
         type = getIntent().getIntExtra("type", MainService.project_detail_type_pz);
         itemViews = new ArrayList<>();
@@ -45,6 +45,14 @@ public class ProjectDetailActivity extends CommonActivity {
         TextView dateTextView = (TextView) findViewById(R.id.date_text);
         String date = "日期：" + Utils.getCurrentDateStr();
         dateTextView.setText(date);
+
+        Button submitBtn = (Button) findViewById(R.id.submit_btn);
+        submitBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showComponentDetailActivity();
+            }
+        });
     }
 
     @Override
@@ -177,16 +185,14 @@ public class ProjectDetailActivity extends CommonActivity {
     // 旁站模式、巡视模式，按钮状态
     private void updateButtonStatus(Button button, int Progress, int PZStatus) {
         if (button != null) {
-            if (PZStatus == 2) {
+            if (Progress == 2) {
                 button.setBackgroundColor(Color.RED);
             }
+            else if (Progress == 1) {
+                button.setBackgroundColor(Color.GREEN);
+            }
             else {
-                if (Progress == 1 || Progress == 2) {
-                    button.setBackgroundColor(Color.GREEN);
-                }
-                else {
-                    button.setBackgroundColor(Color.GRAY);
-                }
+                button.setBackgroundColor(Color.GRAY);
             }
         }
     }
@@ -213,17 +219,14 @@ public class ProjectDetailActivity extends CommonActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                if (unitProjectModel.getPZStatus() == 2) {
+                if (unitProjectModel.getProgress() == 2) {
+                    showUnitProjectDetailActivity(unitProjectModel);
+                }
+                else if (unitProjectModel.getProgress() == 1) {
                     showUnitProjectDetailActivity(unitProjectModel);
                 }
                 else {
-                    if (unitProjectModel.getProgress() == 1 || unitProjectModel.getProgress() == 2) {
-                        showUnitProjectDetailActivity(unitProjectModel);
-                    }
-                    else {
-                        alertToActiveUnitProject(unitProjectModel);
-                    }
+                    alertToActiveUnitProject(unitProjectModel);
                 }
             }
         });
@@ -292,4 +295,12 @@ public class ProjectDetailActivity extends CommonActivity {
             startActivity(intent);
         }
     }
+
+    private void showComponentDetailActivity() {
+        Intent intent = new Intent(this ,InspectionDetailActivity.class);
+        intent.putExtra("title", getIntent().getStringExtra("title"));
+        intent.putExtra("type", type);
+        startActivity(intent);
+    }
 }
+

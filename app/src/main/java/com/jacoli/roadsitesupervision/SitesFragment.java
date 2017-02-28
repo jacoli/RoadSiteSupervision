@@ -66,24 +66,32 @@ public class SitesFragment extends Fragment {
 
                 MyToast.showMessage(getActivity(), models[position]);
 
-                Intent intent = new Intent(getActivity(), ProjectDetailActivity.class);
-                intent.putExtra("title", models[position]);
+                Intent intent = null;
                 if (position == 0) {
+                    intent = new Intent(getActivity(), ProjectDetailActivity.class);
                     intent.putExtra("type", MainService.project_detail_type_pz);
                 }
                 else if (position == 1) {
+                    intent = new Intent(getActivity(), ProjectDetailForInspectionActivity.class);
                     intent.putExtra("type", MainService.project_detail_type_quality_inspection);
                 }
                 else if (position == 2) {
+                    intent = new Intent(getActivity(), ProjectDetailForInspectionActivity.class);
                     intent.putExtra("type", MainService.project_detail_type_safety_inspection);
                 }
                 else if (position == 3) {
+                    intent = new Intent(getActivity(), ProjectDetailForInspectionActivity.class);
                     intent.putExtra("type", MainService.project_detail_type_environmental_inspection);
                 }
                 else if (position == 4) {
+                    intent = new Intent(getActivity(), ProjectDetailActivity.class);
                     intent.putExtra("type", MainService.project_detail_type_quality_sampling_inspection);
                 }
-                startActivity(intent);
+
+                if (intent != null) {
+                    intent.putExtra("title", models[position]);
+                    startActivity(intent);
+                }
             }
         });
 

@@ -4,7 +4,7 @@
     android:id="@+id/activity_unit_project_detail"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.jacoli.roadsitesupervision.UnitProjectDetailActivity">
+    tools:context="com.jacoli.roadsitesupervision.UnitProjectDetailForInspectionActivity">
 
     <com.jacoli.roadsitesupervision.views.TitleBar
         android:id="@+id/title_bar"
@@ -17,7 +17,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/title_bar"
-        android:layout_alignParentBottom="true">
+        android:layout_above="@+id/submit_btn">
 
         <org.apmem.tools.layouts.FlowLayout
             android:layout_width="match_parent"
@@ -31,7 +31,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="32dp"
                 android:textSize="20sp"
-                android:text="旁站情况：" />
+                android:text="巡视情况：" />
 
             <View android:layout_height="2dp"
                 android:layout_width="match_parent"
@@ -41,4 +41,16 @@
 
     </ScrollView>
 
+    <Button
+        android:layout_width="164dp"
+        android:layout_height="40dp"
+        android:layout_margin="16dp"
+        android:layout_gravity="center"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:background="@color/accent"
+        android:text="填写巡视表"
+        android:id="@+id/submit_btn" />
+
 </RelativeLayout>
+
