@@ -729,9 +729,14 @@ public class MainService {
                     MultipartBody.Builder builder = new MultipartBody.Builder()
                             .setType(MultipartBody.FORM)
                             .addFormDataPart("Token", getLoginModel().getToken())
-                            .addFormDataPart("PZContentID", id)
-                            .addFormDataPart("Weather", weatherModel.getWeather())
-                            .addFormDataPart("AirTep", weatherModel.getAirTep());
+                            .addFormDataPart("PZContentID", id);
+
+                    if (weatherModel.getWeather() != null && weatherModel.getWeather().length() > 0) {
+                        builder.addFormDataPart("Weather", weatherModel.getWeather());
+                    }
+                    if (weatherModel.getAirTep() != null && weatherModel.getAirTep().length() > 0) {
+                        builder.addFormDataPart("AirTep", weatherModel.getAirTep());
+                    }
 
                     if (params != null) {
                         for (String key : params.keySet()) {
@@ -941,9 +946,14 @@ public class MainService {
                             .addFormDataPart("Token", getLoginModel().getToken())
                             .addFormDataPart("ProjectID", id)
                             .addFormDataPart("PatrolType", type)
-                            .addFormDataPart("Situation", Situation == null ? "" : Situation)
-                            .addFormDataPart("Weather", weatherModel.getWeather())
-                            .addFormDataPart("AirTep", weatherModel.getAirTep());
+                            .addFormDataPart("Situation", Situation == null ? "" : Situation);
+
+                    if (weatherModel.getWeather() != null && weatherModel.getWeather().length() > 0) {
+                        builder.addFormDataPart("Weather", weatherModel.getWeather());
+                    }
+                    if (weatherModel.getAirTep() != null && weatherModel.getAirTep().length() > 0) {
+                        builder.addFormDataPart("AirTep", weatherModel.getAirTep());
+                    }
 
                     for (String imgUrl : imgUrls) {
                         builder.addPart(Headers.of("Content-Disposition", "form-data; filename=\"img.png\""),
@@ -1085,9 +1095,14 @@ public class MainService {
                             .setType(MultipartBody.FORM)
                             .addFormDataPart("Token", getLoginModel().getToken())
                             .addFormDataPart("ComponentID", id)
-                            .addFormDataPart("Situation", Situation == null ? "" : Situation)
-                            .addFormDataPart("Weather", weatherModel.getWeather())
-                            .addFormDataPart("AirTep", weatherModel.getAirTep());
+                            .addFormDataPart("Situation", Situation == null ? "" : Situation);
+
+                    if (weatherModel.getWeather() != null && weatherModel.getWeather().length() > 0) {
+                        builder.addFormDataPart("Weather", weatherModel.getWeather());
+                    }
+                    if (weatherModel.getAirTep() != null && weatherModel.getAirTep().length() > 0) {
+                        builder.addFormDataPart("AirTep", weatherModel.getAirTep());
+                    }
 
                     for (String imgUrl : imgUrls) {
                         builder.addPart(Headers.of("Content-Disposition", "form-data; filename=\"img.png\""),

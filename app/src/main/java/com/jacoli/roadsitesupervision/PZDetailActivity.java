@@ -340,10 +340,10 @@ public class PZDetailActivity extends CommonActivity {
 
         EditText editText = (EditText)tableRow.findViewById(R.id.edit_text);
         if (isDecimal) {
-            editText.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+            editText.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL | InputType.TYPE_NUMBER_FLAG_SIGNED);
         }
         else {
-            editText.setInputType(InputType.TYPE_CLASS_NUMBER);
+            editText.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_SIGNED);
         }
         editText.setText(rowModel.getValue());
         editText.addTextChangedListener(new TextWatcher() {
@@ -519,10 +519,10 @@ public class PZDetailActivity extends CommonActivity {
         for (int i = 0; i < maxNum; ++i) {
             EditText editText = (EditText) getLayoutInflater().inflate(R.layout.pz_detail_array_edit_view, null);
             if (isDecimal) {
-                editText.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+                editText.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL | InputType.TYPE_NUMBER_FLAG_SIGNED);
             }
             else {
-                editText.setInputType(InputType.TYPE_CLASS_NUMBER);
+                editText.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_SIGNED);
             }
 
             if (i < values.length) {
