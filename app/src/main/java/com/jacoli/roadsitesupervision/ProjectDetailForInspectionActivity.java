@@ -132,7 +132,8 @@ public class ProjectDetailForInspectionActivity extends CommonActivity {
             FlowLayout.LayoutParams layoutParams = new FlowLayout.LayoutParams(size, size);
             layoutParams.setMargins(margin_h, margin_v, margin_h, margin_v);
             button.setLayoutParams(layoutParams);
-            button.setTextSize(12);
+            button.setPadding(5, 5, 5, 5);
+            //button.setTextSize(12);
 
             button.setText(unitProjectModel.getName());
 

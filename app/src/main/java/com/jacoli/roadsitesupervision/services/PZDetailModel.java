@@ -183,6 +183,27 @@ public class PZDetailModel extends MsgResponseBase {
         static final int SubValueIndexMax = 2;
         static final String SubValueSeparator = "/";
 
+        public String getSubUnitAtIndexBelowThree(int index) {
+            if (index < 0 || index > SubValueIndexMax) {
+                return "";
+            }
+
+            String[] values = {};
+            try {
+                values = getDescription().split(SubValueSeparator);
+            }
+            catch (Exception ex) {
+                Log.e("", ex.toString());
+            }
+
+            if (index < values.length) {
+                return values[index];
+            }
+            else {
+                return "";
+            }
+        }
+
         public String getSubValueAtIndexBelowThree(int index) {
             if (index < 0 || index > SubValueIndexMax) {
                 return "";

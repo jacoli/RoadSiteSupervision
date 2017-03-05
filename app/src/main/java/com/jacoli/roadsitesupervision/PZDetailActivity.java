@@ -547,35 +547,7 @@ public class PZDetailActivity extends CommonActivity {
 
                 @Override
                 public void afterTextChanged(Editable s) {
-                    if (ofIndex == 0 && s.toString().length() > 0) {
-                        int number = 0;
-                        try {
-                            number = Integer.valueOf(s.toString());
-                        }
-                        catch (Exception e) {
-                            Log.e("", e.toString());
-                        }
-
-                        if (number >= 1 && number < 5) {
-                            rowModel.setSubValueAtIndexBelowThree(s.toString(), ofIndex);
-                        }
-                        else {
-                            AlertDialog.Builder builder = new AlertDialog.Builder(PZDetailActivity.this);
-                            builder.setTitle("错误");
-                            builder.setMessage("数值不能小于1或大于4");
-
-                            builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int which) {
-                                }
-                            });
-
-                            builder.create().show();
-                        }
-                    }
-                    else {
-                        rowModel.setSubValueAtIndexBelowThree(s.toString(), ofIndex);
-                    }
+                    rowModel.setSubValueAtIndexBelowThree(s.toString(), ofIndex);
                 }
             });
 
@@ -593,6 +565,15 @@ public class PZDetailActivity extends CommonActivity {
         setupEditTextOfNumbersInput((EditText)tableRow.findViewById(R.id.edit_text2), rowModel, 1);
         setupEditTextOfNumbersInput((EditText)tableRow.findViewById(R.id.edit_text3), rowModel, 2);
 
+        TextView textView1 = (TextView) tableRow.findViewById(R.id.text1);
+        textView1.setText(rowModel.getSubUnitAtIndexBelowThree(0));
+
+        TextView textView2 = (TextView) tableRow.findViewById(R.id.text2);
+        textView2.setText(rowModel.getSubUnitAtIndexBelowThree(1));
+
+        TextView textView3 = (TextView) tableRow.findViewById(R.id.text3);
+        textView3.setText(rowModel.getSubUnitAtIndexBelowThree(2));
+
         layout.addView(tableRow);
     }
 
@@ -605,6 +586,15 @@ public class PZDetailActivity extends CommonActivity {
         setupEditTextOfNumbersInput((EditText)tableRow.findViewById(R.id.edit_text1), rowModel, 0);
         setupEditTextOfNumbersInput((EditText)tableRow.findViewById(R.id.edit_text2), rowModel, 1);
         setupEditTextOfNumbersInput((EditText)tableRow.findViewById(R.id.edit_text3), rowModel, 2);
+
+        TextView textView1 = (TextView) tableRow.findViewById(R.id.text1);
+        textView1.setText(rowModel.getSubUnitAtIndexBelowThree(0));
+
+        TextView textView2 = (TextView) tableRow.findViewById(R.id.text2);
+        textView2.setText(rowModel.getSubUnitAtIndexBelowThree(1));
+
+        TextView textView3 = (TextView) tableRow.findViewById(R.id.text3);
+        textView3.setText(rowModel.getSubUnitAtIndexBelowThree(2));
 
         layout.addView(tableRow);
     }

@@ -118,7 +118,7 @@ public class ComponentDetailActivity extends CommonActivity {
     // fix : flowlayout底部无法滑倒底，增加一个padding
     private void addBottomPaddingViewToFlowLayout(FlowLayout layout) {
         View view = new View(this);
-        int size = getResources().getDimensionPixelSize(R.dimen.project_detail_button_size);
+        int size = getResources().getDimensionPixelSize(R.dimen.unit_project_detail_button_size);
         FlowLayout.LayoutParams layoutParams = new FlowLayout.LayoutParams(size, size);
         layoutParams.setNewLine(true);
         layout.addView(view, layoutParams);

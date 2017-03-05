@@ -49,12 +49,12 @@ public class UnitProjectDetailActivity extends CommonActivity {
         }
 
         if (type == MainService.project_detail_type_pz) {
-            String name = intent.getStringExtra("name") + "  旁站情况:";
+            String name = intent.getStringExtra("name") + "\n旁站情况:";
             TextView textView = (TextView) findViewById(R.id.project_name_text);
             textView.setText(name);
         }
         else {
-            String name = intent.getStringExtra("name") + "  抽检情况:";
+            String name = intent.getStringExtra("name") + "\n抽检情况:";
             TextView textView = (TextView) findViewById(R.id.project_name_text);
             textView.setText(name);
         }
@@ -103,7 +103,7 @@ public class UnitProjectDetailActivity extends CommonActivity {
             // header
             TextView textView = new TextView(this);
             textView.setText(subProjectModel.getName());
-            int textViewSize = getResources().getDimensionPixelSize(R.dimen.project_detail_button_size);
+            int textViewSize = getResources().getDimensionPixelSize(R.dimen.unit_project_detail_button_size);
             FlowLayout.LayoutParams textLayoutParams = new FlowLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             textLayoutParams.setNewLine(true);
             int textView_margin_v = getResources().getDimensionPixelSize(R.dimen.project_detail_button_margin_v);
@@ -115,7 +115,7 @@ public class UnitProjectDetailActivity extends CommonActivity {
             for (final UnitProjectModel.ComponentModel componentModel : subProjectModel.getComponents()) {
                 Button button = new Button(this);
 
-                int size = getResources().getDimensionPixelSize(R.dimen.project_detail_button_size);
+                int size = getResources().getDimensionPixelSize(R.dimen.unit_project_detail_button_size);
                 int margin_v = getResources().getDimensionPixelSize(R.dimen.project_detail_button_margin_v);
                 int margin_h = getResources().getDimensionPixelSize(R.dimen.project_detail_button_margin_h);
 
@@ -159,7 +159,7 @@ public class UnitProjectDetailActivity extends CommonActivity {
     // fix : flowlayout底部无法滑倒底，增加一个padding
     private void addBottomPaddingViewToFlowLayout(FlowLayout layout) {
         View view = new View(this);
-        int size = getResources().getDimensionPixelSize(R.dimen.project_detail_button_size);
+        int size = getResources().getDimensionPixelSize(R.dimen.unit_project_detail_button_size);
         FlowLayout.LayoutParams layoutParams = new FlowLayout.LayoutParams(size, size);
         layoutParams.setNewLine(true);
         layout.addView(view, layoutParams);
