@@ -160,20 +160,84 @@ public class PZDetailModel extends MsgResponseBase {
 
                 for (int i = 0; i < maxNum; ++i) {
                     if (i == index) {
-                        newValue += value + Utils.MultipartSeparator;
+                        newValue += value;
                     }
                     else {
                         if (i < values.length) {
-                            newValue += values[i] + Utils.MultipartSeparator;
+                            newValue += values[i];
                         }
                         else {
-                            newValue += Utils.MultipartSeparator;
+                            newValue += "";
                         }
+                    }
+
+                    if (i < maxNum - 1) {
+                        newValue += Utils.MultipartSeparator;
                     }
                 }
 
                 setValue(newValue);
             }
+        }
+
+        static final int SubValueIndexMax = 2;
+        static final String SubValueSeparator = "/";
+
+        public String getSubValueAtIndexBelowThree(int index) {
+            if (index < 0 || index > SubValueIndexMax) {
+                return "";
+            }
+
+            String[] values = {};
+            try {
+                values = getValue().split(SubValueSeparator);
+            }
+            catch (Exception ex) {
+                Log.e("", ex.toString());
+            }
+
+            if (index < values.length) {
+                return values[index];
+            }
+            else {
+                return "";
+            }
+        }
+
+        public void setSubValueAtIndexBelowThree(String value, int index) {
+            if (index < 0 || index > SubValueIndexMax) {
+                return;
+            }
+
+            String[] values = {};
+            try {
+                values = getValue().split(SubValueSeparator);
+            }
+            catch (Exception ex) {
+                Log.e("", ex.toString());
+            }
+
+            String newValue = "";
+
+            for (int i = 0; i < SubValueIndexMax + 1; ++i) {
+                if (i == index) {
+                    newValue += value;
+                }
+                else {
+                    if (i < values.length) {
+                        newValue += values[i];
+                    }
+                    else {
+                        newValue += "";
+                    }
+                }
+
+                if (i < SubValueIndexMax) {
+                    newValue += SubValueSeparator;
+                }
+            }
+
+            setValue(newValue);
         }
     }
 }

@@ -325,6 +325,12 @@ public class PZDetailActivity extends CommonActivity {
                 case "5":
                     addDoubleAryToLayout(tableLayout, rowModel);
                     break;
+                case "6":
+                    addIntDoubleIntInputToLayout(tableLayout, rowModel);
+                    break;
+                case "7":
+                    addIntDoubleDoubleInputToLayout(tableLayout, rowModel);
+                    break;
                 default:
                     break;
             }
@@ -450,39 +456,6 @@ public class PZDetailActivity extends CommonActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 rowModel.setValue(s.toString());
-
-//                String text = s.toString();
-//
-//                boolean isValid = true;
-//
-//                try {
-//                    double value = Double.valueOf(text);
-//
-//                    if (item.getMinValue() != null) {
-//                        double minValue = Double.valueOf(item.getMinValue());
-//                        if (value < minValue) {
-//                            isValid = false;
-//                        }
-//                    }
-//
-//                    if (item.getMaxValue() != null) {
-//                        double maxValue = Integer.valueOf(item.getMaxValue());
-//                        if (value > maxValue) {
-//                            isValid = false;
-//                        }
-//                    }
-//
-//                } catch (NumberFormatException e) {
-//                    Log.e("", e.toString());
-//                    isValid = false;
-//                } finally {
-//                }
-//
-//                if (isValid) {
-//                model.getParams().put(item.getItemKey(), s.toString());
-//                } else {
-//                    MyToast.showMessage(getBaseContext(), "参数错误");
-//                }
             }
         });
 
@@ -559,4 +532,81 @@ public class PZDetailActivity extends CommonActivity {
     public void addDoubleAryToLayout(TableLayout layout, PZDetailModel.PZRowModel rowModel) {
         addAryInputToLayout(layout, rowModel, true);
     }
+
+    private void setupEditTextOfNumbersInput(final EditText editText, final PZDetailModel.PZRowModel rowModel, final int ofIndex) {
+        if (editText != null && rowModel != null) {
+            editText.setText(rowModel.getSubValueAtIndexBelowThree(ofIndex));
+            editText.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    if (ofIndex == 0 && s.toString().length() > 0) {
+                        int number = 0;
+                        try {
+                            number = Integer.valueOf(s.toString());
+                        }
+                        catch (Exception e) {
+                            Log.e("", e.toString());
+                        }
+
+                        if (number >= 1 && number < 5) {
+                            rowModel.setSubValueAtIndexBelowThree(s.toString(), ofIndex);
+                        }
+                        else {
+                            AlertDialog.Builder builder = new AlertDialog.Builder(PZDetailActivity.this);
+                            builder.setTitle("错误");
+                            builder.setMessage("数值不能小于1或大于4");
+
+                            builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int which) {
+                                }
+                            });
+
+                            builder.create().show();
+                        }
+                    }
+                    else {
+                        rowModel.setSubValueAtIndexBelowThree(s.toString(), ofIndex);
+                    }
+                }
+            });
+
+            editText.clearFocus();
+        }
+    }
+
+    // type 6, int/double/int
+    public void addIntDoubleIntInputToLayout(TableLayout layout, final PZDetailModel.PZRowModel rowModel) {
+        LinearLayout tableRow = (LinearLayout) getLayoutInflater().inflate(R.layout.pz_detail_int_double_int_row_layout, null);
+        TextView titleView = (TextView) tableRow.findViewById(R.id.title_text_view);
+        titleView.setText(rowModel.getSubName());
+
+        setupEditTextOfNumbersInput((EditText)tableRow.findViewById(R.id.edit_text1), rowModel, 0);
+        setupEditTextOfNumbersInput((EditText)tableRow.findViewById(R.id.edit_text2), rowModel, 1);
+        setupEditTextOfNumbersInput((EditText)tableRow.findViewById(R.id.edit_text3), rowModel, 2);
+
+        layout.addView(tableRow);
+    }
+
+    // type 7, int/double/double
+    public void addIntDoubleDoubleInputToLayout(TableLayout layout, final PZDetailModel.PZRowModel rowModel) {
+        LinearLayout tableRow = (LinearLayout) getLayoutInflater().inflate(R.layout.pz_detail_int_double_double_row_layout, null);
+        TextView titleView = (TextView) tableRow.findViewById(R.id.title_text_view);
+        titleView.setText(rowModel.getSubName());
+
+        setupEditTextOfNumbersInput((EditText)tableRow.findViewById(R.id.edit_text1), rowModel, 0);
+        setupEditTextOfNumbersInput((EditText)tableRow.findViewById(R.id.edit_text2), rowModel, 1);
+        setupEditTextOfNumbersInput((EditText)tableRow.findViewById(R.id.edit_text3), rowModel, 2);
+
+        layout.addView(tableRow);
+    }
+
 }
