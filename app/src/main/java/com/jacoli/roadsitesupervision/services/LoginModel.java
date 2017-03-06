@@ -11,6 +11,15 @@ public class LoginModel extends MsgResponseBase implements Serializable {
     private String ExpirDate;
     private String ProjectID;
 
+    // 旁站权限
+    private boolean PZ;
+
+    // 巡视权限
+    private boolean Patrol;
+
+    // 抽检权限
+    private boolean Check;
+
     public String getToken() {
         return token;
     }
@@ -41,6 +50,30 @@ public class LoginModel extends MsgResponseBase implements Serializable {
 
     public void setProjectID(String projectID) {
         ProjectID = projectID;
+    }
+
+    public boolean isPZ() {
+        return PZ;
+    }
+
+    public void setPZ(boolean PZ) {
+        this.PZ = PZ;
+    }
+
+    public boolean isPatrol() {
+        return Patrol;
+    }
+
+    public void setPatrol(boolean patrol) {
+        Patrol = patrol;
+    }
+
+    public boolean isCheck() {
+        return Check;
+    }
+
+    public void setCheck(boolean check) {
+        Check = check;
     }
 
     // 登录是否成功

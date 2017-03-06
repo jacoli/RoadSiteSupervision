@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:padding="5dp"
+        android:id="@+id/title_text_view"
+        android:text="title_text_view"
+        />
+
+
+    <LinearLayout android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="5dp"
+            android:gravity="end"
+            android:paddingEnd="10dp"
+            android:padding="5dp"
+            android:id="@+id/edit_text1"
+            android:inputType="number|numberSigned"
+            android:hint="请输入"
+            android:maxLines="1"
+            android:singleLine="true"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:layout_gravity="center_vertical"
+            android:textSize="18sp"
+            android:text="单位"
+            android:id="@+id/text1"
+            />
+    </LinearLayout>
+
+    <LinearLayout android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="5dp"
+            android:gravity="end"
+            android:paddingEnd="10dp"
+            android:padding="5dp"
+            android:id="@+id/edit_text2"
+            android:inputType="numberDecimal|numberSigned"
+            android:hint="请输入"
+            android:maxLines="1"
+            android:singleLine="true"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:layout_gravity="center_vertical"
+            android:textSize="18sp"
+            android:text="单位"
+            android:id="@+id/text2"
+            />
+    </LinearLayout>
+
+    <LinearLayout android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="5dp"
+            android:padding="5dp"
+            android:gravity="end"
+            android:paddingEnd="10dp"
+            android:id="@+id/edit_text3"
+            android:inputType="numberDecimal|numberSigned"
+            android:hint="请输入"
+            android:maxLines="1"
+            android:singleLine="true"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:layout_gravity="center_vertical"
+            android:textSize="18sp"
+            android:text="单位"
+            android:id="@+id/text3"
+            />
+    </LinearLayout>
+
+    <LinearLayout android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="5dp"
+            android:padding="5dp"
+            android:gravity="end"
+            android:paddingEnd="10dp"
+            android:id="@+id/edit_text4"
+            android:inputType="numberDecimal|numberSigned"
+            android:hint="请输入"
+            android:maxLines="1"
+            android:singleLine="true"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:layout_gravity="center_vertical"
+            android:textSize="18sp"
+            android:text="单位"
+            android:id="@+id/text4"
+            />
+    </LinearLayout>
+
+
+</LinearLayout>

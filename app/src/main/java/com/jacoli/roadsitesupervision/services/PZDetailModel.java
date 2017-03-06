@@ -180,10 +180,15 @@ public class PZDetailModel extends MsgResponseBase {
             }
         }
 
-        static final int SubValueIndexMax = 2;
+        //static final int SubValueIndexMax = 2;
         static final String SubValueSeparator = "/";
 
         public String getSubUnitAtIndexBelowThree(int index) {
+            int SubValueIndexMax = 2;
+            if (getDataFormat().equals("8")) {
+                SubValueIndexMax = 3;
+            }
+
             if (index < 0 || index > SubValueIndexMax) {
                 return "";
             }
@@ -205,6 +210,11 @@ public class PZDetailModel extends MsgResponseBase {
         }
 
         public String getSubValueAtIndexBelowThree(int index) {
+            int SubValueIndexMax = 2;
+            if (getDataFormat().equals("8")) {
+                SubValueIndexMax = 3;
+            }
+
             if (index < 0 || index > SubValueIndexMax) {
                 return "";
             }
@@ -226,6 +236,11 @@ public class PZDetailModel extends MsgResponseBase {
         }
 
         public void setSubValueAtIndexBelowThree(String value, int index) {
+            int SubValueIndexMax = 2;
+            if (getDataFormat().equals("8")) {
+                SubValueIndexMax = 3;
+            }
+
             if (index < 0 || index > SubValueIndexMax) {
                 return;
             }

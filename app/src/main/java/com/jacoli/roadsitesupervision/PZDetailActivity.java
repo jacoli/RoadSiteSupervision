@@ -331,6 +331,9 @@ public class PZDetailActivity extends CommonActivity {
                 case "7":
                     addIntDoubleDoubleInputToLayout(tableLayout, rowModel);
                     break;
+                case "8":
+                    addIntDoubleDoubleDoubleInputToLayout(tableLayout, rowModel);
+                    break;
                 default:
                     break;
             }
@@ -595,6 +598,32 @@ public class PZDetailActivity extends CommonActivity {
 
         TextView textView3 = (TextView) tableRow.findViewById(R.id.text3);
         textView3.setText(rowModel.getSubUnitAtIndexBelowThree(2));
+
+        layout.addView(tableRow);
+    }
+
+    // type 8, int/double/double/double
+    public void addIntDoubleDoubleDoubleInputToLayout(TableLayout layout, final PZDetailModel.PZRowModel rowModel) {
+        LinearLayout tableRow = (LinearLayout) getLayoutInflater().inflate(R.layout.pz_detail_int_double_double_double_row_layout, null);
+        TextView titleView = (TextView) tableRow.findViewById(R.id.title_text_view);
+        titleView.setText(rowModel.getSubName());
+
+        setupEditTextOfNumbersInput((EditText)tableRow.findViewById(R.id.edit_text1), rowModel, 0);
+        setupEditTextOfNumbersInput((EditText)tableRow.findViewById(R.id.edit_text2), rowModel, 1);
+        setupEditTextOfNumbersInput((EditText)tableRow.findViewById(R.id.edit_text3), rowModel, 2);
+        setupEditTextOfNumbersInput((EditText)tableRow.findViewById(R.id.edit_text4), rowModel, 3);
+
+        TextView textView1 = (TextView) tableRow.findViewById(R.id.text1);
+        textView1.setText(rowModel.getSubUnitAtIndexBelowThree(0));
+
+        TextView textView2 = (TextView) tableRow.findViewById(R.id.text2);
+        textView2.setText(rowModel.getSubUnitAtIndexBelowThree(1));
+
+        TextView textView3 = (TextView) tableRow.findViewById(R.id.text3);
+        textView3.setText(rowModel.getSubUnitAtIndexBelowThree(2));
+
+        TextView textView4 = (TextView) tableRow.findViewById(R.id.text4);
+        textView4.setText(rowModel.getSubUnitAtIndexBelowThree(3));
 
         layout.addView(tableRow);
     }
