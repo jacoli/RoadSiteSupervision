@@ -49,7 +49,7 @@ public class LoginActivity extends CommonActivity {
 
         configsModel = BGConfigsModel.fetch(this);
         if (configsModel.getServerPort().length() == 0) {
-            configsModel.setServerPort("8002");
+            configsModel.setServerPort("8001");
         }
 
         MainService.getInstance().setServerAddress(configsModel.getServerAddress(), configsModel.getServerPort());
