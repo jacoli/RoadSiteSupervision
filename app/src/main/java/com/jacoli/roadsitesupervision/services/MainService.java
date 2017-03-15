@@ -3,19 +3,14 @@ package com.jacoli.roadsitesupervision.services;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
-
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonSyntaxException;
-
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import okhttp3.FormBody;
 import okhttp3.Headers;
 import okhttp3.MediaType;
@@ -24,21 +19,6 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
-import java.lang.reflect.Type;
-import java.io.EOFException;
-import java.io.IOException;
-import java.io.Reader;
-import java.io.StringReader;
-import java.io.StringWriter;
-import java.io.Writer;
-import java.lang.reflect.Type;
-import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 public class MainService {
 
@@ -53,15 +33,17 @@ public class MainService {
     // 质量抽检
     public static final int project_detail_type_quality_sampling_inspection = 0x1005;
 
-
+    /*
+    * 响应码
+    * */
     public static final int MSG_LOGIN_SUCCESS = 0x1001;
     public static final int MSG_LOGIN_FAILED = 0x1002;
-    public static final int MSG_QUERY_PROJECT_DETAIL_SUCCESS = 0x3001;
-    public static final int MSG_QUERY_PROJECT_DETAIL_FAILED = 0x3002;
-    public static final int MSG_ACTIVE_UNIT_PROJECT_SUCCESS = 0x4001;
-    public static final int MSG_ACTIVE_UNIT_PROJECT_FAILED = 0x4002;
-    public static final int MSG_QUERY_UNIT_PROJECT_DETAIL_SUCCESS = 0x5001;
-    public static final int MSG_QUERY_UNIT_PROJECT_DETAIL_FAILED = 0x5002;
+    public static final int MSG_QUERY_PROJECT_DETAIL_SUCCESS = 0x2001;
+    public static final int MSG_QUERY_PROJECT_DETAIL_FAILED = 0x2002;
+    public static final int MSG_ACTIVE_UNIT_PROJECT_SUCCESS = 0x2003;
+    public static final int MSG_ACTIVE_UNIT_PROJECT_FAILED = 0x2004;
+    public static final int MSG_QUERY_UNIT_PROJECT_DETAIL_SUCCESS = 0x2005;
+    public static final int MSG_QUERY_UNIT_PROJECT_DETAIL_FAILED = 0x2006;
     public static final int MSG_ACTIVE_COMPONENT_SUCCESS = 0x6001;
     public static final int MSG_ACTIVE_COMPONENT_FAILED = 0x6002;
     public static final int MSG_QUERY_COMPONENT_DETAIL_SUCCESS = 0x7001;
@@ -85,8 +67,7 @@ public class MainService {
     public static final int MSG_QUERY_WEATHER_SUCCESS = 0xf001;
     public static final int MSG_QUERY_WEATHER_FAILED = 0xf002;
 
-    public String serverBaseUrl = "http://118.178.92.22:8002";
-
+    private String serverBaseUrl = "http://118.178.92.22:8002";
     private OkHttpClient httpClient;
     private LoginModel loginModel;
     private WeatherModel weatherModel;
@@ -137,19 +118,6 @@ public class MainService {
 
     private String responsePrevProcess(String inString) {
         return inString;
-//        if (inString != null && inString.length() > 0) {
-//            if (inString.startsWith("(")) {
-//                inString = inString.substring(1);
-//                if (inString.endsWith(")")) {
-//                    inString = inString.substring(0, inString.length() - 1);
-//                }
-//            }
-//            String outString = inString.replace("\\\"", "\"");
-//            return outString;
-//        }
-//        else {
-//            return "";
-//        }
     }
 
     private void notifyMsg(Handler handler, int msgCode) {
@@ -590,6 +558,10 @@ public class MainService {
             return false;
         }
 
+        if (getLoginModel().getProjectID().length() == 0) {
+            return false;
+        }
+
         Runnable networkTask = new Runnable() {
 
             @Override
@@ -599,6 +571,7 @@ public class MainService {
 
                     FormBody body = new FormBody.Builder()
                             .add("Token", getLoginModel().getToken())
+                            .add("ProjectID", getLoginModel().getProjectID())
                             .build();
 
                     Request request = new Request.Builder()
