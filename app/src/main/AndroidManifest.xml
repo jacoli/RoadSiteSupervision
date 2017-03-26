@@ -51,7 +51,8 @@
             android:theme="@style/Theme.AppCompat.NoActionBar" />
         <activity android:name=".SamplingInspectionActivity" />
         <activity android:name=".UnitProjectDetailForInspectionActivity" />
-        <activity android:name=".ProjectDetailForInspectionActivity"></activity>
+        <activity android:name=".ProjectDetailForInspectionActivity" />
+        <activity android:name=".AssignedMatterDetailActivity"></activity>
     </application>
 
 </manifest>

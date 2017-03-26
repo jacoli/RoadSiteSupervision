@@ -37,49 +37,49 @@ public class MainService {
     * 响应码
     * */
     // 系统事件
-    public static final int MSG_LOGIN_SUCCESS = 0x1001;
-    public static final int MSG_LOGIN_FAILED = 0x1002;
-    public static final int MSG_QUERY_WEATHER_SUCCESS = 0x1003;
-    public static final int MSG_QUERY_WEATHER_FAILED = 0x1004;
+    public static final int MSG_LOGIN_SUCCESS = 1000;
+    public static final int MSG_LOGIN_FAILED = 1002;
+    public static final int MSG_QUERY_WEATHER_SUCCESS = 1003;
+    public static final int MSG_QUERY_WEATHER_FAILED = 1004;
 
     //
-    public static final int MSG_QUERY_PROJECT_DETAIL_SUCCESS = 0x2001;
-    public static final int MSG_QUERY_PROJECT_DETAIL_FAILED = 0x2002;
-    public static final int MSG_ACTIVE_UNIT_PROJECT_SUCCESS = 0x2003;
-    public static final int MSG_ACTIVE_UNIT_PROJECT_FAILED = 0x2004;
-    public static final int MSG_QUERY_UNIT_PROJECT_DETAIL_SUCCESS = 0x2005;
-    public static final int MSG_QUERY_UNIT_PROJECT_DETAIL_FAILED = 0x2006;
-    public static final int MSG_ACTIVE_COMPONENT_SUCCESS = 0x2007;
-    public static final int MSG_ACTIVE_COMPONENT_FAILED = 0x2008;
-    public static final int MSG_QUERY_COMPONENT_DETAIL_SUCCESS = 0x2009;
-    public static final int MSG_QUERY_COMPONENT_DETAIL_FAILED = 0x200a;
-    public static final int MSG_QUERY_OPERATOR_LIST_SUCCESS = 0x200b;
-    public static final int MSG_QUERY_OPERATOR_LIST_FAILED = 0x200c;
-    public static final int MSG_QUERY_PZ_DETAIL_SUCCESS = 0x200d;
-    public static final int MSG_QUERY_PZ_DETAIL_FAILED = 0x200e;
+    public static final int MSG_QUERY_PROJECT_DETAIL_SUCCESS = 2001;
+    public static final int MSG_QUERY_PROJECT_DETAIL_FAILED = 2002;
+    public static final int MSG_ACTIVE_UNIT_PROJECT_SUCCESS = 2003;
+    public static final int MSG_ACTIVE_UNIT_PROJECT_FAILED = 2004;
+    public static final int MSG_QUERY_UNIT_PROJECT_DETAIL_SUCCESS = 2005;
+    public static final int MSG_QUERY_UNIT_PROJECT_DETAIL_FAILED = 2006;
+    public static final int MSG_ACTIVE_COMPONENT_SUCCESS = 2007;
+    public static final int MSG_ACTIVE_COMPONENT_FAILED = 2008;
+    public static final int MSG_QUERY_COMPONENT_DETAIL_SUCCESS = 2009;
+    public static final int MSG_QUERY_COMPONENT_DETAIL_FAILED = 2010;
+    public static final int MSG_QUERY_OPERATOR_LIST_SUCCESS = 2011;
+    public static final int MSG_QUERY_OPERATOR_LIST_FAILED = 2012;
+    public static final int MSG_QUERY_PZ_DETAIL_SUCCESS = 2013;
+    public static final int MSG_QUERY_PZ_DETAIL_FAILED = 2014;
 
-    public static final int MSG_SUBMIT_PZ_DETAIL_SUCCESS = 0x2010;
-    public static final int MSG_SUBMIT_PZ_DETAIL_FAILED = 0x2011;
-    public static final int MSG_FINISH_COMPONENT_SUCCESS = 0x2012;
-    public static final int MSG_FINISH_COMPONENT_FAILED = 0x2013;
-    public static final int MSG_QUERY_INSPECTION_DETAIL_SUCCESS = 0x2014;
-    public static final int MSG_QUERY_INSPECTION_DETAIL_FAILED = 0x2015;
-    public static final int MSG_SUBMIT_INSPECTION_DETAIL_SUCCESS = 0x2016;
-    public static final int MSG_SUBMIT_INSPECTION_DETAIL_FAILED = 0x2017;
-    public static final int MSG_QUERY_COMPONENT_SAMPLING_INSPECTION_SUCCESS = 0x2018;
-    public static final int MSG_QUERY_COMPONENT_SAMPLING_INSPECTION_FAILED = 0x2019;
-    public static final int MSG_SUBMIT_COMPONENT_SAMPLING_INSPECTION_SUCCESS = 0x201a;
-    public static final int MSG_SUBMIT_COMPONENT_SAMPLING_INSPECTION_FAILED = 0x201b;
+    public static final int MSG_SUBMIT_PZ_DETAIL_SUCCESS = 2100;
+    public static final int MSG_SUBMIT_PZ_DETAIL_FAILED = 2101;
+    public static final int MSG_FINISH_COMPONENT_SUCCESS = 2102;
+    public static final int MSG_FINISH_COMPONENT_FAILED = 2103;
+    public static final int MSG_QUERY_INSPECTION_DETAIL_SUCCESS = 2104;
+    public static final int MSG_QUERY_INSPECTION_DETAIL_FAILED = 2105;
+    public static final int MSG_SUBMIT_INSPECTION_DETAIL_SUCCESS = 2106;
+    public static final int MSG_SUBMIT_INSPECTION_DETAIL_FAILED = 2107;
+    public static final int MSG_QUERY_COMPONENT_SAMPLING_INSPECTION_SUCCESS = 2108;
+    public static final int MSG_QUERY_COMPONENT_SAMPLING_INSPECTION_FAILED = 2109;
+    public static final int MSG_SUBMIT_COMPONENT_SAMPLING_INSPECTION_SUCCESS = 2110;
+    public static final int MSG_SUBMIT_COMPONENT_SAMPLING_INSPECTION_FAILED = 2111;
 
     //
-    public static final int MSG_SUBMIT_ASSIGNED_MATTER_SUCCESS = 0x3000;
-    public static final int MSG_SUBMIT_ASSIGNED_MATTER_FAILED = 0x3001;
-    public static final int MSG_REPLY_ASSIGNED_MATTER_SUCCESS = 0x3002;
-    public static final int MSG_REPLY_ASSIGNED_MATTER_FAILED = 0x3003;
-    public static final int MSG_QUERY_ASSIGNED_MATTERS_SUCCESS = 0x3004;
-    public static final int MSG_QUERY_ASSIGNED_MATTERS_FAILED = 0x3005;
-    public static final int MSG_QUERY_ASSIGNED_MATTER_DETAIL_SUCCESS = 0x3006;
-    public static final int MSG_QUERY_ASSIGNED_MATTER_DETAIL_FAILED = 0x3007;
+    public static final int MSG_SUBMIT_ASSIGNED_MATTER_SUCCESS = 3000;
+    public static final int MSG_SUBMIT_ASSIGNED_MATTER_FAILED = 3001;
+    public static final int MSG_REPLY_ASSIGNED_MATTER_SUCCESS = 3002;
+    public static final int MSG_REPLY_ASSIGNED_MATTER_FAILED = 3003;
+    public static final int MSG_QUERY_ASSIGNED_MATTERS_SUCCESS = 3004;
+    public static final int MSG_QUERY_ASSIGNED_MATTERS_FAILED = 3005;
+    public static final int MSG_QUERY_ASSIGNED_MATTER_DETAIL_SUCCESS = 3006;
+    public static final int MSG_QUERY_ASSIGNED_MATTER_DETAIL_FAILED = 3007;
 
     private String serverBaseUrl = "http://118.178.92.22:8002";
     private OkHttpClient httpClient;
