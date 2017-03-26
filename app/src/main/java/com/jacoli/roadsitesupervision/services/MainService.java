@@ -1133,65 +1133,108 @@ public class MainService {
             return false;
         }
 
-        Runnable networkTask = new Runnable() {
+        MyRequest request = new MyRequest(new RequestProcessor() {
+            @Override
+            public Response execute() throws IOException {
+                String url = serverBaseUrl + "/APP.ashx?Type=GetWeather";
+
+                FormBody body = new FormBody.Builder()
+                        .add("Token", getLoginModel().getToken())
+                        .add("ProjectID", id)
+                        .build();
+
+                Request request = new Request.Builder()
+                        .url(url)
+                        .post(body)
+                        .build();
+
+                return httpClient.newCall(request).execute();
+            }
 
             @Override
-            public void run() {
-                try {
-                    String url = serverBaseUrl + "/APP.ashx?Type=GetWeather";
-
-                    FormBody body = new FormBody.Builder()
-                            .add("Token", getLoginModel().getToken())
-                            .add("ProjectID", id)
-                            .build();
-
-                    Request request = new Request.Builder()
-                            .url(url)
-                            .post(body)
-                            .build();
-
-                    Response response = httpClient.newCall(request).execute();
-                    if (response.isSuccessful()) {
-                        String responseStr = response.body().string();
-
-                        Log.i("MainService", responseStr);
-
-                        responseStr = responsePrevProcess(responseStr);
-
-                        try {
-                            Gson gson = new GsonBuilder()
-                                    .registerTypeAdapterFactory(new NullStringToEmptyAdapterFactory())
-                                    .setDateFormat("yyyy-MM-dd'T'HH:mm:ss")
-                                    .create();
-
-                            WeatherModel res = gson.fromJson(responseStr, WeatherModel.class);
-
-                            if (res != null && res.isSuccess()) {
-                                // 通知UI
-                                weatherModel = res;
-                                notifyMsg(handler, MSG_QUERY_WEATHER_SUCCESS, res);
-                            }
-                            else {
-                                notifyMsg(handler, MSG_QUERY_WEATHER_FAILED);
-                            }
-                        }
-                        catch (Exception ex) {
-                            Log.e("MainService", ex.toString());
-                            notifyMsg(handler, MSG_QUERY_WEATHER_FAILED);
-                        }
-                    }
-                    else {
-                        notifyMsg(handler, MSG_QUERY_WEATHER_FAILED);
-                    }
-                }
-                catch (IOException e) {
-                    notifyMsg(handler, MSG_QUERY_WEATHER_FAILED);
-                }
+            public MsgResponseBase parse(String responseJsonString, Gson gson) {
+                WeatherModel res = gson.fromJson(responseJsonString, WeatherModel.class);
+                return res;
             }
-        };
 
-        new Thread(networkTask).start();
-        return true;
+            @Override
+            public void onSuccess(MsgResponseBase res) {
+                weatherModel = (WeatherModel) res;
+            }
+        }, MSG_QUERY_WEATHER_SUCCESS, MSG_QUERY_WEATHER_FAILED, handler);
+
+        return request.run();
     }
+
+//    // 获取天气
+//    public boolean sendQueryWeather(final String id, final Handler handler) {
+//        if (getLoginModel() == null || !getLoginModel().isLoginSuccess()) {
+//            return false;
+//        }
+//
+//        if (id.length() == 0) {
+//            return false;
+//        }
+//
+//        Runnable networkTask = new Runnable() {
+//
+//            @Override
+//            public void run() {
+//                try {
+//                    String url = serverBaseUrl + "/APP.ashx?Type=GetWeather";
+//
+//                    FormBody body = new FormBody.Builder()
+//                            .add("Token", getLoginModel().getToken())
+//                            .add("ProjectID", id)
+//                            .build();
+//
+//                    Request request = new Request.Builder()
+//                            .url(url)
+//                            .post(body)
+//                            .build();
+//
+//                    Response response = httpClient.newCall(request).execute();
+//                    if (response.isSuccessful()) {
+//                        String responseStr = response.body().string();
+//
+//                        Log.i("MainService", responseStr);
+//
+//                        responseStr = responsePrevProcess(responseStr);
+//
+//                        try {
+//                            Gson gson = new GsonBuilder()
+//                                    .registerTypeAdapterFactory(new NullStringToEmptyAdapterFactory())
+//                                    .setDateFormat("yyyy-MM-dd'T'HH:mm:ss")
+//                                    .create();
+//
+//                            WeatherModel res = gson.fromJson(responseStr, WeatherModel.class);
+//
+//                            if (res != null && res.isSuccess()) {
+//                                // 通知UI
+//                                weatherModel = res;
+//                                notifyMsg(handler, MSG_QUERY_WEATHER_SUCCESS, res);
+//                            }
+//                            else {
+//                                notifyMsg(handler, MSG_QUERY_WEATHER_FAILED);
+//                            }
+//                        }
+//                        catch (Exception ex) {
+//                            Log.e("MainService", ex.toString());
+//                            notifyMsg(handler, MSG_QUERY_WEATHER_FAILED);
+//                        }
+//                    }
+//                    else {
+//                        notifyMsg(handler, MSG_QUERY_WEATHER_FAILED);
+//                    }
+//                }
+//                catch (IOException e) {
+//                    notifyMsg(handler, MSG_QUERY_WEATHER_FAILED);
+//                }
+//            }
+//        };
+//
+//        new Thread(networkTask).start();
+//        return true;
+//    }
 
 }
