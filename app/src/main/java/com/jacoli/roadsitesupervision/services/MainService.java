@@ -1220,7 +1220,7 @@ public class MainService {
         return new MyRequest(handler, MSG_REPLY_ASSIGNED_MATTER_SUCCESS, MSG_REPLY_ASSIGNED_MATTER_FAILED, new RequestAndResponseHandler() {
             @Override
             public Response buildRequestAndWaitingResponse() throws IOException {
-                String url = serverBaseUrl + "/APP.ashx?Type=SubmitAssignedMatter";
+                String url = serverBaseUrl + "/APP.ashx?Type=SubmitAssignedMatterReply";
 
                 MultipartBody.Builder builder = new MultipartBody.Builder()
                         .setType(MultipartBody.FORM)

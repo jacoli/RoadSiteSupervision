@@ -20,8 +20,12 @@ import com.jacoli.roadsitesupervision.views.MyToast;
 
 import java.util.List;
 
+import me.iwf.photopicker.PhotoPicker;
+import me.iwf.photopicker.PhotoPreview;
+
 public class AssignedMatterDetailActivity extends CommonActivity {
 
+    private String matterId;
     private AssignedMatterDetailModel model;
     private BaseAdapter adapter;
 
@@ -35,8 +39,8 @@ public class AssignedMatterDetailActivity extends CommonActivity {
         titleBar.setTitle("交办事项详情");
 
         Intent intent = getIntent();
-        String id = intent.getStringExtra("id");
-        if (!MainService.getInstance().sendQueryAssignedMatterDetail(id, handler)) {
+        matterId = intent.getStringExtra("id");
+        if (!MainService.getInstance().sendQueryAssignedMatterDetail(matterId, handler)) {
             Toast.makeText(getBaseContext(), "获取交办事项详情失败", Toast.LENGTH_SHORT).show();
         }
 
@@ -44,6 +48,9 @@ public class AssignedMatterDetailActivity extends CommonActivity {
         submitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent = new Intent(AssignedMatterDetailActivity.this, AssignedMatterReplyActivity.class);
+                intent.putExtra("id", getIntent().getStringExtra("id"));
+                startActivityForResult(intent, AssignedMatterReplyActivity.RequestCode);
             }
         });
 
@@ -110,6 +117,18 @@ public class AssignedMatterDetailActivity extends CommonActivity {
                 break;
             default:
                 break;
+        }
+    }
+
+    @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == AssignedMatterReplyActivity.RequestCode) {
+            if (resultCode == RESULT_OK) {
+                if (!MainService.getInstance().sendQueryAssignedMatterDetail(matterId, handler)) {
+                    Toast.makeText(getBaseContext(), "获取交办事项详情失败", Toast.LENGTH_SHORT).show();
+                }
+            }
         }
     }
 }

@@ -52,7 +52,8 @@
         <activity android:name=".SamplingInspectionActivity" />
         <activity android:name=".UnitProjectDetailForInspectionActivity" />
         <activity android:name=".ProjectDetailForInspectionActivity" />
-        <activity android:name=".AssignedMatterDetailActivity"></activity>
+        <activity android:name=".AssignedMatterDetailActivity" />
+        <activity android:name=".AssignedMatterReplyActivity"></activity>
     </application>
 
 </manifest>
