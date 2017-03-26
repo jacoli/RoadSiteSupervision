@@ -59,9 +59,12 @@ public class TodoListFragment extends CommonFragment {
 
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
-                View v = getActivity().getLayoutInflater().inflate(R.layout.list_item_base_action_button, null);
+                View v = getActivity().getLayoutInflater().inflate(R.layout.list_item_assigned_mater_list, null);
                 TextView textView = (TextView)v.findViewById(R.id.textView);
-                //textView.setText(models[position]);
+                textView.setText(model.getItems().get(position).getSubject());
+
+                TextView textView2 = (TextView)v.findViewById(R.id.textView2);
+                textView2.setText(model.getItems().get(position).getAddTime());
                 return v;
             }
         };

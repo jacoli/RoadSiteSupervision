@@ -3,6 +3,9 @@ package com.jacoli.roadsitesupervision;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.OrientationHelper;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -18,6 +21,7 @@ import com.jacoli.roadsitesupervision.services.ImageUrlModel;
 import com.jacoli.roadsitesupervision.services.MainService;
 import com.jacoli.roadsitesupervision.views.MyToast;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import me.iwf.photopicker.PhotoPicker;
@@ -78,12 +82,18 @@ public class AssignedMatterDetailActivity extends CommonActivity {
                 View v = getLayoutInflater().inflate(R.layout.list_item_assigned_mater_detail, null);
                 TextView textView = (TextView)v.findViewById(R.id.textView);
 
+                final ArrayList<String> imageUrls = new ArrayList<>();
+
                 if (position == 0) {
                     String text = "主题：" + model.getSubject() + "\n"
                             + "来自于：" + model.getSenderName() + "\n"
                             + "时间：" + model.getAddTime() + "\n"
                             + "内容：" + model.getAssignContent();
                     textView.setText(text);
+
+                    for (ImageUrlModel imageUrlModel : model.getPhotoList()) {
+                        imageUrls.add(imageUrlModel.getWebPath());
+                    }
                 }
                 else {
                     AssignedMatterDetailModel.Reply reply = model.getReply().get(position - 1);
@@ -91,7 +101,14 @@ public class AssignedMatterDetailActivity extends CommonActivity {
                             + "时间：" + reply.getAddTime() + "\n"
                             + "内容：" + reply.getAssignContent();
                     textView.setText(text);
+
+                    for (ImageUrlModel imageUrlModel : reply.getPhotoList()) {
+                        imageUrls.add(imageUrlModel.getWebPath());
+                    }
                 }
+
+                RecyclerView recyclerView = (RecyclerView) v.findViewById(R.id.recycler_view);
+                setupPhotoPicker(recyclerView, imageUrls);
 
                 return v;
             }
@@ -103,6 +120,26 @@ public class AssignedMatterDetailActivity extends CommonActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             }
         });
+    }
+
+    private void setupPhotoPicker(RecyclerView recyclerView, final ArrayList<String> imgUrls) {
+        if (recyclerView != null && imgUrls != null) {
+            PhotoAdapter photoAdapter = new PhotoAdapter(AssignedMatterDetailActivity.this, imgUrls, false);
+
+            recyclerView.setLayoutManager(new StaggeredGridLayoutManager(5, OrientationHelper.VERTICAL));
+            recyclerView.setAdapter(photoAdapter);
+
+            recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(AssignedMatterDetailActivity.this,
+                    new RecyclerItemClickListener.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(View view, int position) {
+                            PhotoPreview.builder()
+                                    .setPhotos(imgUrls)
+                                    .setCurrentItem(position)
+                                    .start(AssignedMatterDetailActivity.this);
+                        }
+                    }));
+        }
     }
 
     @Override
