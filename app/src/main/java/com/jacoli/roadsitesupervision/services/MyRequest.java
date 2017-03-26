@@ -9,7 +9,6 @@ import com.google.gson.GsonBuilder;
 
 import java.io.IOException;
 
-import okhttp3.FormBody;
 import okhttp3.Response;
 
 /**
@@ -17,16 +16,16 @@ import okhttp3.Response;
  */
 
 public class MyRequest {
-    private RequestProcessor processor;
+    private RequestAndResponseHandler processor;
     private int successMsg;
     private int failureMsg;
     private Handler handler;
 
-    MyRequest(RequestProcessor processor, int successMsg, int failureMsg, Handler handler) {
-        this.processor = processor;
+    MyRequest(Handler handler, int successMsg, int failureMsg, RequestAndResponseHandler processor) {
+        this.handler = handler;
         this.successMsg = successMsg;
         this.failureMsg = failureMsg;
-        this.handler = handler;
+        this.processor = processor;
     }
 
     private String responsePrevProcess(String inString) {
@@ -51,20 +50,20 @@ public class MyRequest {
     }
 
     boolean run() {
-        if (processor != null) {
+        if (processor != null && handler != null && successMsg > 0 && failureMsg > 0) {
             Runnable networkTask = new Runnable() {
 
                 @Override
                 public void run() {
                     try {
-                        Response response = processor.execute();
+                        Response response = processor.buildRequestAndWaitingResponse();
 
                         if (response.isSuccessful()) {
-                            String responseStr = response.body().string();
+                            String responseJsonString = response.body().string();
 
-                            Log.i("MainService", responseStr);
+                            Log.i("MyRequest", responseJsonString);
 
-                            responseStr = responsePrevProcess(responseStr);
+                            responseJsonString = responsePrevProcess(responseJsonString);
 
                             try {
                                 Gson gson = new GsonBuilder()
@@ -72,18 +71,18 @@ public class MyRequest {
                                         .setDateFormat("yyyy-MM-dd'T'HH:mm:ss")
                                         .create();
 
-                                MsgResponseBase res = processor.parse(responseStr, gson);
+                                MsgResponseBase model = processor.jsonModelParsedFromResponseString(responseJsonString, gson);
 
-                                if (res != null && res.isSuccess()) {
-                                    processor.onSuccess(res);
-                                    notifyMsg(handler, successMsg, res);
+                                if (model != null && model.isSuccess()) {
+                                    processor.onSuccessHandleBeforeNotify(model);
+                                    notifyMsg(handler, successMsg, model);
                                 }
                                 else {
                                     notifyMsg(handler, failureMsg);
                                 }
                             }
                             catch (Exception ex) {
-                                Log.e("MainService", ex.toString());
+                                Log.e("MyRequest", ex.toString());
                                 notifyMsg(handler, failureMsg);
                             }
                         }
