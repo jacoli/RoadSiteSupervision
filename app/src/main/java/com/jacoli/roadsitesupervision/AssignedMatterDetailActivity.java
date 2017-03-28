@@ -1,6 +1,5 @@
 package com.jacoli.roadsitesupervision;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.OrientationHelper;
@@ -14,17 +13,10 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.jacoli.roadsitesupervision.services.AssignedMatterDetailModel;
-import com.jacoli.roadsitesupervision.services.ComponentDetailModel;
 import com.jacoli.roadsitesupervision.services.ImageUrlModel;
 import com.jacoli.roadsitesupervision.services.MainService;
-import com.jacoli.roadsitesupervision.views.MyToast;
-
 import java.util.ArrayList;
-import java.util.List;
-
-import me.iwf.photopicker.PhotoPicker;
 import me.iwf.photopicker.PhotoPreview;
 
 public class AssignedMatterDetailActivity extends CommonActivity {
@@ -59,7 +51,10 @@ public class AssignedMatterDetailActivity extends CommonActivity {
         });
 
         ListView listView = (ListView) findViewById(R.id.listView);
+        setupListView(listView);
+    }
 
+    private void setupListView(ListView listView) {
         adapter = new BaseAdapter() {
 
             @Override
@@ -120,6 +115,7 @@ public class AssignedMatterDetailActivity extends CommonActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             }
         });
+
     }
 
     private void setupPhotoPicker(RecyclerView recyclerView, final ArrayList<String> imgUrls) {

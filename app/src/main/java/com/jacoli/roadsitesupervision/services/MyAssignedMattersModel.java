@@ -6,7 +6,7 @@ import java.util.List;
  * Created by lichuange on 17/3/26.
  */
 
-public class MyAssginedMattersModel extends MsgResponseBase {
+public class MyAssignedMattersModel extends MsgResponseBase {
 
     public class Item {
         private String ID;

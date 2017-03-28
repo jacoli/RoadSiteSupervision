@@ -1279,7 +1279,7 @@ public class MainService {
 
             @Override
             public MsgResponseBase jsonModelParsedFromResponseString(String responseJsonString, Gson gson) {
-                return gson.fromJson(responseJsonString, MyAssginedMattersModel.class);
+                return gson.fromJson(responseJsonString, MyAssignedMattersModel.class);
             }
 
             @Override

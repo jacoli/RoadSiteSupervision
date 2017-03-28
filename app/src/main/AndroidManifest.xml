@@ -21,6 +21,8 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.READ_CONTACTS"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
 
     <application
         android:allowBackup="true"
@@ -53,7 +55,8 @@
         <activity android:name=".UnitProjectDetailForInspectionActivity" />
         <activity android:name=".ProjectDetailForInspectionActivity" />
         <activity android:name=".AssignedMatterDetailActivity" />
-        <activity android:name=".AssignedMatterReplyActivity"></activity>
+        <activity android:name=".AssignedMatterReplyActivity" />
+        <activity android:name=".AssignedMatterCreateActivity"></activity>
     </application>
 
 </manifest>

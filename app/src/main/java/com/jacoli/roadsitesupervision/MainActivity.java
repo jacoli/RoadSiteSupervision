@@ -1,9 +1,12 @@
 package com.jacoli.roadsitesupervision;
 
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
+import android.view.View;
 
+import com.jacoli.roadsitesupervision.views.TitleBar;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabSelectListener;
 
@@ -52,6 +55,15 @@ public class MainActivity extends CommonActivity {
                     // 如果MessageFragment不为空，则直接将它显示出来
                     transaction.show(todoListFragment);
                 }
+
+                titleBar.addAction(new TitleBar.TextAction("创建") {
+                    @Override
+                    public void performAction(View view) {
+                        Intent intent = new Intent(MainActivity.this, AssignedMatterCreateActivity.class);
+                        startActivity(intent);
+                    }
+                });
+
                 break;
             case R.id.tab_sites:
                 titleBar.setTitle("现场工作");
@@ -108,5 +120,7 @@ public class MainActivity extends CommonActivity {
         if (settingsFragment != null) {
             transaction.hide(settingsFragment);
         }
+
+        titleBar.removeAllActions();
     }
 }

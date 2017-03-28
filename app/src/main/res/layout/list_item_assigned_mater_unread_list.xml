@@ -5,11 +5,17 @@
     android:orientation="horizontal"
     android:minHeight="64dp">
 
+    <ImageView
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_gravity="center"
+        android:src="@drawable/ic_unread_tip"
+        android:scaleType="fitCenter"/>
+
     <LinearLayout
         android:layout_width="0dp"
         android:layout_weight="1"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
         android:layout_marginEnd="16dp"
         android:orientation="vertical"
         android:minHeight="64dp">
@@ -18,7 +24,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="18sp"
-            android:textColor="@color/secondary_text"
+            android:textColor="@color/primary_text"
             android:layout_marginTop="8dp"
             android:id="@+id/textView"
             android:text="主题"

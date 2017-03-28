@@ -1,13 +1,7 @@
 package com.jacoli.roadsitesupervision;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.app.Fragment;
-//import android.support.v4.app.Fragment;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,29 +10,29 @@ import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.jacoli.roadsitesupervision.services.ComponentDetailModel;
 import com.jacoli.roadsitesupervision.services.MainService;
-import com.jacoli.roadsitesupervision.services.MyAssginedMattersModel;
-import com.jacoli.roadsitesupervision.views.MyToast;
-
-import java.util.List;
+import com.jacoli.roadsitesupervision.services.MyAssignedMattersModel;
 
 public class TodoListFragment extends CommonFragment {
 
-    private MyAssginedMattersModel model;
+    private MyAssignedMattersModel model;
     private BaseAdapter adapter;
 
     public TodoListFragment() {
         // Required empty public constructor
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View selfView = inflater.inflate(R.layout.fragment_todolist_list, container, false);
         ListView listView = (ListView)selfView.findViewById(R.id.listView);
+        setupListView(listView);
+        MainService.getInstance().sendQueryAssignedMatters(handler);
+        return selfView;
+    }
+
+    private void setupListView(ListView listView) {
 
         adapter = new BaseAdapter() {
 
@@ -59,15 +53,27 @@ public class TodoListFragment extends CommonFragment {
 
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
-                View v = getActivity().getLayoutInflater().inflate(R.layout.list_item_assigned_mater_list, null);
-                TextView textView = (TextView)v.findViewById(R.id.textView);
-                textView.setText(model.getItems().get(position).getSubject());
+                //if (position % 2 == 0) {
+                    View v = getActivity().getLayoutInflater().inflate(R.layout.list_item_assigned_mater_list, null);
+                    TextView textView = (TextView)v.findViewById(R.id.textView);
+                    textView.setText(model.getItems().get(position).getSubject());
 
-                TextView textView2 = (TextView)v.findViewById(R.id.textView2);
-                textView2.setText(model.getItems().get(position).getAddTime());
-                return v;
+                    TextView textView2 = (TextView)v.findViewById(R.id.textView2);
+                    textView2.setText(model.getItems().get(position).getAddTime());
+                    return v;
+//                }
+//                else {
+//                    View v = getActivity().getLayoutInflater().inflate(R.layout.list_item_assigned_mater_unread_list, null);
+//                    TextView textView = (TextView)v.findViewById(R.id.textView);
+//                    textView.setText(model.getItems().get(position).getSubject());
+//
+//                    TextView textView2 = (TextView)v.findViewById(R.id.textView2);
+//                    textView2.setText(model.getItems().get(position).getAddTime());
+//                    return v;
+//                }
             }
         };
+
 
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -78,17 +84,13 @@ public class TodoListFragment extends CommonFragment {
                 startActivity(intent);
             }
         });
-
-        MainService.getInstance().sendQueryAssignedMatters(handler);
-
-        return selfView;
     }
 
     @Override
     public void onResponse(int msgCode, Object obj) {
         switch (msgCode) {
             case MainService.MSG_QUERY_ASSIGNED_MATTERS_SUCCESS:
-                model = (MyAssginedMattersModel) obj;
+                model = (MyAssignedMattersModel) obj;
                 adapter.notifyDataSetChanged();
                 break;
             case MainService.MSG_QUERY_ASSIGNED_MATTERS_FAILED:

@@ -3,6 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
+    android:layout_marginStart="24dp"
+    android:layout_marginEnd="16dp"
     android:minHeight="64dp">
 
     <TextView
@@ -10,8 +12,6 @@
         android:layout_height="wrap_content"
         android:textSize="14sp"
         android:textColor="@color/secondary_text"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         android:id="@+id/textView"
@@ -21,8 +21,6 @@
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
         android:layout_marginBottom="3dp"
         />
 
