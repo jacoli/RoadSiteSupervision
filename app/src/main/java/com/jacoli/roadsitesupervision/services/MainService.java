@@ -5,6 +5,8 @@ import android.os.Message;
 import android.util.Log;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.jacoli.roadsitesupervision.EasyRequest.*;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -85,6 +87,7 @@ public class MainService {
     private OkHttpClient httpClient;
     private LoginModel loginModel;
     private WeatherModel weatherModel;
+    private Handler handler = new Handler();
 
     public WeatherModel getWeatherModel() { return weatherModel; }
 
@@ -233,7 +236,7 @@ public class MainService {
 //                            .add("Token", token)
 //                            .build();
 //
-//                    Request request = new Request.Builder()
+//                    EasyRequest request = new EasyRequest.Builder()
 //                            .url(url)
 //                            .post(body)
 //                            .build();
@@ -1323,5 +1326,57 @@ public class MainService {
             public void onSuccessHandleBeforeNotify(MsgResponseBase responseModel) {
             }
         }).run();
+    }
+
+    // 获取员工列表
+    public void sendQueryStaffs(Callbacks callbacks) {
+        if (getLoginModel() == null || !getLoginModel().isLoginSuccess()) {
+            onFailed("错误：未登录", callbacks);
+            return;
+        }
+
+        if (Utils.isStringEmpty(getLoginModel().getProjectID())) {
+            onFailed("错误：项目ID为空", callbacks);
+            return;
+        }
+
+        EasyRequest req = new EasyRequest(new Processor() {
+            @Override
+            public Response buildRequestAndWaitingResponse() throws IOException {
+                String url = serverBaseUrl + "/APP.ashx?Type=GetStaffList";
+
+                FormBody body = new FormBody.Builder()
+                        .add("Token", getLoginModel().getToken())
+                        .add("ProjectID", getLoginModel().getProjectID())
+                        .build();
+
+                Request request = new Request.Builder()
+                        .url(url)
+                        .post(body)
+                        .build();
+
+                return httpClient.newCall(request).execute();
+            }
+
+            @Override
+            public ResponseBase jsonModelParsedFromResponseString(String responseJsonString, Gson gson) {
+                return gson.fromJson(responseJsonString, StaffListModel.class);
+            }
+
+            @Override
+            public void onSuccessHandleBeforeNotify(ResponseBase responseModel) {}
+        }, handler, callbacks);
+        req.asyncSend();
+    }
+
+    private void onFailed(final String error, final Callbacks callbacks) {
+        if (callbacks != null) {
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    callbacks.onFailed(error);
+                }
+            });
+        }
     }
 }

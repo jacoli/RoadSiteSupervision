@@ -16,6 +16,7 @@ public class MyAssignedMattersModel extends MsgResponseBase {
         private String AddTime;
         private String ReplyName;
         private String ReplyTime;
+        private Boolean IsRead;
 
         public String getID() {
             return ID;
@@ -71,6 +72,14 @@ public class MyAssignedMattersModel extends MsgResponseBase {
 
         public void setReplyTime(String replyTime) {
             ReplyTime = replyTime;
+        }
+
+        public Boolean getRead() {
+            return IsRead;
+        }
+
+        public void setRead(Boolean read) {
+            IsRead = read;
         }
     }
 

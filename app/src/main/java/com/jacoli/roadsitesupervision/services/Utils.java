@@ -86,4 +86,8 @@ public class Utils {
 
         return distance;
     }
+
+    static public boolean isStringEmpty(String testString) {
+        return testString == null || testString.isEmpty();
+    }
 }
