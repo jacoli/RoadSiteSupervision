@@ -1,17 +1,14 @@
 package com.jacoli.roadsitesupervision;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.Contacts;
 import android.provider.ContactsContract;
 import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.text.Editable;
-import android.text.InputType;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
@@ -31,6 +28,7 @@ import me.iwf.photopicker.PhotoPreview;
 public class AssignedMatterCreateActivity extends CommonActivity {
 
     public static int RequestCode = 2001;
+    public static int RequestCodeToContacts = 2002;
 
     private PhotoAdapter photoAdapter;
     private ArrayList<String> selectedPhotos = new ArrayList<>();
@@ -61,7 +59,7 @@ public class AssignedMatterCreateActivity extends CommonActivity {
         String time = Utils.getCurrentDateStr();
         textView.setText(time);
 
-        EditText receiverEditText = (EditText) findViewById(R.id.edit_text_receiver);
+        final EditText receiverEditText = (EditText) findViewById(R.id.edit_text_receiver);
         receiverEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -76,18 +74,30 @@ public class AssignedMatterCreateActivity extends CommonActivity {
                 if (s.toString().endsWith("@")) {
                     Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
                     intent.setType(ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE);
-                    startActivityForResult(intent, 1);
+                    startActivityForResult(intent, RequestCodeToContacts);
+                }
+                else if (s.toString().endsWith("，")
+                        || s.toString().endsWith(" ")
+                        || s.toString().endsWith(".")
+                        || s.toString().endsWith("。")) {
+                    // 如果空格或中文逗号，则强制转换成英文逗号
+                    String text = s.toString().replace('，', ',');
+                    text = text.replace(' ', ',');
+                    text = text.replace('.', ',');
+                    text = text.replace('。', ',');
+                    receiverEditText.setText(text);
+                    receiverEditText.setSelection(text.length());
+                    receiverEditText.requestFocus();
                 }
             }
         });
-
     }
 
     private void setupImagePicker() {
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         photoAdapter = new PhotoAdapter(this, selectedPhotos);
 
-        recyclerView.setLayoutManager(new StaggeredGridLayoutManager(4, OrientationHelper.VERTICAL));
+        recyclerView.setLayoutManager(new StaggeredGridLayoutManager(3, OrientationHelper.VERTICAL));
         recyclerView.setAdapter(photoAdapter);
 
         recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(this,
@@ -129,24 +139,43 @@ public class AssignedMatterCreateActivity extends CommonActivity {
             photoAdapter.notifyDataSetChanged();
         }
 
-        if (requestCode == 1 && resultCode == RESULT_OK) {
-            if (data != null) {
-                Uri uri = data.getData();
-                if (uri != null) {
-                    Cursor cursor = getContentResolver()
-                            .query(uri,
-                                    new String[] { ContactsContract.CommonDataKinds.Phone.NUMBER,ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME },
-                                    null, null, null);
-                    while (cursor.moveToNext()) {
-                        String number = cursor.getString(0);
-                        String name = cursor.getString(1);
+        if (requestCode == RequestCodeToContacts) {
+            if (resultCode == RESULT_OK) {
+                if (data != null) {
+                    Uri uri = data.getData();
+                    if (uri != null) {
+                        Cursor cursor = getContentResolver()
+                                .query(uri,
+                                        new String[] { ContactsContract.CommonDataKinds.Phone.NUMBER,ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME },
+                                        null, null, null);
+                        while (cursor.moveToNext()) {
+                            String number = cursor.getString(0);
+                            String name = cursor.getString(1);
 
-                        EditText receiverEditText = (EditText) findViewById(R.id.edit_text_receiver);
-                        String text = receiverEditText.getText().toString() + name;
-                        receiverEditText.setText(text);
+                            EditText receiverEditText = (EditText) findViewById(R.id.edit_text_receiver);
+                            String text = receiverEditText.getText().toString() + name;
+                            text = text.replace('@', ',');
+                            receiverEditText.setText(text);
+                            receiverEditText.setSelection(text.length());
+                            receiverEditText.requestFocus();
+                        }
                     }
                 }
             }
+
+            // 清除字符串头部或尾部的"@"
+            EditText receiverEditText = (EditText) findViewById(R.id.edit_text_receiver);
+            String text = receiverEditText.getText().toString();
+            if (text.startsWith("@") || text.startsWith(",")) {
+                text = text.substring(1);
+            }
+            if (text.endsWith("@")) {
+                text = text.substring(0, text.length() - 1);
+            }
+
+            receiverEditText.setText(text);
+            receiverEditText.setSelection(text.length());
+            receiverEditText.requestFocus();
         }
     }
 
