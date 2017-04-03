@@ -16,9 +16,11 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.jacoli.roadsitesupervision.services.MainService;
+import com.jacoli.roadsitesupervision.services.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,6 +57,10 @@ public class AssignedMatterCreateActivity extends CommonActivity {
         EditText senderEditText = (EditText) findViewById(R.id.edit_text_sender);
         senderEditText.setText(MainService.getInstance().getLoginModel().getName());
 
+        TextView textView = (TextView) findViewById(R.id.text_view_time);
+        String time = Utils.getCurrentDateStr();
+        textView.setText(time);
+
         EditText receiverEditText = (EditText) findViewById(R.id.edit_text_receiver);
         receiverEditText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -81,7 +87,7 @@ public class AssignedMatterCreateActivity extends CommonActivity {
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         photoAdapter = new PhotoAdapter(this, selectedPhotos);
 
-        recyclerView.setLayoutManager(new StaggeredGridLayoutManager(3, OrientationHelper.VERTICAL));
+        recyclerView.setLayoutManager(new StaggeredGridLayoutManager(4, OrientationHelper.VERTICAL));
         recyclerView.setAdapter(photoAdapter);
 
         recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(this,
@@ -145,28 +151,42 @@ public class AssignedMatterCreateActivity extends CommonActivity {
     }
 
     public void submit() {
-        EditText editText = (EditText) findViewById(R.id.editText);
-        String content = editText.getText().toString();
+        EditText editText = (EditText) findViewById(R.id.edit_text_subject);
+        String subject = editText.getText().toString();
+        if (subject.isEmpty()) {
+            Toast.makeText(this, "请输入主题", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        EditText recvEditText = (EditText) findViewById(R.id.edit_text_receiver);
+        String receiver = recvEditText.getText().toString();
+        if (subject.isEmpty()) {
+            Toast.makeText(this, "请输入承办人", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        EditText contentEditText = (EditText) findViewById(R.id.editText);
+        String content = contentEditText.getText().toString();
 
         if (content.isEmpty() && selectedPhotos.isEmpty()) {
             Toast.makeText(this, "请输入内容或选择图片", Toast.LENGTH_SHORT).show();
             return;
         }
 
-//        if (!MainService.getInstance().submitAssignedMatter()) {
-//            Toast.makeText(this, "回复失败", Toast.LENGTH_SHORT).show();
-//        }
+        if (!MainService.getInstance().submitAssignedMatter(receiver, subject, content, selectedPhotos, handler)) {
+            Toast.makeText(this, "创建失败", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
     public void onResponse(int msgCode, Object obj) {
         switch (msgCode) {
-            case MainService.MSG_REPLY_ASSIGNED_MATTER_SUCCESS:
+            case MainService.MSG_SUBMIT_ASSIGNED_MATTER_SUCCESS:
                 setResult(RESULT_OK);
                 finish();
                 break;
-            case MainService.MSG_REPLY_ASSIGNED_MATTER_FAILED:
-                Toast.makeText(this, "回复失败", Toast.LENGTH_SHORT).show();
+            case MainService.MSG_SUBMIT_ASSIGNED_MATTER_FAILED:
+                Toast.makeText(this, "创建失败", Toast.LENGTH_SHORT).show();
                 break;
             default:
                 break;

@@ -13,4 +13,7 @@
     <dimen name="pz_button_size">128dp</dimen>
 
     <dimen name="text_view_padding">5dp</dimen>
+    <dimen name="cell_height">48dp</dimen>
+    <dimen name="small_cell_height">48dp</dimen>
+
 </resources>

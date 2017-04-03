@@ -37,10 +37,10 @@
 
                 <TextView
                     android:layout_width="64dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="@dimen/cell_height"
                     android:gravity="center_vertical"
                     android:textSize="18sp"
-                    android:textColor="@color/secondary_text"
+                    android:textColor="@color/primary_text"
                     android:text="主题:"
                     />
 
@@ -62,10 +62,10 @@
 
                 <TextView
                     android:layout_width="64dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="@dimen/cell_height"
                     android:gravity="center_vertical"
                     android:textSize="18sp"
-                    android:textColor="@color/secondary_text"
+                    android:textColor="@color/primary_text"
                     android:text="交办人:"
                     />
 
@@ -87,10 +87,10 @@
 
                 <TextView
                     android:layout_width="64dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="@dimen/cell_height"
                     android:gravity="center_vertical"
                     android:textSize="18sp"
-                    android:textColor="@color/secondary_text"
+                    android:textColor="@color/primary_text"
                     android:id="@+id/textView"
                     android:text="承办人:"
                     />
@@ -105,20 +105,50 @@
 
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="64dp"
+                    android:layout_height="@dimen/cell_height"
+                    android:gravity="center_vertical"
+                    android:textSize="18sp"
+                    android:textColor="@color/primary_text"
+                    android:text="日期:"
+                    />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:textSize="18sp"
+                    android:textColor="@color/secondary_text"
+                    android:id="@+id/text_view_time"
+                    android:text="2017-04-03"
+                    />
+
+            </LinearLayout>
+
+            <include layout="@layout/cell_separator"/>
+
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="32dp"
+                android:layout_height="@dimen/small_cell_height"
                 android:gravity="center_vertical"
                 android:textSize="18sp"
-                android:textColor="@color/secondary_text"
-                android:id="@+id/text_view_time"
-                android:text="日期时间"
+                android:textColor="@color/primary_text"
+                android:text="交办事项"
                 />
 
             <EditText
                 android:layout_width="match_parent"
-                android:layout_height="120dp"
+                android:minHeight="100dp"
+                android:layout_height="wrap_content"
                 android:padding="10dp"
+                android:layout_marginBottom="10dp"
                 android:id="@+id/editText"
                 android:singleLine="false"
                 android:gravity="top"
@@ -127,13 +157,26 @@
                 android:hint="请输入内容"
                 />
 
+            <include layout="@layout/cell_separator"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/small_cell_height"
+                android:gravity="center_vertical"
+                android:textSize="18sp"
+                android:textColor="@color/primary_text"
+                android:text="上传图片（最多9张，可选）"
+                />
+
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recycler_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="64dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
                 />
+
+            <View android:layout_height="64dp"
+                android:layout_width="match_parent"/>
 
         </LinearLayout>
 
