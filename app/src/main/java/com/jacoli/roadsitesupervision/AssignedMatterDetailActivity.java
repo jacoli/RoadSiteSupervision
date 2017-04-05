@@ -75,16 +75,16 @@ public class AssignedMatterDetailActivity extends CommonActivity {
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
                 View v = getLayoutInflater().inflate(R.layout.list_item_assigned_mater_detail, null);
-                TextView textView = (TextView)v.findViewById(R.id.textView);
+                TextView senderTextView = (TextView)v.findViewById(R.id.text_view_sender);
+                TextView contentTextView = (TextView)v.findViewById(R.id.text_view_content);
+                TextView timeTextView = (TextView)v.findViewById(R.id.text_view_time);
 
                 final ArrayList<String> imageUrls = new ArrayList<>();
 
                 if (position == 0) {
-                    String text = "主题：" + model.getSubject() + "\n"
-                            + "来自于：" + model.getSenderName() + "\n"
-                            + "时间：" + model.getAddTime() + "\n"
-                            + "内容：" + model.getAssignContent();
-                    textView.setText(text);
+                    senderTextView.setText(model.getSenderName());
+                    contentTextView.setText(model.getAssignContent());
+                    timeTextView.setText(model.getAddTime());
 
                     for (ImageUrlModel imageUrlModel : model.getPhotoList()) {
                         imageUrls.add(imageUrlModel.getWebPath());
@@ -92,10 +92,9 @@ public class AssignedMatterDetailActivity extends CommonActivity {
                 }
                 else {
                     AssignedMatterDetailModel.Reply reply = model.getReply().get(position - 1);
-                    String text = "来自于：" + reply.getReplyName() + "\n"
-                            + "时间：" + reply.getAddTime() + "\n"
-                            + "内容：" + reply.getAssignContent();
-                    textView.setText(text);
+                    senderTextView.setText(reply.getReplyName());
+                    contentTextView.setText(reply.getAssignContent());
+                    timeTextView.setText(reply.getAddTime());
 
                     for (ImageUrlModel imageUrlModel : reply.getPhotoList()) {
                         imageUrls.add(imageUrlModel.getWebPath());
@@ -115,7 +114,6 @@ public class AssignedMatterDetailActivity extends CommonActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             }
         });
-
     }
 
     private void setupPhotoPicker(RecyclerView recyclerView, final ArrayList<String> imgUrls) {
@@ -144,6 +142,15 @@ public class AssignedMatterDetailActivity extends CommonActivity {
             case MainService.MSG_QUERY_ASSIGNED_MATTER_DETAIL_SUCCESS:
                 model = (AssignedMatterDetailModel) obj;
                 adapter.notifyDataSetChanged();
+
+                if (adapter.getCount() > 1) {
+                    ListView listView = (ListView) findViewById(R.id.listView);
+                    listView.smoothScrollToPosition(adapter.getCount() - 1);
+                }
+
+                TextView textView = (TextView) findViewById(R.id.text_view_subject);
+                String text = model.getSubject();
+                textView.setText(text);
                 break;
             case MainService.MSG_QUERY_ASSIGNED_MATTER_DETAIL_FAILED:
                 Toast.makeText(getBaseContext(), "获取交办事项详情失败", Toast.LENGTH_SHORT).show();

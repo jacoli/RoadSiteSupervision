@@ -1,5 +1,7 @@
 package com.jacoli.roadsitesupervision;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.OrientationHelper;
@@ -126,39 +128,57 @@ public class AssignedMatterCreateActivity extends CommonActivity {
 
     public void submit() {
         EditText editText = (EditText) findViewById(R.id.edit_text_subject);
-        String subject = editText.getText().toString();
+        final String subject = editText.getText().toString();
         if (subject.isEmpty()) {
             Toast.makeText(this, "请输入主题", Toast.LENGTH_SHORT).show();
             return;
         }
 
         EditText recvEditText = (EditText) findViewById(R.id.edit_text_receiver);
-        String receiver = recvEditText.getText().toString();
+        final String receiver = recvEditText.getText().toString();
         if (receiver.isEmpty()) {
             Toast.makeText(this, "请输入承办人", Toast.LENGTH_SHORT).show();
             return;
         }
 
         EditText contentEditText = (EditText) findViewById(R.id.editText);
-        String content = contentEditText.getText().toString();
+        final String content = contentEditText.getText().toString();
 
         if (content.isEmpty() && selectedPhotos.isEmpty()) {
             Toast.makeText(this, "请输入内容或选择图片", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        String staffIds = "";
+        String tmp = "";
         for (int idx = 0; idx < selectedStaffIds.size(); ++idx) {
             String staffId = selectedStaffIds.get(idx);
-            staffIds += staffId;
+            tmp += staffId;
             if (idx != selectedStaffIds.size() - 1) {
-                staffIds += ",";
+                tmp += ",";
             }
         }
+        final String staffIds = tmp;
 
-        if (!MainService.getInstance().submitAssignedMatter(staffIds, subject, content, selectedPhotos, handler)) {
-            Toast.makeText(this, "创建失败", Toast.LENGTH_SHORT).show();
-        }
+        AlertDialog.Builder builder = new AlertDialog.Builder(AssignedMatterCreateActivity.this);
+        builder.setTitle("提示");
+        builder.setMessage("是否发送");
+
+        builder.setPositiveButton("是", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int which) {
+                if (!MainService.getInstance().submitAssignedMatter(staffIds, subject, content, selectedPhotos, handler)) {
+                    Toast.makeText(AssignedMatterCreateActivity.this, "创建失败", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        builder.setNegativeButton("否", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int which) {
+            }
+        });
+
+        builder.create().show();
     }
 
     @Override

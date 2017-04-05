@@ -33,8 +33,9 @@ public class TodoListFragment extends CommonFragment {
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
+    public void onResume() {
+        super.onResume();
+
         MainService.getInstance().sendQueryAssignedMatters(handler);
     }
 
