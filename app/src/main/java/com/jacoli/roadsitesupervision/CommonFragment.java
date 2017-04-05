@@ -37,4 +37,6 @@ public class CommonFragment extends Fragment {
     public void onResponse(int msgCode, Object obj) {
     }
 
+
+
 }

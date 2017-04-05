@@ -39,4 +39,16 @@ public class StaffListModel extends MsgResponseBase {
     public void setItems(List<Staff> items) {
         this.items = items;
     }
+
+    public String getStaffName(String staffId) {
+        if (!Utils.isStringEmpty(staffId) && getItems() != null) {
+            for (Staff staff : getItems()) {
+                if (staffId.equals(staff.getID())) {
+                    return staff.getName();
+                }
+            }
+        }
+
+        return null;
+    }
 }

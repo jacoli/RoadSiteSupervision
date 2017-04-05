@@ -1,34 +1,31 @@
 package com.jacoli.roadsitesupervision;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.jacoli.roadsitesupervision.EasyRequest.Callbacks;
 import com.jacoli.roadsitesupervision.EasyRequest.ResponseBase;
 import com.jacoli.roadsitesupervision.services.MainService;
-import com.jacoli.roadsitesupervision.services.MyAssignedMattersModel;
 import com.jacoli.roadsitesupervision.services.StaffListModel;
 import com.jacoli.roadsitesupervision.services.Utils;
-
 import java.util.ArrayList;
-import java.util.List;
 
 public class StaffsActivity extends CommonActivity {
 
+    static int RequestCode = 1000;
+    static String KeyForStaffIds = "StaffIds";
+    static String KeyForStaffNames = "StaffNames";
+
     private StaffListModel model;
     private BaseAdapter adapter;
-    private List<String> selectedStaffIds;
+    private ArrayList<String> selectedStaffIds;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,25 +36,12 @@ public class StaffsActivity extends CommonActivity {
         titleBar.setLeftText("取消");
         titleBar.setTitle("选择承办人");
 
-        selectedStaffIds = getIntent().getStringArrayListExtra("staffs");
+        selectedStaffIds = getIntent().getStringArrayListExtra(StaffsActivity.KeyForStaffIds);
         if (selectedStaffIds == null) {
             selectedStaffIds = new ArrayList<>();
         }
 
         setupListView((ListView) findViewById(R.id.listView));
-
-        MainService.getInstance().sendQueryStaffs(new Callbacks() {
-            @Override
-            public void onSuccess(ResponseBase responseModel) {
-                model = (StaffListModel) responseModel;
-                adapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onFailed(String error) {
-                Toast.makeText(StaffsActivity.this, error, Toast.LENGTH_SHORT).show();
-            }
-        });
 
         Button submitBtn = (Button) findViewById(R.id.submit_btn);
         submitBtn.setText("确定");
@@ -65,6 +49,27 @@ public class StaffsActivity extends CommonActivity {
             @Override
             public void onClick(View v) {
                 submit();
+            }
+        });
+
+        MainService.getInstance().sendQueryStaffs(new Callbacks() {
+            @Override
+            public void onSuccess(ResponseBase responseModel) {
+                model = (StaffListModel) responseModel;
+                adapter.notifyDataSetChanged();
+
+                ArrayList<String> staffIds = new ArrayList<>();
+                for (String staffId: selectedStaffIds) {
+                    if (model.getStaffName(staffId) != null) {
+                        staffIds.add(staffId);
+                    }
+                }
+                selectedStaffIds = staffIds;
+            }
+
+            @Override
+            public void onFailed(String error) {
+                Toast.makeText(StaffsActivity.this, error, Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -126,52 +131,26 @@ public class StaffsActivity extends CommonActivity {
         });
     }
 
-    boolean isStaffSelected(String staffId) {
-        if (Utils.isStringEmpty(staffId)) {
-            return false;
-        }
-
-        boolean isSelected = false;
-        if (selectedStaffIds != null) {
-            for (String selectedStaffId : selectedStaffIds) {
-                if (selectedStaffId.equals(staffId)) {
-                    isSelected = true;
-                    break;
-                }
-            }
-        }
-        return isSelected;
-    }
-
     void submit() {
         if (model == null) {
             return;
         }
 
+        String staffNames = "";
 
-//        String staffIds = "";
-//        String staffNames = "";
-//
-//        for (int idx = 0; idx < selectedStaffIds.size(); ++idx) {
-//            String staffId = selectedStaffIds.get(idx);
-//            staffIds += staffId;
-//            if (idx != selectedStaffIds.size() - 1) {
-//                staffIds += ",";
-//            }
-//
-//
-//
-//        }
-//
-//        for (String staffId : selectedStaffIds) {
-//
-//
-//        }
-
-
+        for (int idx = 0; idx < selectedStaffIds.size(); ++idx) {
+            String name = model.getStaffName(selectedStaffIds.get(idx));
+            if (name != null) {
+                staffNames += name;
+                if (idx != selectedStaffIds.size() - 1) {
+                    staffNames += ",";
+                }
+            }
+        }
 
         Intent intent = new Intent();
-        //intent.putExtra("staffID", );
+        intent.putStringArrayListExtra(StaffsActivity.KeyForStaffIds, selectedStaffIds);
+        intent.putExtra(StaffsActivity.KeyForStaffNames, staffNames);
         setResult(RESULT_OK, intent);
         finish();
     }

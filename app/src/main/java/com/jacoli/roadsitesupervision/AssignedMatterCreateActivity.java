@@ -1,24 +1,18 @@
 package com.jacoli.roadsitesupervision;
 
 import android.content.Intent;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.text.Editable;
-import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.jacoli.roadsitesupervision.services.MainService;
 import com.jacoli.roadsitesupervision.services.Utils;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,10 +22,10 @@ import me.iwf.photopicker.PhotoPreview;
 public class AssignedMatterCreateActivity extends CommonActivity {
 
     public static int RequestCode = 2001;
-    public static int RequestCodeToContacts = 2002;
 
     private PhotoAdapter photoAdapter;
     private ArrayList<String> selectedPhotos = new ArrayList<>();
+    private ArrayList<String> selectedStaffIds = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,34 +54,14 @@ public class AssignedMatterCreateActivity extends CommonActivity {
         textView.setText(time);
 
         final EditText receiverEditText = (EditText) findViewById(R.id.edit_text_receiver);
-        receiverEditText.addTextChangedListener(new TextWatcher() {
+        receiverEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if (s.toString().endsWith("@")) {
-                    Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                    intent.setType(ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE);
-                    startActivityForResult(intent, RequestCodeToContacts);
-                }
-                else if (s.toString().endsWith("，")
-                        || s.toString().endsWith(" ")
-                        || s.toString().endsWith(".")
-                        || s.toString().endsWith("。")) {
-                    // 如果空格或中文逗号，则强制转换成英文逗号
-                    String text = s.toString().replace('，', ',');
-                    text = text.replace(' ', ',');
-                    text = text.replace('.', ',');
-                    text = text.replace('。', ',');
-                    receiverEditText.setText(text);
-                    receiverEditText.setSelection(text.length());
-                    receiverEditText.requestFocus();
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    receiverEditText.clearFocus();
+                    Intent intent = new Intent(AssignedMatterCreateActivity.this, StaffsActivity.class);
+                    intent.putStringArrayListExtra(StaffsActivity.KeyForStaffIds, selectedStaffIds);
+                    startActivityForResult(intent, StaffsActivity.RequestCode);
                 }
             }
         });
@@ -139,43 +113,14 @@ public class AssignedMatterCreateActivity extends CommonActivity {
             photoAdapter.notifyDataSetChanged();
         }
 
-        if (requestCode == RequestCodeToContacts) {
-            if (resultCode == RESULT_OK) {
-                if (data != null) {
-                    Uri uri = data.getData();
-                    if (uri != null) {
-                        Cursor cursor = getContentResolver()
-                                .query(uri,
-                                        new String[] { ContactsContract.CommonDataKinds.Phone.NUMBER,ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME },
-                                        null, null, null);
-                        while (cursor.moveToNext()) {
-                            String number = cursor.getString(0);
-                            String name = cursor.getString(1);
-
-                            EditText receiverEditText = (EditText) findViewById(R.id.edit_text_receiver);
-                            String text = receiverEditText.getText().toString() + name;
-                            text = text.replace('@', ',');
-                            receiverEditText.setText(text);
-                            receiverEditText.setSelection(text.length());
-                            receiverEditText.requestFocus();
-                        }
-                    }
-                }
+        if (requestCode == StaffsActivity.RequestCode && resultCode == RESULT_OK) {
+            try {
+                selectedStaffIds = data.getStringArrayListExtra(StaffsActivity.KeyForStaffIds);
+                EditText receiverEditText = (EditText) findViewById(R.id.edit_text_receiver);
+                receiverEditText.setText(data.getStringExtra(StaffsActivity.KeyForStaffNames));
+            } catch (Exception ex) {
+                Log.e("", ex.toString());
             }
-
-            // 清除字符串头部或尾部的"@"
-            EditText receiverEditText = (EditText) findViewById(R.id.edit_text_receiver);
-            String text = receiverEditText.getText().toString();
-            if (text.startsWith("@") || text.startsWith(",")) {
-                text = text.substring(1);
-            }
-            if (text.endsWith("@")) {
-                text = text.substring(0, text.length() - 1);
-            }
-
-            receiverEditText.setText(text);
-            receiverEditText.setSelection(text.length());
-            receiverEditText.requestFocus();
         }
     }
 
@@ -189,7 +134,7 @@ public class AssignedMatterCreateActivity extends CommonActivity {
 
         EditText recvEditText = (EditText) findViewById(R.id.edit_text_receiver);
         String receiver = recvEditText.getText().toString();
-        if (subject.isEmpty()) {
+        if (receiver.isEmpty()) {
             Toast.makeText(this, "请输入承办人", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -202,7 +147,16 @@ public class AssignedMatterCreateActivity extends CommonActivity {
             return;
         }
 
-        if (!MainService.getInstance().submitAssignedMatter(receiver, subject, content, selectedPhotos, handler)) {
+        String staffIds = "";
+        for (int idx = 0; idx < selectedStaffIds.size(); ++idx) {
+            String staffId = selectedStaffIds.get(idx);
+            staffIds += staffId;
+            if (idx != selectedStaffIds.size() - 1) {
+                staffIds += ",";
+            }
+        }
+
+        if (!MainService.getInstance().submitAssignedMatter(staffIds, subject, content, selectedPhotos, handler)) {
             Toast.makeText(this, "创建失败", Toast.LENGTH_SHORT).show();
         }
     }

@@ -28,8 +28,14 @@ public class TodoListFragment extends CommonFragment {
         View selfView = inflater.inflate(R.layout.fragment_todolist_list, container, false);
         ListView listView = (ListView)selfView.findViewById(R.id.listView);
         setupListView(listView);
-        MainService.getInstance().sendQueryAssignedMatters(handler);
+
         return selfView;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        MainService.getInstance().sendQueryAssignedMatters(handler);
     }
 
     private void setupListView(ListView listView) {
@@ -53,24 +59,15 @@ public class TodoListFragment extends CommonFragment {
 
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
-                //if (position % 2 == 0) {
-                    View v = getActivity().getLayoutInflater().inflate(R.layout.list_item_assigned_mater_list, null);
-                    TextView textView = (TextView)v.findViewById(R.id.textView);
-                    textView.setText(model.getItems().get(position).getSubject());
+                int layoutId = model.getItems().get(position).getRead() ? R.layout.list_item_assigned_mater_list : R.layout.list_item_assigned_mater_unread_list;
 
-                    TextView textView2 = (TextView)v.findViewById(R.id.textView2);
-                    textView2.setText(model.getItems().get(position).getAddTime());
-                    return v;
-//                }
-//                else {
-//                    View v = getActivity().getLayoutInflater().inflate(R.layout.list_item_assigned_mater_unread_list, null);
-//                    TextView textView = (TextView)v.findViewById(R.id.textView);
-//                    textView.setText(model.getItems().get(position).getSubject());
-//
-//                    TextView textView2 = (TextView)v.findViewById(R.id.textView2);
-//                    textView2.setText(model.getItems().get(position).getAddTime());
-//                    return v;
-//                }
+                View v = getActivity().getLayoutInflater().inflate(layoutId, null);
+                TextView textView = (TextView)v.findViewById(R.id.textView);
+                textView.setText(model.getItems().get(position).getSubject());
+
+                TextView textView2 = (TextView)v.findViewById(R.id.textView2);
+                textView2.setText(model.getItems().get(position).getAddTime());
+                return v;
             }
         };
 

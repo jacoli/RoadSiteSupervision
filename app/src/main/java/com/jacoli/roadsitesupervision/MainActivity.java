@@ -59,7 +59,7 @@ public class MainActivity extends CommonActivity {
                 titleBar.addAction(new TitleBar.TextAction("创建") {
                     @Override
                     public void performAction(View view) {
-                        Intent intent = new Intent(MainActivity.this, StaffsActivity.class);
+                        Intent intent = new Intent(MainActivity.this, AssignedMatterCreateActivity.class);
                         startActivity(intent);
                     }
                 });
