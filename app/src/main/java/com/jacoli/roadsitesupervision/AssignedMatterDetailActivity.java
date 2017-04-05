@@ -114,6 +114,8 @@ public class AssignedMatterDetailActivity extends CommonActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             }
         });
+
+        listView.setFooterDividersEnabled(true);
     }
 
     private void setupPhotoPicker(RecyclerView recyclerView, final ArrayList<String> imgUrls) {

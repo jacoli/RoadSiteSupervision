@@ -2,6 +2,7 @@ package com.jacoli.roadsitesupervision;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ public class TodoListFragment extends CommonFragment {
 
     private MyAssignedMattersModel model;
     private BaseAdapter adapter;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     public TodoListFragment() {
         // Required empty public constructor
@@ -29,6 +31,14 @@ public class TodoListFragment extends CommonFragment {
         ListView listView = (ListView)selfView.findViewById(R.id.listView);
         setupListView(listView);
 
+        swipeRefreshLayout = (SwipeRefreshLayout) selfView.findViewById(R.id.id_swipe_ly);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                MainService.getInstance().sendQueryAssignedMatters(handler);
+            }
+        });
+
         return selfView;
     }
 
@@ -40,7 +50,6 @@ public class TodoListFragment extends CommonFragment {
     }
 
     private void setupListView(ListView listView) {
-
         adapter = new BaseAdapter() {
 
             @Override
@@ -90,6 +99,7 @@ public class TodoListFragment extends CommonFragment {
             case MainService.MSG_QUERY_ASSIGNED_MATTERS_SUCCESS:
                 model = (MyAssignedMattersModel) obj;
                 adapter.notifyDataSetChanged();
+                swipeRefreshLayout.setRefreshing(false);
                 break;
             case MainService.MSG_QUERY_ASSIGNED_MATTERS_FAILED:
                 Toast.makeText(getActivity(), "获取交办事项列表失败", Toast.LENGTH_SHORT).show();
