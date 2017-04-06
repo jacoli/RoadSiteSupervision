@@ -53,23 +53,22 @@ public class AssignedMatterCreateActivity extends CommonActivity {
 
         EditText senderEditText = (EditText) findViewById(R.id.edit_text_sender);
         senderEditText.setText(MainService.getInstance().getLoginModel().getName());
+        senderEditText.setEnabled(false);
 
         TextView textView = (TextView) findViewById(R.id.text_view_time);
         String time = Utils.getCurrentDateStr();
         textView.setText(time);
 
         final EditText receiverEditText = (EditText) findViewById(R.id.edit_text_receiver);
-        receiverEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        receiverEditText.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
-                    receiverEditText.clearFocus();
-                    Intent intent = new Intent(AssignedMatterCreateActivity.this, StaffsActivity.class);
-                    intent.putStringArrayListExtra(StaffsActivity.KeyForStaffIds, selectedStaffIds);
-                    startActivityForResult(intent, StaffsActivity.RequestCode);
-                }
+            public void onClick(View v) {
+                Intent intent = new Intent(AssignedMatterCreateActivity.this, StaffsActivity.class);
+                intent.putStringArrayListExtra(StaffsActivity.KeyForStaffIds, selectedStaffIds);
+                startActivityForResult(intent, StaffsActivity.RequestCode);
             }
         });
+        receiverEditText.setFocusable(false);
 
         initSpinerAfterFetchOperatorListSuccess();
     }
