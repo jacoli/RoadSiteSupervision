@@ -69,14 +69,22 @@ public class TodoListFragment extends CommonFragment {
 
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
-                int layoutId = model.getItems().get(position).getRead() ? R.layout.list_item_assigned_mater_list : R.layout.list_item_assigned_mater_unread_list;
+                MyAssignedMattersModel.Item item = model.getItems().get(position);
+
+                int layoutId = item.getRead() ? R.layout.list_item_assigned_mater_list : R.layout.list_item_assigned_mater_unread_list;
 
                 View v = getActivity().getLayoutInflater().inflate(layoutId, null);
                 TextView textView = (TextView)v.findViewById(R.id.textView);
-                textView.setText(model.getItems().get(position).getSubject());
+                String text = item.getAMType() + "： " + item.getSubject();
+                textView.setText(text);
 
                 TextView textView2 = (TextView)v.findViewById(R.id.textView2);
-                textView2.setText(model.getItems().get(position).getAddTime());
+                String text2 = "交办人：" + item.getSenderName() + " " + item.getAddTime();
+                textView2.setText(text2);
+
+                TextView textView3 = (TextView)v.findViewById(R.id.textView3);
+                String text3 = "最后回复：" + item.getReceiverName() + " " + item.getReplyTime();
+                textView3.setText(text3);
                 return v;
             }
         };

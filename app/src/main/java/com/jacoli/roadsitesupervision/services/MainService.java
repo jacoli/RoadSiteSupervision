@@ -1379,4 +1379,45 @@ public class MainService {
             });
         }
     }
+
+    // 归档交办事项
+    public void sendFinishAssignedMatter(final String assignedMatterId, Callbacks callbacks) {
+        if (getLoginModel() == null || !getLoginModel().isLoginSuccess()) {
+            onFailed("错误：未登录", callbacks);
+            return;
+        }
+
+        if (Utils.isStringEmpty(assignedMatterId)) {
+            onFailed("错误：ID不能为空", callbacks);
+            return;
+        }
+
+        EasyRequest req = new EasyRequest(new Processor() {
+            @Override
+            public Response buildRequestAndWaitingResponse() throws IOException {
+                String url = serverBaseUrl + "/APP.ashx?Type=FileAssignedMatter";
+
+                FormBody body = new FormBody.Builder()
+                        .add("Token", getLoginModel().getToken())
+                        .add("AssignedMatterID", assignedMatterId)
+                        .build();
+
+                Request request = new Request.Builder()
+                        .url(url)
+                        .post(body)
+                        .build();
+
+                return httpClient.newCall(request).execute();
+            }
+
+            @Override
+            public ResponseBase jsonModelParsedFromResponseString(String responseJsonString, Gson gson) {
+                return gson.fromJson(responseJsonString, ResponseBase.class);
+            }
+
+            @Override
+            public void onSuccessHandleBeforeNotify(ResponseBase responseModel) {}
+        }, handler, callbacks);
+        req.asyncSend();
+    }
 }

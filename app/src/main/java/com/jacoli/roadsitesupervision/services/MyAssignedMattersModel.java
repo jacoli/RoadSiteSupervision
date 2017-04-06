@@ -10,6 +10,7 @@ public class MyAssignedMattersModel extends MsgResponseBase {
 
     public class Item {
         private String ID;
+        private String AMType;
         private String Subject;
         private String SenderName;
         private String ReceiverName;
@@ -24,6 +25,14 @@ public class MyAssignedMattersModel extends MsgResponseBase {
 
         public void setID(String ID) {
             this.ID = ID;
+        }
+
+        public String getAMType() {
+            return AMType;
+        }
+
+        public void setAMType(String AMType) {
+            this.AMType = AMType;
         }
 
         public String getSubject() {

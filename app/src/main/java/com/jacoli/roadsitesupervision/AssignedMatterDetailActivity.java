@@ -1,5 +1,7 @@
 package com.jacoli.roadsitesupervision;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.OrientationHelper;
@@ -13,6 +15,9 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.jacoli.roadsitesupervision.EasyRequest.Callbacks;
+import com.jacoli.roadsitesupervision.EasyRequest.ResponseBase;
 import com.jacoli.roadsitesupervision.services.AssignedMatterDetailModel;
 import com.jacoli.roadsitesupervision.services.ImageUrlModel;
 import com.jacoli.roadsitesupervision.services.MainService;
@@ -21,7 +26,7 @@ import me.iwf.photopicker.PhotoPreview;
 
 public class AssignedMatterDetailActivity extends CommonActivity {
 
-    private String matterId;
+    public String matterId;
     private AssignedMatterDetailModel model;
     private BaseAdapter adapter;
 
@@ -47,6 +52,14 @@ public class AssignedMatterDetailActivity extends CommonActivity {
                 Intent intent = new Intent(AssignedMatterDetailActivity.this, AssignedMatterReplyActivity.class);
                 intent.putExtra("id", getIntent().getStringExtra("id"));
                 startActivityForResult(intent, AssignedMatterReplyActivity.RequestCode);
+            }
+        });
+
+        Button submit2Btn = (Button) findViewById(R.id.submit2_btn);
+        submit2Btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finishAssignedMatter();
             }
         });
 
@@ -172,5 +185,37 @@ public class AssignedMatterDetailActivity extends CommonActivity {
                 }
             }
         }
+    }
+
+    void finishAssignedMatter() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(AssignedMatterDetailActivity.this);
+        builder.setTitle("提示");
+        builder.setMessage("是否归档交办事项？");
+
+        builder.setPositiveButton("是", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int which) {
+                MainService.getInstance().sendFinishAssignedMatter(matterId, new Callbacks() {
+                    @Override
+                    public void onSuccess(ResponseBase responseModel) {
+                        Toast.makeText(getBaseContext(), " 归档交办事项成功", Toast.LENGTH_LONG).show();
+                        finish();
+                    }
+
+                    @Override
+                    public void onFailed(String error) {
+                        Toast.makeText(getBaseContext(), " 归档交办事项失败", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
+
+        builder.setNegativeButton("否", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int which) {
+            }
+        });
+
+        builder.create().show();
     }
 }

@@ -39,19 +39,37 @@
     <ListView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/submit_btn"
+        android:layout_above="@+id/actions"
         android:layout_below="@+id/subject_layout"
         android:id="@+id/listView"
         />
 
-    <Button
-        android:layout_width="164dp"
-        android:layout_height="40dp"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_margin="16dp"
-        android:background="@color/accent"
-        android:text="回复"
-        android:id="@+id/submit_btn" />
+        android:orientation="horizontal"
+        android:id="@+id/actions">
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_weight="5"
+            android:layout_height="40dp"
+            android:layout_margin="16dp"
+            android:background="@color/accent"
+            android:text="回复"
+            android:id="@+id/submit_btn" />
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_weight="2"
+            android:layout_height="40dp"
+            android:layout_margin="16dp"
+            android:background="@color/warning"
+            android:text="闭合"
+            android:id="@+id/submit2_btn" />
+
+    </LinearLayout>
 
 </RelativeLayout>
