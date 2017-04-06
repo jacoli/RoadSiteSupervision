@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.jacoli.roadsitesupervision.services.MainService;
 import com.jacoli.roadsitesupervision.services.MyAssignedMattersModel;
+import com.jacoli.roadsitesupervision.services.Utils;
 
 public class TodoListFragment extends CommonFragment {
 
@@ -75,7 +76,13 @@ public class TodoListFragment extends CommonFragment {
 
                 View v = getActivity().getLayoutInflater().inflate(layoutId, null);
                 TextView textView = (TextView)v.findViewById(R.id.textView);
-                String text = item.getAMType() + "： " + item.getSubject();
+                String text = "";
+                if (Utils.isStringEmpty(item.getAMType())) {
+                    text += item.getSubject();
+                } else {
+                    text += item.getAMType() + "：" + item.getSubject();
+                }
+
                 textView.setText(text);
 
                 TextView textView2 = (TextView)v.findViewById(R.id.textView2);
@@ -83,12 +90,16 @@ public class TodoListFragment extends CommonFragment {
                 textView2.setText(text2);
 
                 TextView textView3 = (TextView)v.findViewById(R.id.textView3);
-                String text3 = "最后回复：" + item.getReceiverName() + " " + item.getReplyTime();
+                String text3 = "最后回复：";
+                if (Utils.isStringEmpty(item.getReplyName())) {
+                    text3 += "无";
+                } else {
+                    text3 += item.getReplyName() + " " + item.getReplyTime();
+                }
                 textView3.setText(text3);
                 return v;
             }
         };
-
 
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

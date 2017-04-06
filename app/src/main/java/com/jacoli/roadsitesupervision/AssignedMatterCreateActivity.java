@@ -9,8 +9,11 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.jacoli.roadsitesupervision.services.MainService;
@@ -67,6 +70,8 @@ public class AssignedMatterCreateActivity extends CommonActivity {
                 }
             }
         });
+
+        initSpinerAfterFetchOperatorListSuccess();
     }
 
     private void setupImagePicker() {
@@ -159,6 +164,9 @@ public class AssignedMatterCreateActivity extends CommonActivity {
         }
         final String staffIds = tmp;
 
+        Spinner spinner = (Spinner) findViewById(R.id.spinner0);
+        final String type = (String) spinner.getSelectedItem();
+
         AlertDialog.Builder builder = new AlertDialog.Builder(AssignedMatterCreateActivity.this);
         builder.setTitle("提示");
         builder.setMessage("是否发送");
@@ -166,7 +174,7 @@ public class AssignedMatterCreateActivity extends CommonActivity {
         builder.setPositiveButton("是", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int which) {
-                if (!MainService.getInstance().submitAssignedMatter(staffIds, subject, content, selectedPhotos, handler)) {
+                if (!MainService.getInstance().submitAssignedMatter(type, staffIds, subject, content, selectedPhotos, handler)) {
                     Toast.makeText(AssignedMatterCreateActivity.this, "创建失败", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -185,6 +193,7 @@ public class AssignedMatterCreateActivity extends CommonActivity {
     public void onResponse(int msgCode, Object obj) {
         switch (msgCode) {
             case MainService.MSG_SUBMIT_ASSIGNED_MATTER_SUCCESS:
+                Toast.makeText(this, "创建交办事项成功", Toast.LENGTH_LONG).show();
                 setResult(RESULT_OK);
                 finish();
                 break;
@@ -194,5 +203,28 @@ public class AssignedMatterCreateActivity extends CommonActivity {
             default:
                 break;
         }
+    }
+
+    public void initSpinerAfterFetchOperatorListSuccess() {
+        String[] types = {"进度", "安全", "质量", "文明施工"};
+
+        Spinner spinner = (Spinner) findViewById(R.id.spinner0);
+
+        // 建立Adapter并且绑定数据源
+        ArrayAdapter<String> adapter=new ArrayAdapter<>(this,android.R.layout.simple_spinner_item, types);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        //绑定 Adapter到控件
+        spinner .setAdapter(adapter);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view,
+                                       int pos, long id) {
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // Another interface callback
+            }
+        });
     }
 }

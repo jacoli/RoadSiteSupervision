@@ -1160,7 +1160,8 @@ public class MainService {
     }
 
     // 提交交办事项
-    public boolean submitAssignedMatter(final String receiver,
+    public boolean submitAssignedMatter(final String type,
+                                        final String receiver,
                                         final String subject,
                                         final String content,
                                         final List<String> imgUrls,
@@ -1169,6 +1170,7 @@ public class MainService {
             return false;
         }
 
+        if (Utils.isStringEmpty(type)) return false;
         if (receiver == null || receiver.isEmpty()) return false;
         if (subject == null || subject.isEmpty()) return false;
         if (content == null || content.isEmpty()) return false;
@@ -1181,6 +1183,7 @@ public class MainService {
                 MultipartBody.Builder builder = new MultipartBody.Builder()
                         .setType(MultipartBody.FORM)
                         .addFormDataPart("Token", getLoginModel().getToken())
+                        .addFormDataPart("AMType", type)
                         .addFormDataPart("Receiver", receiver)
                         .addFormDataPart("Subject", subject)
                         .addFormDataPart("AssignContent", content);
