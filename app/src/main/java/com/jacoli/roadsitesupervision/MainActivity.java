@@ -23,7 +23,8 @@ public class MainActivity extends CommonActivity {
         setContentView(R.layout.activity_main);
 
         createTitleBar();
-        titleBar.setLeftText("注销");
+        //titleBar.setLeftText("注销");
+        titleBar.setLeftVisible(false);
 
         BottomBar bottomBar = (BottomBar) findViewById(R.id.bottomBar);
         bottomBar.setOnTabSelectListener(new OnTabSelectListener() {
