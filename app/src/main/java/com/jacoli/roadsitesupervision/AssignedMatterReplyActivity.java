@@ -104,6 +104,9 @@ public class AssignedMatterReplyActivity extends CommonActivity {
 
         if (!MainService.getInstance().replyAssignedMatter(matterId, content, selectedPhotos, handler)) {
             Toast.makeText(this, "回复失败", Toast.LENGTH_SHORT).show();
+        } else {
+            Button submitBtn = (Button) findViewById(R.id.submit_btn);
+            submitBtn.setEnabled(false);
         }
     }
 
@@ -116,6 +119,8 @@ public class AssignedMatterReplyActivity extends CommonActivity {
                 break;
             case MainService.MSG_REPLY_ASSIGNED_MATTER_FAILED:
                 Toast.makeText(this, "回复失败", Toast.LENGTH_SHORT).show();
+                Button submitBtn = (Button) findViewById(R.id.submit_btn);
+                submitBtn.setEnabled(true);
                 break;
             default:
                 break;

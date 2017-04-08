@@ -138,6 +138,8 @@ public class SamplingInspectionActivity extends CommonActivity {
                 break;
             case MainService.MSG_SUBMIT_COMPONENT_SAMPLING_INSPECTION_FAILED:
                 MyToast.showMessage(getBaseContext(), "提交抽检情况失败");
+                Button submitBtn = (Button) findViewById(R.id.submit_btn);
+                submitBtn.setEnabled(true);
                 break;
             default:
                 break;
@@ -233,6 +235,9 @@ public class SamplingInspectionActivity extends CommonActivity {
 
             MainService.getInstance().sendSubmitComponentSamplingInspection(id,
                     editText.getText().toString(), delFiles, imgUrls, handler);
+
+            Button submitBtn = (Button) findViewById(R.id.submit_btn);
+            submitBtn.setEnabled(false);
         }
         catch (Exception ex) {
             Log.e("InspectionDetail", ex.toString());
