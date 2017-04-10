@@ -85,7 +85,7 @@ public class MainService {
     public static final int MSG_QUERY_ASSIGNED_MATTER_DETAIL_SUCCESS = 3006;
     public static final int MSG_QUERY_ASSIGNED_MATTER_DETAIL_FAILED = 3007;
 
-    private String serverBaseUrl = "http://118.178.92.22:8002";
+    private String serverBaseUrl = "http://118.178.92.22:8003";
     private OkHttpClient httpClient;
     private LoginModel loginModel;
     private WeatherModel weatherModel;

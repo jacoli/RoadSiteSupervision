@@ -48,9 +48,6 @@ public class LoginActivity extends CommonActivity {
         final Button serverIPBtn = (Button) findViewById(R.id.login_server_ip_btn);
 
         configsModel = BGConfigsModel.fetch(this);
-        if (configsModel.getServerPort().length() == 0) {
-            configsModel.setServerPort("8001");
-        }
 
         MainService.getInstance().setServerAddress(configsModel.getServerAddress(), configsModel.getServerPort());
 

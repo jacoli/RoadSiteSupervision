@@ -23,7 +23,7 @@ tools:context=".LoginActivity">
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:scaleType="centerCrop"
-        android:src="@drawable/login_main_pic"
+        android:src="@drawable/app_main"
         />
 
     <LinearLayout

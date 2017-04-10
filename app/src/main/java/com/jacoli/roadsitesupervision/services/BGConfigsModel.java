@@ -1,7 +1,11 @@
 package com.jacoli.roadsitesupervision.services;
 
+import android.app.Application;
 import android.content.ContextWrapper;
+import android.content.res.Resources;
 import android.util.Log;
+
+import com.jacoli.roadsitesupervision.R;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -14,6 +18,7 @@ import java.io.Serializable;
  */
 public class BGConfigsModel implements Serializable {
     static public String configFileName = "bg_configs_file";
+    static public String defaultServerPort = "8003";
 
     static BGConfigsModel __mainConfigModel;
 
@@ -81,6 +86,9 @@ public class BGConfigsModel implements Serializable {
 
     public static BGConfigsModel fetch(ContextWrapper contextWrapper) {
         if (__mainConfigModel != null) {
+            if (__mainConfigModel.getServerPort().length() == 0) {
+                __mainConfigModel.setServerPort(defaultServerPort);
+            }
             return __mainConfigModel;
         }
 
@@ -101,10 +109,14 @@ public class BGConfigsModel implements Serializable {
             configsModel.setRememberUserName(true);
             configsModel.setRememberPassword(false);
             configsModel.setServerAddress("");
-            configsModel.setServerPort("8001");
+            configsModel.setServerPort(defaultServerPort);
         }
 
         __mainConfigModel = configsModel;
+
+        if (__mainConfigModel.getServerPort().length() == 0) {
+            __mainConfigModel.setServerPort(defaultServerPort);
+        }
 
         return configsModel;
     }
