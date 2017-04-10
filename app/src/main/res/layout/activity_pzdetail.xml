@@ -16,133 +16,139 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/submit_btn"
-        android:layout_below="@+id/title_bar">
+        android:layout_below="@+id/title_bar"
+        android:layout_alignParentBottom="true">
 
-        <TableLayout
-            android:id="@+id/table_layout"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:divider="@drawable/divider_common"
-            android:showDividers="middle|end|beginning"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingBottom="64dp">
 
-            <LinearLayout
+            <TableLayout
+                android:id="@+id/table_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_margin="24dp">
+                android:divider="@drawable/divider_common"
+                android:showDividers="middle|end|beginning"
+                android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/name_text"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp"
-                    android:textSize="20sp"
-                    android:text="旁站项目：" />
+                    android:orientation="vertical"
+                    android:layout_margin="24dp">
 
-                <TextView
-                    android:id="@+id/project_name_text"
+                    <TextView
+                        android:id="@+id/name_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="10dp"
+                        android:paddingBottom="10dp"
+                        android:textSize="20sp"
+                        android:text="旁站项目：" />
+
+                    <TextView
+                        android:id="@+id/project_name_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="10dp"
+                        android:paddingBottom="10dp"
+                        android:textSize="20sp"
+                        android:text="工序部位：" />
+
+                    <View android:layout_height="2dp"
+                        android:layout_width="match_parent"
+                        android:background="@color/divider"/>
+
+                </LinearLayout>
+
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp"
-                    android:textSize="20sp"
-                    android:text="工序部位：" />
+                    android:orientation="vertical"
+                    android:layout_margin="24dp">
 
-                <View android:layout_height="2dp"
-                    android:layout_width="match_parent"
-                    android:background="@color/divider"/>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
 
-            </LinearLayout>
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="32dp"
+                            android:layout_weight="1"
+                            android:textSize="20sp"
+                            android:text="质检员：" />
 
-            <LinearLayout
+                        <Spinner
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:id="@+id/spinner0"
+                            android:padding="5dp"
+                            />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="32dp"
+                            android:layout_weight="1"
+                            android:textSize="20sp"
+                            android:text="专职安全员：" />
+
+                        <Spinner
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:id="@+id/spinner1"
+                            android:padding="5dp"
+                            />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="32dp"
+                            android:layout_weight="1"
+                            android:textSize="20sp"
+                            android:text="试验人员：" />
+
+                        <Spinner
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:id="@+id/spinner2"
+                            android:padding="5dp"
+                            />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </TableLayout>
+
+            <Button
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_margin="24dp">
+                android:layout_height="@dimen/cell_height"
+                android:layout_margin="16dp"
+                android:background="@color/accent"
+                android:text="提交／暂存"
+                android:id="@+id/submit_btn" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="32dp"
-                        android:layout_weight="1"
-                        android:textSize="20sp"
-                        android:text="质检员：" />
-
-                    <Spinner
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:id="@+id/spinner0"
-                        android:padding="5dp"
-                         />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="32dp"
-                        android:layout_weight="1"
-                        android:textSize="20sp"
-                        android:text="专职安全员：" />
-
-                    <Spinner
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:id="@+id/spinner1"
-                        android:padding="5dp"
-                        />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="32dp"
-                        android:layout_weight="1"
-                        android:textSize="20sp"
-                        android:text="试验人员：" />
-
-                    <Spinner
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:id="@+id/spinner2"
-                        android:padding="5dp"
-                        />
-                </LinearLayout>
-
-            </LinearLayout>
-
-        </TableLayout>
+        </LinearLayout>
 
     </ScrollView>
-
-    <Button
-        android:layout_width="164dp"
-        android:layout_height="40dp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_margin="16dp"
-        android:background="@color/accent"
-        android:text="提交／暂存"
-        android:id="@+id/submit_btn" />
 
 </RelativeLayout>

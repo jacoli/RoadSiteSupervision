@@ -2,7 +2,7 @@
     <tab
         id="@+id/tab_todo_list"
         icon="@drawable/ic_main_todo_list"
-        title="我的任务" />
+        title="交办事项" />
     <tab
         id="@+id/tab_sites"
         icon="@drawable/ic_main_sites"

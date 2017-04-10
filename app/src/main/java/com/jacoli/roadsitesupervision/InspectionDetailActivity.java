@@ -133,6 +133,8 @@ public class InspectionDetailActivity extends CommonActivity {
                 break;
             case MainService.MSG_SUBMIT_INSPECTION_DETAIL_FAILED:
                 MyToast.showMessage(getBaseContext(), "提交巡视情况失败");
+                Button submitBtn = (Button) findViewById(R.id.submit_btn);
+                submitBtn.setEnabled(true);
                 break;
             default:
                 break;
@@ -238,6 +240,9 @@ public class InspectionDetailActivity extends CommonActivity {
 
             MainService.getInstance().sendSubmitInspectionDetail(MainService.getInstance().getLoginModel().getProjectID(), getPatrolType(),
                     editText.getText().toString(), delFiles, imgUrls, handler);
+
+            Button submitBtn = (Button) findViewById(R.id.submit_btn);
+            submitBtn.setEnabled(false);
         }
         catch (Exception ex) {
             Log.e("InspectionDetail", ex.toString());

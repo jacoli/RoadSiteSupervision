@@ -24,6 +24,8 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PhotoViewHol
 
   private Context mContext;
 
+    private boolean canAdd = true;
+
   final static int TYPE_ADD = 1;
   final static int TYPE_PHOTO = 2;
 
@@ -35,6 +37,13 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PhotoViewHol
     inflater = LayoutInflater.from(mContext);
 
   }
+
+    public PhotoAdapter(Context mContext, ArrayList<String> photoPaths, boolean canAdd) {
+        this.photoPaths = photoPaths;
+        this.mContext = mContext;
+        inflater = LayoutInflater.from(mContext);
+        this.canAdd = canAdd;
+    }
 
 
   @Override public PhotoViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -84,7 +93,7 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PhotoViewHol
 
 
   @Override public int getItemCount() {
-    int count = photoPaths.size() + 1;
+    int count = photoPaths.size() + (canAdd ? 1 : 0);
     if (count > MAX) {
       count = MAX;
     }
@@ -93,7 +102,12 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PhotoViewHol
 
   @Override
   public int getItemViewType(int position) {
-    return (position == photoPaths.size() && position != MAX) ? TYPE_ADD : TYPE_PHOTO;
+      if (canAdd) {
+          return (position == photoPaths.size() && position != MAX) ? TYPE_ADD : TYPE_PHOTO;
+      }
+      else {
+          return TYPE_PHOTO;
+      }
   }
 
   public static class PhotoViewHolder extends RecyclerView.ViewHolder {

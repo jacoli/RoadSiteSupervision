@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_staffs"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.jacoli.roadsitesupervision.StaffsActivity">
+
+    <include layout="@layout/title_bar_layout"
+        android:id="@+id/title_bar"/>
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_below="@+id/title_bar"
+        android:layout_above="@id/submit_btn"
+        android:id="@+id/listView"
+        />
+
+    <include layout="@layout/submit_btn"
+        android:id="@+id/submit_btn" />
+
+</RelativeLayout>

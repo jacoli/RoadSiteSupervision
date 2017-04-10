@@ -1,29 +1,10 @@
 package com.jacoli.roadsitesupervision.services;
 
+import com.jacoli.roadsitesupervision.EasyRequest.ResponseBase;
+
 /**
  * Created by lichuange on 16/3/31.
  */
-public class MsgResponseBase {
-    private int Status;
-    private String Msg;
+public class MsgResponseBase extends ResponseBase {
 
-    public int getStatus() {
-        return Status;
-    }
-
-    public void setStatus(int status) {
-        Status = status;
-    }
-
-    public String getMsg() {
-        return Msg;
-    }
-
-    public void setMsg(String msg) {
-        Msg = msg;
-    }
-
-    public boolean isSuccess() {
-        return Status == 0;
-    }
 }

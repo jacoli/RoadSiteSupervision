@@ -1,21 +1,20 @@
 package com.jacoli.roadsitesupervision.services;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
-
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonSyntaxException;
+import com.jacoli.roadsitesupervision.EasyRequest.*;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import okhttp3.FormBody;
 import okhttp3.Headers;
 import okhttp3.MediaType;
@@ -24,21 +23,6 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
-import java.lang.reflect.Type;
-import java.io.EOFException;
-import java.io.IOException;
-import java.io.Reader;
-import java.io.StringReader;
-import java.io.StringWriter;
-import java.io.Writer;
-import java.lang.reflect.Type;
-import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 public class MainService {
 
@@ -53,43 +37,59 @@ public class MainService {
     // 质量抽检
     public static final int project_detail_type_quality_sampling_inspection = 0x1005;
 
+    /*
+    * 响应码
+    * */
+    // 系统事件
+    public static final int MSG_LOGIN_SUCCESS = 1000;
+    public static final int MSG_LOGIN_FAILED = 1002;
+    public static final int MSG_QUERY_WEATHER_SUCCESS = 1003;
+    public static final int MSG_QUERY_WEATHER_FAILED = 1004;
 
-    public static final int MSG_LOGIN_SUCCESS = 0x1001;
-    public static final int MSG_LOGIN_FAILED = 0x1002;
-    public static final int MSG_QUERY_PROJECT_DETAIL_SUCCESS = 0x3001;
-    public static final int MSG_QUERY_PROJECT_DETAIL_FAILED = 0x3002;
-    public static final int MSG_ACTIVE_UNIT_PROJECT_SUCCESS = 0x4001;
-    public static final int MSG_ACTIVE_UNIT_PROJECT_FAILED = 0x4002;
-    public static final int MSG_QUERY_UNIT_PROJECT_DETAIL_SUCCESS = 0x5001;
-    public static final int MSG_QUERY_UNIT_PROJECT_DETAIL_FAILED = 0x5002;
-    public static final int MSG_ACTIVE_COMPONENT_SUCCESS = 0x6001;
-    public static final int MSG_ACTIVE_COMPONENT_FAILED = 0x6002;
-    public static final int MSG_QUERY_COMPONENT_DETAIL_SUCCESS = 0x7001;
-    public static final int MSG_QUERY_COMPONENT_DETAIL_FAILED = 0x7002;
-    public static final int MSG_QUERY_OPERATOR_LIST_SUCCESS = 0x8001;
-    public static final int MSG_QUERY_OPERATOR_LIST_FAILED = 0x8002;
-    public static final int MSG_QUERY_PZ_DETAIL_SUCCESS = 0x9001;
-    public static final int MSG_QUERY_PZ_DETAIL_FAILED = 0x9002;
-    public static final int MSG_SUBMIT_PZ_DETAIL_SUCCESS = 0xa001;
-    public static final int MSG_SUBMIT_PZ_DETAIL_FAILED = 0xa002;
-    public static final int MSG_FINISH_COMPONENT_SUCCESS = 0xb001;
-    public static final int MSG_FINISH_COMPONENT_FAILED = 0xb002;
-    public static final int MSG_QUERY_INSPECTION_DETAIL_SUCCESS = 0xc001;
-    public static final int MSG_QUERY_INSPECTION_DETAIL_FAILED = 0xc002;
-    public static final int MSG_SUBMIT_INSPECTION_DETAIL_SUCCESS = 0xc003;
-    public static final int MSG_SUBMIT_INSPECTION_DETAIL_FAILED = 0xc004;
-    public static final int MSG_QUERY_COMPONENT_SAMPLING_INSPECTION_SUCCESS = 0xd001;
-    public static final int MSG_QUERY_COMPONENT_SAMPLING_INSPECTION_FAILED = 0xd002;
-    public static final int MSG_SUBMIT_COMPONENT_SAMPLING_INSPECTION_SUCCESS = 0xd003;
-    public static final int MSG_SUBMIT_COMPONENT_SAMPLING_INSPECTION_FAILED = 0xd004;
-    public static final int MSG_QUERY_WEATHER_SUCCESS = 0xf001;
-    public static final int MSG_QUERY_WEATHER_FAILED = 0xf002;
+    //
+    public static final int MSG_QUERY_PROJECT_DETAIL_SUCCESS = 2001;
+    public static final int MSG_QUERY_PROJECT_DETAIL_FAILED = 2002;
+    public static final int MSG_ACTIVE_UNIT_PROJECT_SUCCESS = 2003;
+    public static final int MSG_ACTIVE_UNIT_PROJECT_FAILED = 2004;
+    public static final int MSG_QUERY_UNIT_PROJECT_DETAIL_SUCCESS = 2005;
+    public static final int MSG_QUERY_UNIT_PROJECT_DETAIL_FAILED = 2006;
+    public static final int MSG_ACTIVE_COMPONENT_SUCCESS = 2007;
+    public static final int MSG_ACTIVE_COMPONENT_FAILED = 2008;
+    public static final int MSG_QUERY_COMPONENT_DETAIL_SUCCESS = 2009;
+    public static final int MSG_QUERY_COMPONENT_DETAIL_FAILED = 2010;
+    public static final int MSG_QUERY_OPERATOR_LIST_SUCCESS = 2011;
+    public static final int MSG_QUERY_OPERATOR_LIST_FAILED = 2012;
+    public static final int MSG_QUERY_PZ_DETAIL_SUCCESS = 2013;
+    public static final int MSG_QUERY_PZ_DETAIL_FAILED = 2014;
 
-    public String serverBaseUrl = "http://118.178.92.22:8001";
+    public static final int MSG_SUBMIT_PZ_DETAIL_SUCCESS = 2100;
+    public static final int MSG_SUBMIT_PZ_DETAIL_FAILED = 2101;
+    public static final int MSG_FINISH_COMPONENT_SUCCESS = 2102;
+    public static final int MSG_FINISH_COMPONENT_FAILED = 2103;
+    public static final int MSG_QUERY_INSPECTION_DETAIL_SUCCESS = 2104;
+    public static final int MSG_QUERY_INSPECTION_DETAIL_FAILED = 2105;
+    public static final int MSG_SUBMIT_INSPECTION_DETAIL_SUCCESS = 2106;
+    public static final int MSG_SUBMIT_INSPECTION_DETAIL_FAILED = 2107;
+    public static final int MSG_QUERY_COMPONENT_SAMPLING_INSPECTION_SUCCESS = 2108;
+    public static final int MSG_QUERY_COMPONENT_SAMPLING_INSPECTION_FAILED = 2109;
+    public static final int MSG_SUBMIT_COMPONENT_SAMPLING_INSPECTION_SUCCESS = 2110;
+    public static final int MSG_SUBMIT_COMPONENT_SAMPLING_INSPECTION_FAILED = 2111;
 
+    //
+    public static final int MSG_SUBMIT_ASSIGNED_MATTER_SUCCESS = 3000;
+    public static final int MSG_SUBMIT_ASSIGNED_MATTER_FAILED = 3001;
+    public static final int MSG_REPLY_ASSIGNED_MATTER_SUCCESS = 3002;
+    public static final int MSG_REPLY_ASSIGNED_MATTER_FAILED = 3003;
+    public static final int MSG_QUERY_ASSIGNED_MATTERS_SUCCESS = 3004;
+    public static final int MSG_QUERY_ASSIGNED_MATTERS_FAILED = 3005;
+    public static final int MSG_QUERY_ASSIGNED_MATTER_DETAIL_SUCCESS = 3006;
+    public static final int MSG_QUERY_ASSIGNED_MATTER_DETAIL_FAILED = 3007;
+
+    private String serverBaseUrl = "http://118.178.92.22:8002";
     private OkHttpClient httpClient;
     private LoginModel loginModel;
     private WeatherModel weatherModel;
+    private Handler handler = new Handler();
 
     public WeatherModel getWeatherModel() { return weatherModel; }
 
@@ -137,19 +137,6 @@ public class MainService {
 
     private String responsePrevProcess(String inString) {
         return inString;
-//        if (inString != null && inString.length() > 0) {
-//            if (inString.startsWith("(")) {
-//                inString = inString.substring(1);
-//                if (inString.endsWith(")")) {
-//                    inString = inString.substring(0, inString.length() - 1);
-//                }
-//            }
-//            String outString = inString.replace("\\\"", "\"");
-//            return outString;
-//        }
-//        else {
-//            return "";
-//        }
     }
 
     private void notifyMsg(Handler handler, int msgCode) {
@@ -251,13 +238,13 @@ public class MainService {
 //                            .add("Token", token)
 //                            .build();
 //
-//                    Request request = new Request.Builder()
+//                    EasyRequest request = new EasyRequest.Builder()
 //                            .url(url)
 //                            .post(body)
 //                            .build();
 //
 //                    getLoginModel().setToken("");
-//                    Response response = httpClient.newCall(request).execute();
+//                    Response response = httpClient.newCall(request).buildRequestAndWaitingResponse();
 //                    if (response.isSuccessful()) {
 //                        String responseStr = response.body().string();
 //                        Log.i("MainService", responseStr);
@@ -293,54 +280,33 @@ public class MainService {
             return false;
         }
 
-        Runnable networkTask = new Runnable() {
+        return new MyRequest(handler, MSG_QUERY_PROJECT_DETAIL_SUCCESS, MSG_QUERY_PROJECT_DETAIL_FAILED, new RequestAndResponseHandler() {
+            @Override
+            public Response buildRequestAndWaitingResponse() throws IOException {
+                String url = serverBaseUrl + "/APP.ashx?Type=GetUnitProjectList";
+
+                FormBody body = new FormBody.Builder()
+                        .add("Token", getLoginModel().getToken())
+                        .add("ProjectID", getLoginModel().getProjectID())
+                        .build();
+
+                Request request = new Request.Builder()
+                        .url(url)
+                        .post(body)
+                        .build();
+
+                return httpClient.newCall(request).execute();
+            }
 
             @Override
-            public void run() {
-                try {
-                    String url = serverBaseUrl + "/APP.ashx?Type=GetUnitProjectList";
-
-                    FormBody body = new FormBody.Builder()
-                            .add("Token", getLoginModel().getToken())
-                            .add("ProjectID", getLoginModel().getProjectID())
-                            .build();
-
-                    Request request = new Request.Builder()
-                            .url(url)
-                            .post(body)
-                            .build();
-
-                    Response response = httpClient.newCall(request).execute();
-                    if (response.isSuccessful()) {
-                        String responseStr = response.body().string();
-
-                        Log.i("MainService", responseStr);
-
-                        responseStr = responsePrevProcess(responseStr);
-
-                        Gson gson = new Gson();
-                        ProjectDetailModel res = gson.fromJson(responseStr, ProjectDetailModel.class);
-
-                        if (res != null && res.isSuccess()) {
-                            // 通知UI
-                            notifyMsg(handler, MSG_QUERY_PROJECT_DETAIL_SUCCESS, res);
-                        }
-                        else {
-                            notifyMsg(handler, MSG_QUERY_PROJECT_DETAIL_FAILED);
-                        }
-                    }
-                    else {
-                        notifyMsg(handler, MSG_QUERY_PROJECT_DETAIL_FAILED);
-                    }
-                }
-                catch (IOException e) {
-                    notifyMsg(handler, MSG_QUERY_PROJECT_DETAIL_FAILED);
-                }
+            public MsgResponseBase jsonModelParsedFromResponseString(String responseJsonString, Gson gson) {
+                return gson.fromJson(responseJsonString, ProjectDetailModel.class);
             }
-        };
 
-        new Thread(networkTask).start();
-        return true;
+            @Override
+            public void onSuccessHandleBeforeNotify(MsgResponseBase responseModel) {
+            }
+        }).run();
     }
 
     // 激活单位工程
@@ -590,6 +556,10 @@ public class MainService {
             return false;
         }
 
+        if (getLoginModel().getProjectID().length() == 0) {
+            return false;
+        }
+
         Runnable networkTask = new Runnable() {
 
             @Override
@@ -599,6 +569,7 @@ public class MainService {
 
                     FormBody body = new FormBody.Builder()
                             .add("Token", getLoginModel().getToken())
+                            .add("ProjectID", getLoginModel().getProjectID())
                             .build();
 
                     Request request = new Request.Builder()
@@ -1156,69 +1127,302 @@ public class MainService {
             return false;
         }
 
-        if (id.length() == 0) {
+        if (id == null || id.length() == 0) {
             return false;
         }
 
-        Runnable networkTask = new Runnable() {
+        return new MyRequest(handler, MSG_QUERY_WEATHER_SUCCESS, MSG_QUERY_WEATHER_FAILED, new RequestAndResponseHandler() {
+            @Override
+            public Response buildRequestAndWaitingResponse() throws IOException {
+                String url = serverBaseUrl + "/APP.ashx?Type=GetWeather";
+
+                FormBody body = new FormBody.Builder()
+                        .add("Token", getLoginModel().getToken())
+                        .add("ProjectID", id)
+                        .build();
+
+                Request request = new Request.Builder()
+                        .url(url)
+                        .post(body)
+                        .build();
+
+                return httpClient.newCall(request).execute();
+            }
 
             @Override
-            public void run() {
-                try {
-                    String url = serverBaseUrl + "/APP.ashx?Type=GetWeather";
-
-                    FormBody body = new FormBody.Builder()
-                            .add("Token", getLoginModel().getToken())
-                            .add("ProjectID", id)
-                            .build();
-
-                    Request request = new Request.Builder()
-                            .url(url)
-                            .post(body)
-                            .build();
-
-                    Response response = httpClient.newCall(request).execute();
-                    if (response.isSuccessful()) {
-                        String responseStr = response.body().string();
-
-                        Log.i("MainService", responseStr);
-
-                        responseStr = responsePrevProcess(responseStr);
-
-                        try {
-                            Gson gson = new GsonBuilder()
-                                    .registerTypeAdapterFactory(new NullStringToEmptyAdapterFactory())
-                                    .setDateFormat("yyyy-MM-dd'T'HH:mm:ss")
-                                    .create();
-
-                            WeatherModel res = gson.fromJson(responseStr, WeatherModel.class);
-
-                            if (res != null && res.isSuccess()) {
-                                // 通知UI
-                                weatherModel = res;
-                                notifyMsg(handler, MSG_QUERY_WEATHER_SUCCESS, res);
-                            }
-                            else {
-                                notifyMsg(handler, MSG_QUERY_WEATHER_FAILED);
-                            }
-                        }
-                        catch (Exception ex) {
-                            Log.e("MainService", ex.toString());
-                            notifyMsg(handler, MSG_QUERY_WEATHER_FAILED);
-                        }
-                    }
-                    else {
-                        notifyMsg(handler, MSG_QUERY_WEATHER_FAILED);
-                    }
-                }
-                catch (IOException e) {
-                    notifyMsg(handler, MSG_QUERY_WEATHER_FAILED);
-                }
+            public MsgResponseBase jsonModelParsedFromResponseString(String responseJsonString, Gson gson) {
+                return gson.fromJson(responseJsonString, WeatherModel.class);
             }
-        };
 
-        new Thread(networkTask).start();
-        return true;
+            @Override
+            public void onSuccessHandleBeforeNotify(MsgResponseBase responseModel) {
+                weatherModel = (WeatherModel) responseModel;
+            }
+        }).run();
     }
 
+    // 提交交办事项
+    public boolean submitAssignedMatter(final String type,
+                                        final String receiver,
+                                        final String subject,
+                                        final String content,
+                                        final List<String> imgUrls,
+                                        final Handler handler) {
+        if (getLoginModel() == null || !getLoginModel().isLoginSuccess()) {
+            return false;
+        }
+
+        if (Utils.isStringEmpty(type)) return false;
+        if (receiver == null || receiver.isEmpty()) return false;
+        if (subject == null || subject.isEmpty()) return false;
+        if (content == null || content.isEmpty()) return false;
+
+        return new MyRequest(handler, MSG_SUBMIT_ASSIGNED_MATTER_SUCCESS, MSG_SUBMIT_ASSIGNED_MATTER_FAILED, new RequestAndResponseHandler() {
+            @Override
+            public Response buildRequestAndWaitingResponse() throws IOException {
+                String url = serverBaseUrl + "/APP.ashx?Type=SubmitAssignedMatter";
+
+                MultipartBody.Builder builder = new MultipartBody.Builder()
+                        .setType(MultipartBody.FORM)
+                        .addFormDataPart("Token", getLoginModel().getToken())
+                        .addFormDataPart("AMType", type)
+                        .addFormDataPart("Receiver", receiver)
+                        .addFormDataPart("Subject", subject)
+                        .addFormDataPart("AssignContent", content);
+
+                if (imgUrls != null) {
+                    for (String imgUrl : imgUrls) {
+                        builder.addPart(Headers.of("Content-Disposition", "form-data; filename=\"img.png\""),
+                                RequestBody.create(MediaType.parse("image/png"), new File(imgUrl)));
+                    }
+                }
+
+                Request request = new Request.Builder()
+                        .url(url)
+                        .post(builder.build())
+                        .build();
+
+                return httpClient.newCall(request).execute();
+            }
+
+            @Override
+            public MsgResponseBase jsonModelParsedFromResponseString(String responseJsonString, Gson gson) {
+                return gson.fromJson(responseJsonString, MsgResponseBase.class);
+            }
+
+            @Override
+            public void onSuccessHandleBeforeNotify(MsgResponseBase responseModel) {
+            }
+        }).run();
+    }
+
+    // 回复交办事项
+    public boolean replyAssignedMatter(final String matterId, final String content, final List<String> imgUrls, final Handler handler) {
+        if (getLoginModel() == null || !getLoginModel().isLoginSuccess()) {
+            return false;
+        }
+
+        if (matterId == null || matterId.isEmpty()) return false;
+        if (content == null || content.isEmpty()) return false;
+
+        return new MyRequest(handler, MSG_REPLY_ASSIGNED_MATTER_SUCCESS, MSG_REPLY_ASSIGNED_MATTER_FAILED, new RequestAndResponseHandler() {
+            @Override
+            public Response buildRequestAndWaitingResponse() throws IOException {
+                String url = serverBaseUrl + "/APP.ashx?Type=SubmitAssignedMatterReply";
+
+                MultipartBody.Builder builder = new MultipartBody.Builder()
+                        .setType(MultipartBody.FORM)
+                        .addFormDataPart("Token", getLoginModel().getToken())
+                        .addFormDataPart("AssignedMatterID", matterId)
+                        .addFormDataPart("AssignContent", content);
+
+                if (imgUrls != null) {
+                    for (String imgUrl : imgUrls) {
+                        builder.addPart(Headers.of("Content-Disposition", "form-data; filename=\"img.png\""),
+                                RequestBody.create(MediaType.parse("image/png"), new File(imgUrl)));
+                    }
+                }
+
+                Request request = new Request.Builder()
+                        .url(url)
+                        .post(builder.build())
+                        .build();
+
+                return httpClient.newCall(request).execute();
+            }
+
+            @Override
+            public MsgResponseBase jsonModelParsedFromResponseString(String responseJsonString, Gson gson) {
+                return gson.fromJson(responseJsonString, MsgResponseBase.class);
+            }
+
+            @Override
+            public void onSuccessHandleBeforeNotify(MsgResponseBase responseModel) {
+            }
+        }).run();
+    }
+
+    // 获取交办事项列表
+    public boolean sendQueryAssignedMatters(final Handler handler) {
+        if (getLoginModel() == null || !getLoginModel().isLoginSuccess()) {
+            return false;
+        }
+
+        return new MyRequest(handler, MSG_QUERY_ASSIGNED_MATTERS_SUCCESS, MSG_QUERY_ASSIGNED_MATTERS_FAILED, new RequestAndResponseHandler() {
+            @Override
+            public Response buildRequestAndWaitingResponse() throws IOException {
+                String url = serverBaseUrl + "/APP.ashx?Type=GetMyAssignedMatterList";
+
+                FormBody body = new FormBody.Builder()
+                        .add("Token", getLoginModel().getToken())
+                        .build();
+
+                Request request = new Request.Builder()
+                        .url(url)
+                        .post(body)
+                        .build();
+
+                return httpClient.newCall(request).execute();
+            }
+
+            @Override
+            public MsgResponseBase jsonModelParsedFromResponseString(String responseJsonString, Gson gson) {
+                return gson.fromJson(responseJsonString, MyAssignedMattersModel.class);
+            }
+
+            @Override
+            public void onSuccessHandleBeforeNotify(MsgResponseBase responseModel) {
+            }
+        }).run();
+    }
+
+    // 获取交办事项详情
+    public boolean sendQueryAssignedMatterDetail(final String matterId, final Handler handler) {
+        if (getLoginModel() == null || !getLoginModel().isLoginSuccess()) {
+            return false;
+        }
+
+        if (matterId == null || matterId.isEmpty()) return false;
+
+        return new MyRequest(handler, MSG_QUERY_ASSIGNED_MATTER_DETAIL_SUCCESS, MSG_QUERY_ASSIGNED_MATTER_DETAIL_FAILED, new RequestAndResponseHandler() {
+            @Override
+            public Response buildRequestAndWaitingResponse() throws IOException {
+                String url = serverBaseUrl + "/APP.ashx?Type=GetAssignedMatterDetail";
+
+                FormBody body = new FormBody.Builder()
+                        .add("Token", getLoginModel().getToken())
+                        .add("AssignedMatterID", matterId)
+                        .build();
+
+                Request request = new Request.Builder()
+                        .url(url)
+                        .post(body)
+                        .build();
+
+                return httpClient.newCall(request).execute();
+            }
+
+            @Override
+            public MsgResponseBase jsonModelParsedFromResponseString(String responseJsonString, Gson gson) {
+                return gson.fromJson(responseJsonString, AssignedMatterDetailModel.class);
+            }
+
+            @Override
+            public void onSuccessHandleBeforeNotify(MsgResponseBase responseModel) {
+            }
+        }).run();
+    }
+
+    // 获取员工列表
+    public void sendQueryStaffs(Callbacks callbacks) {
+        if (getLoginModel() == null || !getLoginModel().isLoginSuccess()) {
+            onFailed("错误：未登录", callbacks);
+            return;
+        }
+
+        if (Utils.isStringEmpty(getLoginModel().getProjectID())) {
+            onFailed("错误：项目ID为空", callbacks);
+            return;
+        }
+
+        EasyRequest req = new EasyRequest(new Processor() {
+            @Override
+            public Response buildRequestAndWaitingResponse() throws IOException {
+                String url = serverBaseUrl + "/APP.ashx?Type=GetStaffList";
+
+                FormBody body = new FormBody.Builder()
+                        .add("Token", getLoginModel().getToken())
+                        .add("ProjectID", getLoginModel().getProjectID())
+                        .build();
+
+                Request request = new Request.Builder()
+                        .url(url)
+                        .post(body)
+                        .build();
+
+                return httpClient.newCall(request).execute();
+            }
+
+            @Override
+            public ResponseBase jsonModelParsedFromResponseString(String responseJsonString, Gson gson) {
+                return gson.fromJson(responseJsonString, StaffListModel.class);
+            }
+
+            @Override
+            public void onSuccessHandleBeforeNotify(ResponseBase responseModel) {}
+        }, handler, callbacks);
+        req.asyncSend();
+    }
+
+    private void onFailed(final String error, final Callbacks callbacks) {
+        if (callbacks != null) {
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    callbacks.onFailed(error);
+                }
+            });
+        }
+    }
+
+    // 归档交办事项
+    public void sendFinishAssignedMatter(final String assignedMatterId, Callbacks callbacks) {
+        if (getLoginModel() == null || !getLoginModel().isLoginSuccess()) {
+            onFailed("错误：未登录", callbacks);
+            return;
+        }
+
+        if (Utils.isStringEmpty(assignedMatterId)) {
+            onFailed("错误：ID不能为空", callbacks);
+            return;
+        }
+
+        EasyRequest req = new EasyRequest(new Processor() {
+            @Override
+            public Response buildRequestAndWaitingResponse() throws IOException {
+                String url = serverBaseUrl + "/APP.ashx?Type=FileAssignedMatter";
+
+                FormBody body = new FormBody.Builder()
+                        .add("Token", getLoginModel().getToken())
+                        .add("AssignedMatterID", assignedMatterId)
+                        .build();
+
+                Request request = new Request.Builder()
+                        .url(url)
+                        .post(body)
+                        .build();
+
+                return httpClient.newCall(request).execute();
+            }
+
+            @Override
+            public ResponseBase jsonModelParsedFromResponseString(String responseJsonString, Gson gson) {
+                return gson.fromJson(responseJsonString, ResponseBase.class);
+            }
+
+            @Override
+            public void onSuccessHandleBeforeNotify(ResponseBase responseModel) {}
+        }, handler, callbacks);
+        req.asyncSend();
+    }
 }

@@ -239,7 +239,7 @@ public class PZDetailActivity extends CommonActivity {
             });
 
             try {
-                int index = operatorListModel.getZJY().indexOf(model.getZZAQY());
+                int index = operatorListModel.getZZAQY().indexOf(model.getZZAQY());
                 if (index >= 0 && index < spinner.getCount())
                     spinner.setSelection(index);
             }
@@ -271,7 +271,7 @@ public class PZDetailActivity extends CommonActivity {
             });
 
             try {
-                int index = operatorListModel.getZJY().indexOf(model.getSYRY());
+                int index = operatorListModel.getSYRY().indexOf(model.getSYRY());
                 if (index >= 0 && index < spinner.getCount())
                     spinner.setSelection(index);
             }
