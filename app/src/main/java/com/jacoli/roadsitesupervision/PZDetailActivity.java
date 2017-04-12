@@ -23,6 +23,8 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import com.jacoli.roadsitesupervision.services.MainService;
@@ -334,6 +336,9 @@ public class PZDetailActivity extends CommonActivity {
                 case "8":
                     addIntDoubleDoubleDoubleInputToLayout(tableLayout, rowModel);
                     break;
+                case "9":
+                    addAryCheckBoxToLayout(tableLayout, rowModel);
+                    break;
                 default:
                     break;
             }
@@ -626,6 +631,58 @@ public class PZDetailActivity extends CommonActivity {
         textView4.setText(rowModel.getSubUnitAtIndexBelowThree(3));
 
         layout.addView(tableRow);
+    }
+
+    // type9, ary checkbox
+    //"SubName":"技术交底及记录情况","Description":"#已交底，手续齐全#已交底，手续不齐全#没有交底#","DataFormat":9,"Value":""
+    public void addAryCheckBoxToLayout(TableLayout layout, final PZDetailModel.PZRowModel rowModel) {
+        LinearLayout linearLayout = (LinearLayout) getLayoutInflater().inflate(R.layout.pz_detail_ary_checkbox_row_layout, null);
+
+        TextView textView = (TextView) linearLayout.findViewById(R.id.title_text_view);
+        textView.setText(rowModel.getSubName());
+
+        FlowLayout flowLayout = (FlowLayout) linearLayout.findViewById(R.id.flow_layout);
+
+        int selectedIndex = rowModel.getSelectedIndexOfType9();
+        String[] descriptions = rowModel.getDescriptionsOfType9();
+        final ArrayList<CheckBox> selectedCheckBox = new ArrayList<>();
+
+        for (int i = 0; i < descriptions.length; ++i) {
+            final CheckBox checkBox = (CheckBox) getLayoutInflater().inflate(R.layout.pz_detail_check_box, null);
+
+            checkBox.setText(descriptions[i]);
+            checkBox.setTag(Integer.toString(i));
+
+            if (i == selectedIndex) {
+                checkBox.setChecked(true);
+                selectedCheckBox.clear();
+                selectedCheckBox.add(checkBox);
+            } else {
+                checkBox.setChecked(false);
+            }
+
+            checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton button, boolean isChecked) {
+                    if (isChecked) {
+                        if (!selectedCheckBox.isEmpty()) {
+                            CheckBox selected = selectedCheckBox.get(0);
+                            selected.setChecked(false);
+                        }
+                        rowModel.setValue((String) checkBox.getTag());
+                        selectedCheckBox.clear();
+                        selectedCheckBox.add(checkBox);
+                    }
+                    else {
+                        rowModel.setValue("");
+                    }
+                }
+            });
+
+            flowLayout.addView(checkBox);
+        }
+
+        layout.addView(linearLayout);
     }
 
 }

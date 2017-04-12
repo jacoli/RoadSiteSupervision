@@ -275,5 +275,28 @@ public class PZDetailModel extends MsgResponseBase {
 
             setValue(newValue);
         }
+
+        public String[] getDescriptionsOfType9() {
+            String description = getDescription();
+            if (description.startsWith("#")) {
+                description = description.substring(1);
+            }
+            if (description.endsWith("#")) {
+                description = description.substring(0, description.length() - 1);
+            }
+
+            return description.split("#");
+        }
+
+        public int getSelectedIndexOfType9() {
+            int selectedIndex = -1;
+            try {
+                selectedIndex = Integer.parseInt(getValue());
+            }
+            catch (Exception ex) {
+                Log.e("", ex.toString());
+            }
+            return selectedIndex;
+        }
     }
 }
