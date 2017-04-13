@@ -18,7 +18,7 @@ import java.io.Serializable;
  */
 public class BGConfigsModel implements Serializable {
     static public String configFileName = "bg_configs_file";
-    static public String defaultServerPort = "8002";
+    static public String defaultServerPort = "8003";
 
     static BGConfigsModel __mainConfigModel;
 

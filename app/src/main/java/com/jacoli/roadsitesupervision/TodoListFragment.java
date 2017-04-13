@@ -102,10 +102,6 @@ public class TodoListFragment extends CommonFragment {
                     text3 += item.getReplyName() + " " + item.getReplyTime();
                 }
 
-                if (isExpireDeadLine) {
-                    text3 = "截止时间：" + item.getDeadLine();
-                }
-
                 textView3.setText(text3);
                 return v;
             }

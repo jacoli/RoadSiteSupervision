@@ -33,6 +33,7 @@ import com.jacoli.roadsitesupervision.services.PZDetailModel;
 import com.jacoli.roadsitesupervision.services.Utils;
 import com.jacoli.roadsitesupervision.views.MyToast;
 import org.apmem.tools.layouts.FlowLayout;
+import org.feezu.liuli.timeselector.TimeSelector;
 
 public class PZDetailActivity extends CommonActivity {
 
@@ -174,6 +175,15 @@ public class PZDetailActivity extends CommonActivity {
 
             // TODO other params
 
+            final EditText editText1 = (EditText) findViewById(R.id.edit_text_construction);
+            params.put("ConstructionDate", editText1.getText().toString());
+
+            final EditText editText2 = (EditText) findViewById(R.id.edit_text_pz_start);
+            params.put("PZStartDate", editText2.getText().toString());
+
+            final EditText editText3 = (EditText) findViewById(R.id.edit_text_pz_end);
+            params.put("PZEndDate", editText3.getText().toString());
+
             MainService.getInstance().sendSubmitPZContentDetail(modelID, params, handler);
         }
         catch (Exception ex) {
@@ -283,10 +293,53 @@ public class PZDetailActivity extends CommonActivity {
         }
     }
 
+    void onTimeSelectorClicked(final EditText editText) {
+        TimeSelector timeSelector = new TimeSelector(this, new TimeSelector.ResultHandler() {
+            @Override
+            public void handle(String time) {
+                String text = time + ":00";
+                editText.setText(text);
+            }
+        }, "2017-01-01 00:00", "2100-01-01 00:00:00");
+        timeSelector.setIsLoop(false);
+        timeSelector.show();
+    }
+
     public void initSubviewsAfterFetchSuccess() {
         if (model == null) {
             return;
         }
+
+        final EditText editText1 = (EditText) findViewById(R.id.edit_text_construction);
+        editText1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onTimeSelectorClicked(editText1);
+            }
+        });
+        editText1.setFocusable(false);
+        editText1.setText(model.getConstructionDate());
+
+        final EditText editText2 = (EditText) findViewById(R.id.edit_text_pz_start);
+        editText2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onTimeSelectorClicked(editText2);
+            }
+        });
+        editText2.setFocusable(false);
+        editText2.setText(model.getPZStartDate());
+
+        final EditText editText3 = (EditText) findViewById(R.id.edit_text_pz_end);
+        editText3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onTimeSelectorClicked(editText3);
+            }
+        });
+        editText3.setFocusable(false);
+        editText3.setText(model.getPZEndDate());
+
 
         String sectionHeaderTitle = "";
 

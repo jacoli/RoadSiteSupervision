@@ -10,6 +10,11 @@ import java.util.List;
 
 public class PZDetailModel extends MsgResponseBase {
 
+    private String ConstructionDate;
+    private String PZStartDate;
+    private String PZEndDate;
+
+
     private String ZJY;
 
     private String ZZAQY;
@@ -49,6 +54,30 @@ public class PZDetailModel extends MsgResponseBase {
 
     public void setItems(List<PZRowModel> items) {
         this.items = items;
+    }
+
+    public String getConstructionDate() {
+        return ConstructionDate;
+    }
+
+    public void setConstructionDate(String constructionDate) {
+        ConstructionDate = constructionDate;
+    }
+
+    public String getPZStartDate() {
+        return PZStartDate;
+    }
+
+    public void setPZStartDate(String PZStartDate) {
+        this.PZStartDate = PZStartDate;
+    }
+
+    public String getPZEndDate() {
+        return PZEndDate;
+    }
+
+    public void setPZEndDate(String PZEndDate) {
+        this.PZEndDate = PZEndDate;
     }
 
     public class PZRowModel {
