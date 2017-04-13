@@ -74,6 +74,11 @@ public class TodoListFragment extends CommonFragment {
 
                 int layoutId = item.getRead() ? R.layout.list_item_assigned_mater_list : R.layout.list_item_assigned_mater_unread_list;
 
+                boolean isExpireDeadLine = !Utils.isStringEmpty(item.getDeadLine()) && Utils.isCurrentTimeExpired(item.getDeadLine());
+                if (isExpireDeadLine) {
+                    layoutId = R.layout.list_item_assigned_mater_list_deadline;
+                }
+
                 View v = getActivity().getLayoutInflater().inflate(layoutId, null);
                 TextView textView = (TextView)v.findViewById(R.id.textView);
                 String text = "";
@@ -96,6 +101,11 @@ public class TodoListFragment extends CommonFragment {
                 } else {
                     text3 += item.getReplyName() + " " + item.getReplyTime();
                 }
+
+                if (isExpireDeadLine) {
+                    text3 = "截止时间：" + item.getDeadLine();
+                }
+
                 textView3.setText(text3);
                 return v;
             }

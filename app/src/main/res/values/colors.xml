@@ -9,7 +9,7 @@
     <color name="icons">#FFFFFF</color>
     <color name="divider">#BDBDBD</color>
     <color name="warning">#f13e35</color>
-
+    <color name="orange">#FFA500</color>
 
     <color name="tab_item_selected">#79a973</color>
     <color name="tab_item_unselected">#9ea69e</color>
