@@ -18,6 +18,7 @@ public class MyAssignedMattersModel extends MsgResponseBase {
         private String ReplyName;
         private String ReplyTime;
         private Boolean IsRead;
+        private String DeadLine;
 
         public String getID() {
             return ID;
@@ -89,6 +90,14 @@ public class MyAssignedMattersModel extends MsgResponseBase {
 
         public void setRead(Boolean read) {
             IsRead = read;
+        }
+
+        public String getDeadLine() {
+            return DeadLine;
+        }
+
+        public void setDeadLine(String deadLine) {
+            DeadLine = deadLine;
         }
     }
 

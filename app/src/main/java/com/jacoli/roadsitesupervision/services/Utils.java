@@ -7,6 +7,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -89,5 +90,21 @@ public class Utils {
 
     static public boolean isStringEmpty(String testString) {
         return testString == null || testString.isEmpty();
+    }
+
+    static public String getDeadLineStart() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH");
+        Date curDate = new Date();
+        return sdf.format(curDate) + ":00";
+    }
+
+    static public String getDeadLineEnd() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH");
+
+        Calendar curr = Calendar.getInstance();
+        curr.set(Calendar.YEAR, curr.get(Calendar.YEAR) + 1);
+        Date date = curr.getTime();
+
+        return sdf.format(date) + ":00";
     }
 }

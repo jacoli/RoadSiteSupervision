@@ -18,6 +18,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.jacoli.roadsitesupervision.services.MainService;
 import com.jacoli.roadsitesupervision.services.Utils;
+
+import org.feezu.liuli.timeselector.TimeSelector;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -70,7 +73,27 @@ public class AssignedMatterCreateActivity extends CommonActivity {
         });
         receiverEditText.setFocusable(false);
 
+        final EditText deadlineEditText = (EditText) findViewById(R.id.edit_text_deadline);
+        deadlineEditText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onDeadLineEditClicked(deadlineEditText);
+            }
+        });
+        deadlineEditText.setFocusable(false);
+
         initSpinerAfterFetchOperatorListSuccess();
+    }
+
+    void onDeadLineEditClicked(final EditText editText) {
+        TimeSelector timeSelector = new TimeSelector(this, new TimeSelector.ResultHandler() {
+            @Override
+            public void handle(String time) {
+                editText.setText(time);
+            }
+        }, Utils.getDeadLineStart(), Utils.getDeadLineEnd());
+        timeSelector.disScrollUnit(TimeSelector.SCROLLTYPE.MINUTE);
+        timeSelector.show();
     }
 
     private void setupImagePicker() {
@@ -145,6 +168,13 @@ public class AssignedMatterCreateActivity extends CommonActivity {
             return;
         }
 
+        EditText deadlineEditText = (EditText) findViewById(R.id.edit_text_deadline);
+        if (Utils.isStringEmpty(deadlineEditText.getText().toString())) {
+            Toast.makeText(this, "请输入截止时间", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        final String deadline = deadlineEditText.getText().toString() + ":00";
+
         EditText contentEditText = (EditText) findViewById(R.id.editText);
         final String content = contentEditText.getText().toString();
 
@@ -173,8 +203,11 @@ public class AssignedMatterCreateActivity extends CommonActivity {
         builder.setPositiveButton("是", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int which) {
-                if (!MainService.getInstance().submitAssignedMatter(type, staffIds, subject, content, selectedPhotos, handler)) {
+                if (!MainService.getInstance().submitAssignedMatter(type, staffIds, subject, deadline, content, selectedPhotos, handler)) {
                     Toast.makeText(AssignedMatterCreateActivity.this, "创建失败", Toast.LENGTH_SHORT).show();
+                } else {
+                    Button submitBtn = (Button) findViewById(R.id.submit_btn);
+                    submitBtn.setEnabled(false);
                 }
             }
         });
@@ -198,6 +231,8 @@ public class AssignedMatterCreateActivity extends CommonActivity {
                 break;
             case MainService.MSG_SUBMIT_ASSIGNED_MATTER_FAILED:
                 Toast.makeText(this, "创建失败", Toast.LENGTH_SHORT).show();
+                Button submitBtn = (Button) findViewById(R.id.submit_btn);
+                submitBtn.setEnabled(true);
                 break;
             default:
                 break;

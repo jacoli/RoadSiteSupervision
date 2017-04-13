@@ -16,4 +16,6 @@
     <dimen name="cell_height">48dp</dimen>
     <dimen name="small_cell_height">48dp</dimen>
 
+    <dimen name="assigned_matter_cell_title_width">96dp</dimen>
+
 </resources>

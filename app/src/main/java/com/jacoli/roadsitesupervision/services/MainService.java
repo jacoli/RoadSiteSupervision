@@ -1165,6 +1165,7 @@ public class MainService {
     public boolean submitAssignedMatter(final String type,
                                         final String receiver,
                                         final String subject,
+                                        final String deadline,
                                         final String content,
                                         final List<String> imgUrls,
                                         final Handler handler) {
@@ -1188,7 +1189,8 @@ public class MainService {
                         .addFormDataPart("AMType", type)
                         .addFormDataPart("Receiver", receiver)
                         .addFormDataPart("Subject", subject)
-                        .addFormDataPart("AssignContent", content);
+                        .addFormDataPart("AssignContent", content)
+                        .addFormDataPart("DeadLine", deadline);
 
                 if (imgUrls != null) {
                     for (String imgUrl : imgUrls) {

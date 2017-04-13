@@ -37,7 +37,7 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="64dp"
+                    android:layout_width="@dimen/assigned_matter_cell_title_width"
                     android:layout_height="@dimen/cell_height"
                     android:gravity="center_vertical"
                     android:textSize="18sp"
@@ -63,7 +63,7 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="64dp"
+                    android:layout_width="@dimen/assigned_matter_cell_title_width"
                     android:layout_height="@dimen/cell_height"
                     android:gravity="center_vertical"
                     android:textSize="18sp"
@@ -77,7 +77,7 @@
                     android:layout_weight="1"
                     android:gravity="center_vertical"
                     android:id="@+id/edit_text_subject"
-                    android:hint="请输入"/>
+                    android:hint="请输入主题"/>
 
             </LinearLayout>
 
@@ -88,7 +88,7 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="64dp"
+                    android:layout_width="@dimen/assigned_matter_cell_title_width"
                     android:layout_height="@dimen/cell_height"
                     android:gravity="center_vertical"
                     android:textSize="18sp"
@@ -113,7 +113,7 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="64dp"
+                    android:layout_width="@dimen/assigned_matter_cell_title_width"
                     android:layout_height="@dimen/cell_height"
                     android:gravity="center_vertical"
                     android:textSize="18sp"
@@ -128,7 +128,7 @@
                     android:layout_weight="1"
                     android:gravity="center_vertical"
                     android:id="@+id/edit_text_receiver"
-                    android:hint="请输入"/>
+                    android:hint="请选择承办人"/>
 
             </LinearLayout>
 
@@ -139,12 +139,12 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="64dp"
+                    android:layout_width="96dp"
                     android:layout_height="@dimen/cell_height"
                     android:gravity="center_vertical"
                     android:textSize="18sp"
                     android:textColor="@color/primary_text"
-                    android:text="日期:"
+                    android:text="交办日期:"
                     />
 
                 <TextView
@@ -156,6 +156,31 @@
                     android:id="@+id/text_view_time"
                     android:text="2017-04-03"
                     />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="@dimen/assigned_matter_cell_title_width"
+                    android:layout_height="@dimen/cell_height"
+                    android:gravity="center_vertical"
+                    android:textSize="18sp"
+                    android:textColor="@color/primary_text"
+                    android:text="限时完成:"
+                    />
+
+                <EditText
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:id="@+id/edit_text_deadline"
+                    android:hint="请输入截止时间"/>
 
             </LinearLayout>
 
