@@ -57,7 +57,10 @@ public class SupervisionPatrolListActivity extends CommonActivity {
         });
     }
 
-    public void submit() {}
+    public void submit() {
+        Intent intent = new Intent(this, SupervisionPatrolCreatingActivity.class);
+        startActivity(intent);
+    }
 
     @Override
     public void onResume() {
@@ -87,7 +90,7 @@ public class SupervisionPatrolListActivity extends CommonActivity {
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
                 // TODO
-                
+
                 MyAssignedMattersModel.Item item = model.getItems().get(position);
 
                 View v = getLayoutInflater().inflate(R.layout.list_item_supervision_patral_list, null);
