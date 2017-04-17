@@ -95,14 +95,18 @@ public class TodoListFragment extends CommonFragment {
                 textView2.setText(text2);
 
                 TextView textView3 = (TextView)v.findViewById(R.id.textView3);
-                String text3 = "最后回复：";
-                if (Utils.isStringEmpty(item.getReplyName())) {
-                    text3 += "无";
-                } else {
-                    text3 += item.getReplyName() + " " + item.getReplyTime();
-                }
-
+                String text3 = "截止时间：" + item.getDeadLine();
                 textView3.setText(text3);
+
+                TextView textView4 = (TextView)v.findViewById(R.id.textView4);
+                String text4 = "最后回复：";
+                if (Utils.isStringEmpty(item.getReplyName())) {
+                    text4 += "无";
+                } else {
+                    text4 += item.getReplyName() + " " + item.getReplyTime();
+                }
+                textView4.setText(text4);
+
                 return v;
             }
         };

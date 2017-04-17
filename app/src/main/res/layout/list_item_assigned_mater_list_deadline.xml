@@ -40,8 +40,18 @@
             android:textSize="14sp"
             android:textColor="@color/warning"
             android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
             android:id="@+id/textView3"
+            android:text="截止时间："
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:textColor="@color/warning"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:id="@+id/textView4"
             android:text="最后回复："
             />
 
