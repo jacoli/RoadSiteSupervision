@@ -57,7 +57,8 @@
         <activity android:name=".AssignedMatterDetailActivity" />
         <activity android:name=".AssignedMatterReplyActivity" />
         <activity android:name=".AssignedMatterCreateActivity" />
-        <activity android:name=".StaffsActivity"></activity>
+        <activity android:name=".StaffsActivity" />
+        <activity android:name=".SupervisionPatrol.SupervisionPatrolListActivity"></activity>
     </application>
 
 </manifest>
