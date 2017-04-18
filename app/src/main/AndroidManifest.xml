@@ -25,6 +25,7 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
     <application
+        android:name=".Upgrade.A"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -63,6 +64,12 @@
         <activity android:name=".SupervisionPatrol.SupervisionPatrolDetailActivity" />
         <activity android:name=".SupervisionPatrol.SupervisionPatrolProjectDetailActivity" />
         <activity android:name=".SupervisionPatrol.SupervisionPatrolUnitProjectDetailActivity"></activity>
+
+        <receiver android:name=".Upgrade.download.ApkInstallReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.DOWNLOAD_COMPLETE" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

@@ -1427,4 +1427,32 @@ public class MainService {
         }, handler, callbacks);
         req.asyncSend();
     }
+
+    public void sendQueryUpgrade(Callbacks callbacks) {
+        EasyRequest req = new EasyRequest(new Processor() {
+            @Override
+            public Response buildRequestAndWaitingResponse() throws IOException {
+                String url = serverBaseUrl + "/APP.ashx?Type=GetAPPInfo";
+
+                FormBody body = new FormBody.Builder()
+                        .build();
+
+                Request request = new Request.Builder()
+                        .url(url)
+                        .post(body)
+                        .build();
+
+                return httpClient.newCall(request).execute();
+            }
+
+            @Override
+            public ResponseBase jsonModelParsedFromResponseString(String responseJsonString, Gson gson) {
+                return gson.fromJson(responseJsonString, UpgradeModel.class);
+            }
+
+            @Override
+            public void onSuccessHandleBeforeNotify(ResponseBase responseModel) {}
+        }, handler, callbacks);
+        req.asyncSend();
+    }
 }
