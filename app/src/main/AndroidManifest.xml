@@ -61,7 +61,8 @@
         <activity android:name=".SupervisionPatrol.SupervisionPatrolListActivity" />
         <activity android:name=".SupervisionPatrol.SupervisionPatrolCreatingActivity" />
         <activity android:name=".SupervisionPatrol.SupervisionPatrolDetailActivity" />
-        <activity android:name=".SupervisionPatrol.SupervisionPatrolProjectDetailActivity"></activity>
+        <activity android:name=".SupervisionPatrol.SupervisionPatrolProjectDetailActivity" />
+        <activity android:name=".SupervisionPatrol.SupervisionPatrolUnitProjectDetailActivity"></activity>
     </application>
 
 </manifest>

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_supervision_patrol_project_detail"
+    android:id="@+id/activity_supervision_patrol_unit_project_detail"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.jacoli.roadsitesupervision.SupervisionPatrol.SupervisionPatrolProjectDetailActivity">
+    tools:context="com.jacoli.roadsitesupervision.SupervisionPatrol.SupervisionPatrolUnitProjectDetailActivity">
 
     <com.jacoli.roadsitesupervision.views.TitleBar
         android:id="@+id/title_bar"
@@ -22,7 +22,8 @@
         <org.apmem.tools.layouts.FlowLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
+            android:layout_margin="24dp"
+            android:layout_marginBottom="64dp"
             android:id="@+id/flow_layout">
 
             <TextView
@@ -31,7 +32,7 @@
                 android:layout_height="wrap_content"
                 android:textSize="20sp"
                 android:layout_margin="16dp"
-                android:text="单位工程"/>
+                android:text="旁站情况"/>
 
             <include layout="@layout/cell_separator" />
 
