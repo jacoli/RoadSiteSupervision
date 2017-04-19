@@ -194,7 +194,7 @@ public class LoginActivity extends CommonActivity {
 
     public void onUpgrade(final UpgradeModel model) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("新版本更新提示");
+        builder.setTitle("有新版本");
         builder.setMessage(model.getUpdate());
 
         builder.setPositiveButton("马上更新", new DialogInterface.OnClickListener() {

@@ -6,11 +6,11 @@ import android.os.Bundle;
 import com.jacoli.roadsitesupervision.CommonActivity;
 import com.jacoli.roadsitesupervision.R;
 
-public class SupervisionPatrolDetailActivity extends CommonActivity {
+public class SupervisionPatrolApprovalProcessActivity extends CommonActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_supervision_patrol_detail);
+        setContentView(R.layout.activity_supervision_patrol_approval_process);
     }
 }

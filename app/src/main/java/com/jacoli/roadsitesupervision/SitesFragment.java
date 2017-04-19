@@ -17,8 +17,8 @@ import com.jacoli.roadsitesupervision.views.MyToast;
 
 
 public class SitesFragment extends Fragment {
-    final String[] models = {"施工旁站", "质量巡视", "安全巡视", "环保巡视", "质量抽检"};
-    //final String[] models = {"施工旁站", "质量巡视", "安全巡视", "环保巡视", "质量抽检", "监理巡查"};
+    //final String[] models = {"施工旁站", "质量巡视", "安全巡视", "环保巡视", "质量抽检"};
+    final String[] models = {"施工旁站", "质量巡视", "安全巡视", "环保巡视", "质量抽检", "监理巡查"};
 
     public SitesFragment() {
         // Required empty public constructor

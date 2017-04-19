@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_supervision_patrol_approval_process"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.jacoli.roadsitesupervision.SupervisionPatrol.SupervisionPatrolApprovalProcessActivity">
+
+    <com.jacoli.roadsitesupervision.views.TitleBar
+        android:id="@+id/title_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true" />
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/actions"
+        android:layout_below="@+id/title_bar"
+        android:id="@+id/listView"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:orientation="horizontal"
+        android:id="@+id/actions">
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_weight="5"
+            android:layout_height="40dp"
+            android:layout_margin="16dp"
+            android:background="@color/accent"
+            android:text="需整改"
+            android:id="@+id/submit_btn_1" />
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_weight="5"
+            android:layout_height="40dp"
+            android:layout_margin="16dp"
+            android:background="@color/accent"
+            android:text="不整改"
+            android:id="@+id/submit_btn_2" />
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_weight="2"
+            android:layout_height="40dp"
+            android:layout_margin="16dp"
+            android:background="@color/warning"
+            android:text="删除"
+            android:id="@+id/submit_btn_3" />
+
+    </LinearLayout>
+
+</RelativeLayout>
