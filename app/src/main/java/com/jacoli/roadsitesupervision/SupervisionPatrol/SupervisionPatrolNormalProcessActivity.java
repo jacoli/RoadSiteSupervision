@@ -55,23 +55,23 @@ public class SupervisionPatrolNormalProcessActivity extends CommonActivity {
             Toast.makeText(getBaseContext(), "获取交办事项详情失败", Toast.LENGTH_SHORT).show();
         }
 
-//        Button submitBtn = (Button) findViewById(R.id.submit_btn);
-//        submitBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(AssignedMatterDetailActivity.this, AssignedMatterReplyActivity.class);
-//                intent.putExtra("id", getIntent().getStringExtra("id"));
-//                startActivityForResult(intent, AssignedMatterReplyActivity.RequestCode);
-//            }
-//        });
-//
-//        Button submit2Btn = (Button) findViewById(R.id.submit2_btn);
-//        submit2Btn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                finishAssignedMatter();
-//            }
-//        });
+        Button submitBtn = (Button) findViewById(R.id.submit_btn_1);
+        submitBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(SupervisionPatrolNormalProcessActivity.this, SupervisionPatrolNormalProcessReplyActivity.class);
+                intent.putExtra("id", getIntent().getStringExtra("id"));
+                startActivityForResult(intent, SupervisionPatrolNormalProcessReplyActivity.RequestCode);
+            }
+        });
+
+        Button submit2Btn = (Button) findViewById(R.id.submit_btn_2);
+        submit2Btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finishAssignedMatter();
+            }
+        });
 
         ListView listView = (ListView) findViewById(R.id.listView);
         setupListView(listView);
@@ -181,7 +181,7 @@ public class SupervisionPatrolNormalProcessActivity extends CommonActivity {
     @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == AssignedMatterReplyActivity.RequestCode) {
+        if (requestCode == SupervisionPatrolNormalProcessReplyActivity.RequestCode) {
             if (resultCode == RESULT_OK) {
                 if (!MainService.getInstance().sendQueryAssignedMatterDetail(matterId, handler)) {
                     Toast.makeText(getBaseContext(), "获取交办事项详情失败", Toast.LENGTH_SHORT).show();

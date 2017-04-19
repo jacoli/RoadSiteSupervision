@@ -71,7 +71,8 @@
         </receiver>
 
         <activity android:name=".SupervisionPatrol.SupervisionPatrolApprovalProcessActivity" />
-        <activity android:name=".SupervisionPatrol.SupervisionPatrolNormalProcessActivity"></activity>
+        <activity android:name=".SupervisionPatrol.SupervisionPatrolNormalProcessActivity" />
+        <activity android:name=".SupervisionPatrol.SupervisionPatrolNormalProcessReplyActivity"></activity>
     </application>
 
 </manifest>
