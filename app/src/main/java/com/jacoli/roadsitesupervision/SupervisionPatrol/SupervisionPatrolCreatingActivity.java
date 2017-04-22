@@ -1,5 +1,7 @@
 package com.jacoli.roadsitesupervision.SupervisionPatrol;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.OrientationHelper;
@@ -9,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
@@ -23,6 +26,8 @@ import com.jacoli.roadsitesupervision.PhotoAdapter;
 import com.jacoli.roadsitesupervision.R;
 import com.jacoli.roadsitesupervision.RecyclerItemClickListener;
 import com.jacoli.roadsitesupervision.StaffsActivity;
+import com.jacoli.roadsitesupervision.services.MainService;
+import com.jacoli.roadsitesupervision.services.Utils;
 
 import org.w3c.dom.Text;
 
@@ -74,6 +79,14 @@ public class SupervisionPatrolCreatingActivity extends CommonActivity {
 
         setupCheckItems();
         setupDefaultImagePicker();
+
+        Button submitBtn = (Button) findViewById(R.id.submit_btn);
+        submitBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                submit();
+            }
+        });
     }
 
     private void setupCheckItems() {
@@ -169,5 +182,46 @@ public class SupervisionPatrolCreatingActivity extends CommonActivity {
                 // Another interface callback
             }
         });
+    }
+
+    public void submit() {
+        EditText editText = (EditText) findViewById(R.id.edit_text_subject);
+        final String subject = editText.getText().toString();
+        if (subject.isEmpty()) {
+            Toast.makeText(this, "请输入工程构件", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (Utils.isStringEmpty(selectedTypeId)) {
+            Toast.makeText(this, "请输入工程构件", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (Utils.isStringEmpty(selectedApproverId)) {
+            Toast.makeText(this, "请输入工程构件", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (Utils.isStringEmpty(selectedCheckItemIds)) {
+            Toast.makeText(this, "请输入工程构件", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        SupervisionPatrolService.getInstance().sendCreateSupervisionPatrol(subject,
+                selectedTypeId, selectedCheckItemIds, subject, selectedApproverId, getCommonSelectedPhotoUrls(), new Callbacks() {
+            @Override
+            public void onSuccess(ResponseBase responseModel) {
+            }
+
+            @Override
+            public void onFailed(String error) {
+                Button submitBtn = (Button) findViewById(R.id.submit_btn);
+                submitBtn.setEnabled(true);
+                Toast.makeText(SupervisionPatrolCreatingActivity.this, error, Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        Button submitBtn = (Button) findViewById(R.id.submit_btn);
+        submitBtn.setEnabled(false);
     }
 }

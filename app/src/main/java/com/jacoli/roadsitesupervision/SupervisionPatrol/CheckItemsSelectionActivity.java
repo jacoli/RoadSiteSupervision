@@ -141,6 +141,10 @@ public class CheckItemsSelectionActivity extends CommonActivity {
             text += item.getName() + "(否)\n";
         }
 
+        if (itemIds.endsWith(",")) {
+            itemIds = itemIds.substring(0, itemIds.length() - 1);
+        }
+
         Intent intent = new Intent();
         intent.putExtra("checkItemIds", itemIds);
         intent.putExtra("content", text);
