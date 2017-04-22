@@ -22,7 +22,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_margin="16dp"
-            android:layout_marginBottom="64dp"
+            android:paddingBottom="64dp"
             android:focusable="true"
             android:focusableInTouchMode="true"
             android:divider="@drawable/divider_between_cells"
@@ -36,33 +36,24 @@
                 android:gravity="center_vertical"
                 android:layout_gravity="center_vertical"
                 android:orientation="horizontal"
-                android:clickable="true"
                 android:id="@+id/component_id">
 
                 <TextView
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
+                    android:layout_width="@dimen/assigned_matter_cell_title_width"
+                    android:layout_height="@dimen/cell_height"
                     android:gravity="center_vertical"
                     android:textSize="18sp"
                     android:textColor="@color/primary_text"
-                    android:text="工程构件："
+                    android:text="工程构件:"
                     />
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <EditText
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:gravity="center_vertical"
-                    android:textSize="18sp"
-                    android:textColor="@color/secondary_text"
-                    android:text="text"
-                    />
-
-                <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:src="@drawable/next_arrow"
-                    android:scaleType="fitCenter"/>
+                    android:id="@+id/edit_text_subject"
+                    android:hint="请输入主题"/>
 
             </LinearLayout>
 
@@ -94,39 +85,57 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="@dimen/assigned_matter_cell_title_width"
+                    android:layout_height="@dimen/cell_height"
+                    android:gravity="center_vertical"
+                    android:textSize="18sp"
+                    android:textColor="@color/primary_text"
+                    android:text="审批人："
+                    />
+
+                <Spinner
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:id="@+id/spinner_approver"
+                    android:paddingStart="24dp"
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
                 android:layout_gravity="center_vertical"
                 android:orientation="horizontal"
                 android:clickable="true"
-                android:id="@+id/patrol_items">
+                android:id="@+id/check_items">
 
-                <LinearLayout
+                <TextView
                     android:layout_width="0dp"
                     android:layout_weight="1"
+                    android:layout_height="@dimen/cell_height"
+                    android:gravity="center_vertical"
+                    android:textSize="18sp"
+                    android:textColor="@color/primary_text"
+                    android:text="检查明细:"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
-                    android:layout_gravity="center_vertical"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:textSize="18sp"
-                        android:textColor="@color/primary_text"
-                        android:text="工程构件："
-                        />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:textSize="18sp"
-                        android:textColor="@color/secondary_text"
-                        android:text="text"
-                        />
-                    </LinearLayout>
+                    android:textSize="18sp"
+                    android:textColor="@color/secondary_text"
+                    android:text="点击选择  "
+                    />
 
                 <ImageView
                     android:layout_width="24dp"
@@ -136,6 +145,16 @@
 
             </LinearLayout>
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:textSize="18sp"
+                android:textColor="@color/secondary_text"
+                android:id="@+id/text_view_check_items"
+                android:text="@string/default_text"
+                />
+
             <include layout="@layout/cell_separator"/>
 
             <TextView
@@ -144,7 +163,7 @@
                 android:gravity="center_vertical"
                 android:textSize="18sp"
                 android:textColor="@color/primary_text"
-                android:text="补充内容"
+                android:text="巡查内容"
                 />
 
             <EditText
@@ -176,7 +195,6 @@
                 android:id="@+id/recycler_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
                 />
 
             <Button

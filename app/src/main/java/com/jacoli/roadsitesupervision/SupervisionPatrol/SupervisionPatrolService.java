@@ -67,6 +67,40 @@ public class SupervisionPatrolService {
     * 监理巡查
     * */
 
+    // 获取审批人列表
+    public void sendQueryApproverList(final String SupervisionCheckItemID, Callbacks callbacks) {
+        if (!isLogined()) {
+            onFailed("错误：未登录", callbacks);
+            return;
+        }
+
+        EasyRequest req = new EasyRequest(new Processor() {
+            @Override
+            public Response buildRequestAndWaitingResponse() throws IOException {
+                FormBody body = new FormBody.Builder()
+                        .add("Token", getToken())
+                        .add("SupervisionCheckItemID", SupervisionCheckItemID)
+                        .build();
+
+                Request request = new Request.Builder()
+                        .url(requestUrl("GetAllSupCheckItemApprovalList"))
+                        .post(body)
+                        .build();
+
+                return httpClient.newCall(request).execute();
+            }
+
+            @Override
+            public ResponseBase jsonModelParsedFromResponseString(String responseJsonString, Gson gson) {
+                return gson.fromJson(responseJsonString, ApproverListModel.class);
+            }
+
+            @Override
+            public void onSuccessHandleBeforeNotify(ResponseBase responseModel) {}
+        }, handler, callbacks);
+        req.asyncSend();
+    }
+
     // 获取巡查明细列表
     public void sendQuerySupervisionPatrolCheckItemList(Callbacks callbacks) {
         if (!isLogined()) {

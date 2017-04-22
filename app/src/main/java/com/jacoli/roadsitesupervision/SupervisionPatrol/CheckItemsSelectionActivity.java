@@ -23,6 +23,8 @@ import java.util.Map;
 
 public class CheckItemsSelectionActivity extends CommonActivity {
 
+    static int RequestCode = 1001;
+
     private BaseAdapter adapter;
     private List<CheckItemsModel.Item> flatItems;
     private HashMap<String, CheckItemsModel.Item> selectedItems;
@@ -140,7 +142,7 @@ public class CheckItemsSelectionActivity extends CommonActivity {
         }
 
         Intent intent = new Intent();
-        intent.putExtra("itemIds", itemIds);
+        intent.putExtra("checkItemIds", itemIds);
         intent.putExtra("content", text);
         setResult(RESULT_OK, intent);
         finish();

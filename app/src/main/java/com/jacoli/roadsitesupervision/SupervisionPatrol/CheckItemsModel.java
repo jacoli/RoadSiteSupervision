@@ -117,4 +117,8 @@ public class CheckItemsModel extends MsgResponseBase {
 
         return flatItems;
     }
+
+    public List<Item> getCheckTypes() {
+        return getItems();
+    }
 }
