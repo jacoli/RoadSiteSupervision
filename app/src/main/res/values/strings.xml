@@ -5,6 +5,8 @@
      
     <string name="vendor_name">杭州港建德港区十里埠综合作业区工程</string>
 
+    <string name="default_text">default_text</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

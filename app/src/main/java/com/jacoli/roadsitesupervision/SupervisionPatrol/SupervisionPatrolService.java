@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+import okhttp3.FormBody;
 import okhttp3.Headers;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -46,21 +47,108 @@ public class SupervisionPatrolService {
         }
     }
 
+    private boolean isLogined() {
+        if (MainService.getInstance().getLoginModel() == null || !MainService.getInstance().getLoginModel().isLoginSuccess()) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    private String getToken() {
+        return MainService.getInstance().getLoginModel().getToken();
+    }
+
+    private String requestUrl(String type) {
+        return MainService.getInstance().getServerBaseUrl() + "/APP.ashx?Type=" + type;
+    }
+
     /*
     * 监理巡查
     * */
 
     // 获取监理巡查列表
+    public void sendQuerySupervisionPatrolList(Callbacks callbacks) {
+        if (!isLogined()) {
+            onFailed("错误：未登录", callbacks);
+            return;
+        }
+
+        EasyRequest req = new EasyRequest(new Processor() {
+            @Override
+            public Response buildRequestAndWaitingResponse() throws IOException {
+                FormBody body = new FormBody.Builder()
+                        .add("Token", getToken())
+                        .build();
+
+                Request request = new Request.Builder()
+                        .url(requestUrl("GetMySupervisionCheckList"))
+                        .post(body)
+                        .build();
+
+                return httpClient.newCall(request).execute();
+            }
+
+            @Override
+            public ResponseBase jsonModelParsedFromResponseString(String responseJsonString, Gson gson) {
+                return gson.fromJson(responseJsonString, SupervisionPatrolListModel.class);
+            }
+
+            @Override
+            public void onSuccessHandleBeforeNotify(ResponseBase responseModel) {}
+        }, handler, callbacks);
+        req.asyncSend();
+    }
 
     // 获取监理巡查详情
 
     // 创建监理巡查
 
     // 审批监理巡查
+    public void sendSupervisionPatrolApproval(final String Id, final String comment, final String type, final String receiverId, Callbacks callbacks) {
+        if (!isLogined()) {
+            onFailed("错误：未登录", callbacks);
+            return;
+        }
+
+        if (Utils.isStringEmpty(Id)) {
+            onFailed("错误：ID不能为空", callbacks);
+            return;
+        }
+
+        EasyRequest req = new EasyRequest(new Processor() {
+            @Override
+            public Response buildRequestAndWaitingResponse() throws IOException {
+                FormBody body = new FormBody.Builder()
+                        .add("Token", getToken())
+                        .add("SupervisionCheckID", Id)
+                        .add("ApprovalComment", comment)
+                        .add("OperType", type)
+                        .add("ReceiverID", receiverId)
+                        .build();
+
+                Request request = new Request.Builder()
+                        .url(requestUrl("SupervisionCheckApproval"))
+                        .post(body)
+                        .build();
+
+                return httpClient.newCall(request).execute();
+            }
+
+            @Override
+            public ResponseBase jsonModelParsedFromResponseString(String responseJsonString, Gson gson) {
+                return gson.fromJson(responseJsonString, ResponseBase.class);
+            }
+
+            @Override
+            public void onSuccessHandleBeforeNotify(ResponseBase responseModel) {}
+        }, handler, callbacks);
+        req.asyncSend();
+    }
 
     // 回复监理巡查
     public void sendSupervisionPatrolReply(final String id, final String content, final List<String> imgUrls, Callbacks callbacks) {
-        if (MainService.getInstance().getLoginModel() == null || !MainService.getInstance().getLoginModel().isLoginSuccess()) {
+        if (!isLogined()) {
             onFailed("错误：未登录", callbacks);
             return;
         }
@@ -73,14 +161,11 @@ public class SupervisionPatrolService {
         EasyRequest req = new EasyRequest(new Processor() {
             @Override
             public Response buildRequestAndWaitingResponse() throws IOException {
-                // TODO
-                String url = MainService.getInstance().getServerBaseUrl() + "/APP.ashx?Type=SubmitAssignedMatterReply";
-
                 MultipartBody.Builder builder = new MultipartBody.Builder()
                         .setType(MultipartBody.FORM)
                         .addFormDataPart("Token", MainService.getInstance().getLoginModel().getToken())
-                        .addFormDataPart("AssignedMatterID", id)
-                        .addFormDataPart("AssignContent", content);
+                        .addFormDataPart("SupervisionCheckID", id)
+                        .addFormDataPart("ReplyContent", content);
 
                 if (imgUrls != null) {
                     for (String imgUrl : imgUrls) {
@@ -90,8 +175,47 @@ public class SupervisionPatrolService {
                 }
 
                 Request request = new Request.Builder()
-                        .url(url)
+                        .url(requestUrl("SubmitSupervisionCheckReply"))
                         .post(builder.build())
+                        .build();
+
+                return httpClient.newCall(request).execute();
+            }
+
+            @Override
+            public ResponseBase jsonModelParsedFromResponseString(String responseJsonString, Gson gson) {
+                return gson.fromJson(responseJsonString, ResponseBase.class);
+            }
+
+            @Override
+            public void onSuccessHandleBeforeNotify(ResponseBase responseModel) {}
+        }, handler, callbacks);
+        req.asyncSend();
+    }
+
+    // 监理巡查归档
+    public void sendFinishSupervisionPatrol(final String Id, Callbacks callbacks) {
+        if (!isLogined()) {
+            onFailed("错误：未登录", callbacks);
+            return;
+        }
+
+        if (Utils.isStringEmpty(Id)) {
+            onFailed("错误：ID不能为空", callbacks);
+            return;
+        }
+
+        EasyRequest req = new EasyRequest(new Processor() {
+            @Override
+            public Response buildRequestAndWaitingResponse() throws IOException {
+                FormBody body = new FormBody.Builder()
+                        .add("Token", getToken())
+                        .add("SupervisionCheckID", Id)
+                        .build();
+
+                Request request = new Request.Builder()
+                        .url(requestUrl("FileAssignedMatter"))
+                        .post(body)
                         .build();
 
                 return httpClient.newCall(request).execute();

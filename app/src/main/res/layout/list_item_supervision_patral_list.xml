@@ -2,70 +2,62 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal">
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:divider="@drawable/divider_between_text_views"
+    android:showDividers="middle">
 
     <LinearLayout
-        android:layout_width="0dp"
-        android:layout_weight="1"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:divider="@drawable/divider_between_text_views"
-        android:showDividers="middle"
-        android:orientation="vertical">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:textSize="14sp"
-                android:textColor="@color/secondary_text"
-                android:id="@+id/textView"
-                android:text="上报人："
-                />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="14sp"
-                android:textColor="@color/warning"
-                android:id="@+id/text_view_status"
-                android:text="待审批"
-                />
-
-            </LinearLayout>
+        android:orientation="horizontal">
 
         <TextView
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
             android:textSize="14sp"
             android:textColor="@color/secondary_text"
-            android:id="@+id/textView2"
-            android:text="上报时间："
+            android:id="@+id/textView"
+            android:text="@string/default_text"
             />
 
         <TextView
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="14sp"
-            android:textColor="@color/secondary_text"
-            android:id="@+id/textView3"
-            android:text="问题描述："
-            />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="14sp"
-            android:textColor="@color/secondary_text"
-            android:id="@+id/textView4"
-            android:text="最后回复："
+            android:textColor="@color/warning"
+            android:id="@+id/text_view_status"
+            android:text="@string/default_text"
             />
 
     </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        android:textColor="@color/secondary_text"
+        android:id="@+id/textView2"
+        android:text="@string/default_text"
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        android:textColor="@color/secondary_text"
+        android:id="@+id/textView3"
+        android:text="@string/default_text"
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        android:textColor="@color/secondary_text"
+        android:id="@+id/textView4"
+        android:text="@string/default_text"
+        />
 
 </LinearLayout>

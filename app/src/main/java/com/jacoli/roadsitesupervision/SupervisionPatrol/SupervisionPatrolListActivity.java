@@ -1,10 +1,8 @@
 package com.jacoli.roadsitesupervision.SupervisionPatrol;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -13,18 +11,15 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.jacoli.roadsitesupervision.AssignedMatterDetailActivity;
 import com.jacoli.roadsitesupervision.CommonActivity;
+import com.jacoli.roadsitesupervision.EasyRequest.Callbacks;
+import com.jacoli.roadsitesupervision.EasyRequest.ResponseBase;
 import com.jacoli.roadsitesupervision.R;
-import com.jacoli.roadsitesupervision.services.MainService;
-import com.jacoli.roadsitesupervision.services.MyAssignedMattersModel;
-import com.jacoli.roadsitesupervision.services.Utils;
 
-// 监理巡查
+// 监理巡查列表页
 public class SupervisionPatrolListActivity extends CommonActivity {
 
-    private MyAssignedMattersModel model;
+    private SupervisionPatrolListModel model;
     private BaseAdapter adapter;
     private SwipeRefreshLayout swipeRefreshLayout;
 
@@ -52,7 +47,23 @@ public class SupervisionPatrolListActivity extends CommonActivity {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                MainService.getInstance().sendQueryAssignedMatters(handler);
+                loadData();
+            }
+        });
+    }
+
+    public void loadData() {
+        SupervisionPatrolService.getInstance().sendQuerySupervisionPatrolList(new Callbacks() {
+            @Override
+            public void onSuccess(ResponseBase responseModel) {
+                model = (SupervisionPatrolListModel) responseModel;
+                adapter.notifyDataSetChanged();
+                swipeRefreshLayout.setRefreshing(false);
+            }
+
+            @Override
+            public void onFailed(String error) {
+                Toast.makeText(SupervisionPatrolListActivity.this, error, Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -66,7 +77,7 @@ public class SupervisionPatrolListActivity extends CommonActivity {
     public void onResume() {
         super.onResume();
 
-        MainService.getInstance().sendQueryAssignedMatters(handler);
+        loadData();
     }
 
     private void setupListView(ListView listView) {
@@ -89,37 +100,27 @@ public class SupervisionPatrolListActivity extends CommonActivity {
 
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
-                // TODO
-
-                MyAssignedMattersModel.Item item = model.getItems().get(position);
+                SupervisionPatrolListModel.Item item = model.getItems().get(position);
 
                 View v = getLayoutInflater().inflate(R.layout.list_item_supervision_patral_list, null);
                 TextView textView = (TextView)v.findViewById(R.id.textView);
-                String text = "";
-                if (Utils.isStringEmpty(item.getAMType())) {
-                    text += item.getSubject();
-                } else {
-                    text += item.getAMType() + "：" + item.getSubject();
-                }
-
+                String text = "项目：" + item.getProjectName();
                 textView.setText(text);
 
                 TextView textView2 = (TextView)v.findViewById(R.id.textView2);
-                String text2 = "交办人：" + item.getSenderName() + " " + item.getAddTime();
+                String text2 = "工程地点部位：" + item.getProjectPart();
                 textView2.setText(text2);
 
                 TextView textView3 = (TextView)v.findViewById(R.id.textView3);
-                String text3 = "截止时间：" + item.getDeadLine();
+                String text3 = "上报人：" + item.getAddBy() + item.getAddTime();
                 textView3.setText(text3);
 
                 TextView textView4 = (TextView)v.findViewById(R.id.textView4);
-                String text4 = "最后回复：";
-                if (Utils.isStringEmpty(item.getReplyName())) {
-                    text4 += "无";
-                } else {
-                    text4 += item.getReplyName() + " " + item.getReplyTime();
-                }
+                String text4 = "最后回复：" + item.getLastUpdateBy() + item.getLastUpdateTime();
                 textView4.setText(text4);
+
+                TextView statusTextView = (TextView) v.findViewById(R.id.text_view_status);
+                statusTextView.setText(item.getStatus());
 
                 return v;
             }
@@ -134,21 +135,5 @@ public class SupervisionPatrolListActivity extends CommonActivity {
                 startActivity(intent);
             }
         });
-    }
-
-    @Override
-    public void onResponse(int msgCode, Object obj) {
-        switch (msgCode) {
-            case MainService.MSG_QUERY_ASSIGNED_MATTERS_SUCCESS:
-                model = (MyAssignedMattersModel) obj;
-                adapter.notifyDataSetChanged();
-                swipeRefreshLayout.setRefreshing(false);
-                break;
-            case MainService.MSG_QUERY_ASSIGNED_MATTERS_FAILED:
-                Toast.makeText(this, "获取交办事项列表失败", Toast.LENGTH_SHORT).show();
-                break;
-            default:
-                break;
-        }
     }
 }
