@@ -11,6 +11,7 @@ import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.jacoli.roadsitesupervision.SupervisionPatrol.CheckItemsSelectionActivity;
 import com.jacoli.roadsitesupervision.SupervisionPatrol.SupervisionPatrolListActivity;
 import com.jacoli.roadsitesupervision.services.MainService;
 import com.jacoli.roadsitesupervision.views.MyToast;
@@ -18,7 +19,7 @@ import com.jacoli.roadsitesupervision.views.MyToast;
 
 public class SitesFragment extends Fragment {
     //final String[] models = {"施工旁站", "质量巡视", "安全巡视", "环保巡视", "质量抽检"};
-    final String[] models = {"施工旁站", "质量巡视", "安全巡视", "环保巡视", "质量抽检", "监理巡查"};
+    final String[] models = {"施工旁站", "质量巡视", "安全巡视", "环保巡视", "质量抽检", "监理巡查", "测试"};
 
     public SitesFragment() {
         // Required empty public constructor
@@ -91,6 +92,9 @@ public class SitesFragment extends Fragment {
                 }
                 else if (position == 5) {
                     intent = new Intent(getActivity(), SupervisionPatrolListActivity.class);
+                }
+                else if (position == 6) {
+                    intent = new Intent(getActivity(), CheckItemsSelectionActivity.class);
                 }
 
                 if (intent != null) {

@@ -67,6 +67,39 @@ public class SupervisionPatrolService {
     * 监理巡查
     * */
 
+    // 获取巡查明细列表
+    public void sendQuerySupervisionPatrolCheckItemList(Callbacks callbacks) {
+        if (!isLogined()) {
+            onFailed("错误：未登录", callbacks);
+            return;
+        }
+
+        EasyRequest req = new EasyRequest(new Processor() {
+            @Override
+            public Response buildRequestAndWaitingResponse() throws IOException {
+                FormBody body = new FormBody.Builder()
+                        .add("Token", getToken())
+                        .build();
+
+                Request request = new Request.Builder()
+                        .url(requestUrl("GetAllSupervisionCheckItem"))
+                        .post(body)
+                        .build();
+
+                return httpClient.newCall(request).execute();
+            }
+
+            @Override
+            public ResponseBase jsonModelParsedFromResponseString(String responseJsonString, Gson gson) {
+                return gson.fromJson(responseJsonString, CheckItemsModel.class);
+            }
+
+            @Override
+            public void onSuccessHandleBeforeNotify(ResponseBase responseModel) {}
+        }, handler, callbacks);
+        req.asyncSend();
+    }
+
     // 获取监理巡查列表
     public void sendQuerySupervisionPatrolList(Callbacks callbacks) {
         if (!isLogined()) {
@@ -103,6 +136,61 @@ public class SupervisionPatrolService {
     // 获取监理巡查详情
 
     // 创建监理巡查
+    public void sendCreateSupervisionPatrol(final String projectPart,
+                                            final String typeId,
+                                            final String itemIds,
+                                            final String description,
+                                            final String approvalById,
+                                            final List<String> imgUrls,
+                                            Callbacks callbacks) {
+        if (!isLogined()) {
+            onFailed("错误：未登录", callbacks);
+            return;
+        }
+
+        if (Utils.isStringEmpty(typeId)) {
+            onFailed("参数错误", callbacks);
+            return;
+        }
+
+        EasyRequest req = new EasyRequest(new Processor() {
+            @Override
+            public Response buildRequestAndWaitingResponse() throws IOException {
+                MultipartBody.Builder builder = new MultipartBody.Builder()
+                        .setType(MultipartBody.FORM)
+                        .addFormDataPart("Token", MainService.getInstance().getLoginModel().getToken())
+                        .addFormDataPart("ProjectID", MainService.getInstance().getLoginModel().getProjectID())
+                        .addFormDataPart("ProjectPart", projectPart)
+                        .addFormDataPart("CheckTypeID", typeId)
+                        .addFormDataPart("ItemIDs", itemIds)
+                        .addFormDataPart("Description", description)
+                        .addFormDataPart("ApprovalBy", approvalById);
+
+                if (imgUrls != null) {
+                    for (String imgUrl : imgUrls) {
+                        builder.addPart(Headers.of("Content-Disposition", "form-data; filename=\"img.png\""),
+                                RequestBody.create(MediaType.parse("image/png"), new File(imgUrl)));
+                    }
+                }
+
+                Request request = new Request.Builder()
+                        .url(requestUrl("SubmitSupervisionCheck"))
+                        .post(builder.build())
+                        .build();
+
+                return httpClient.newCall(request).execute();
+            }
+
+            @Override
+            public ResponseBase jsonModelParsedFromResponseString(String responseJsonString, Gson gson) {
+                return gson.fromJson(responseJsonString, ResponseBase.class);
+            }
+
+            @Override
+            public void onSuccessHandleBeforeNotify(ResponseBase responseModel) {}
+        }, handler, callbacks);
+        req.asyncSend();
+    }
 
     // 审批监理巡查
     public void sendSupervisionPatrolApproval(final String Id, final String comment, final String type, final String receiverId, Callbacks callbacks) {
