@@ -49,4 +49,12 @@ public class ApproverListModel extends MsgResponseBase {
     public void setItems(List<Item> items) {
         this.items = items;
     }
+
+    public String getIDAtPosition(int position) {
+        if (position >= 0 && getItems() != null && getItems().size() > position) {
+            return getItems().get(position).getID();
+        } else {
+            return null;
+        }
+    }
 }

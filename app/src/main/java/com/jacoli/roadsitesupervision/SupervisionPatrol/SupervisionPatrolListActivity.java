@@ -130,9 +130,16 @@ public class SupervisionPatrolListActivity extends CommonActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(SupervisionPatrolListActivity.this, SupervisionPatrolNormalProcessActivity.class);
-                intent.putExtra("id", model.getItems().get(position).getID());
-                startActivity(intent);
+                SupervisionPatrolListModel.Item item = model.getItems().get(position);
+                if (item.getSupervisionCheckStatus() == 0) {
+                    Intent intent = new Intent(SupervisionPatrolListActivity.this, SupervisionPatrolApprovalProcessActivity.class);
+                    intent.putExtra("id", model.getItems().get(position).getID());
+                    startActivity(intent);
+                } else if (item.getSupervisionCheckStatus() == 1) {
+                    Intent intent = new Intent(SupervisionPatrolListActivity.this, SupervisionPatrolNormalProcessActivity.class);
+                    intent.putExtra("id", model.getItems().get(position).getID());
+                    startActivity(intent);
+                }
             }
         });
     }

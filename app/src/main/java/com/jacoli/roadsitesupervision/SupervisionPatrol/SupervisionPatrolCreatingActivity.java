@@ -1,13 +1,7 @@
 package com.jacoli.roadsitesupervision.SupervisionPatrol;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.widget.OrientationHelper;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -17,34 +11,20 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.jacoli.roadsitesupervision.AssignedMatterCreateActivity;
 import com.jacoli.roadsitesupervision.CommonActivity;
 import com.jacoli.roadsitesupervision.EasyRequest.Callbacks;
 import com.jacoli.roadsitesupervision.EasyRequest.ResponseBase;
-import com.jacoli.roadsitesupervision.PhotoAdapter;
 import com.jacoli.roadsitesupervision.R;
-import com.jacoli.roadsitesupervision.RecyclerItemClickListener;
-import com.jacoli.roadsitesupervision.StaffsActivity;
-import com.jacoli.roadsitesupervision.services.MainService;
 import com.jacoli.roadsitesupervision.services.Utils;
-
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 import java.util.List;
-
-import me.iwf.photopicker.PhotoPicker;
-import me.iwf.photopicker.PhotoPreview;
 
 // 创建监理巡查
 public class SupervisionPatrolCreatingActivity extends CommonActivity {
 
     private CheckItemsModel checkItemsModel;
-    private ApproverListModel approverListModel;
-    private String selectedTypeId;
     private String selectedCheckItemIds;
-    private String selectedApproverId;
+    private ApproverListModel approverListModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,22 +33,13 @@ public class SupervisionPatrolCreatingActivity extends CommonActivity {
 
         createTitleBar();
         titleBar.setLeftText("取消");
-        titleBar.setTitle("创建监理巡查");
-
-        LinearLayout linearLayout = (LinearLayout) findViewById(R.id.component_id);
-        linearLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(SupervisionPatrolCreatingActivity.this, SupervisionPatrolProjectDetailActivity.class);
-                startActivity(intent);
-            }
-        });
+        titleBar.setTitle("发现问题");
 
         SupervisionPatrolService.getInstance().sendQuerySupervisionPatrolCheckItemList(new Callbacks() {
             @Override
             public void onSuccess(ResponseBase responseModel) {
                 checkItemsModel = (CheckItemsModel) responseModel;
-                updateSpinerAfterFetchSuccess();
+                updateCheckTypeSelectionAfterFetchSuccess();
             }
 
             @Override
@@ -107,10 +78,12 @@ public class SupervisionPatrolCreatingActivity extends CommonActivity {
             TextView textView = (TextView) findViewById(R.id.text_view_check_items);
             textView.setText(data.getStringExtra("content"));
             selectedCheckItemIds = data.getStringExtra("checkItemIds");
+            TextView actionsTextView = (TextView) findViewById(R.id.text_view_check_items_actions);
+            actionsTextView.setText("重新选择");
         }
     }
 
-    public void updateSpinerAfterFetchSuccess() {
+    public void updateCheckTypeSelectionAfterFetchSuccess() {
         final List<CheckItemsModel.Item> items = checkItemsModel.getCheckTypes();
         List<String> typeNames = new ArrayList<>();
         for (CheckItemsModel.Item item : items) {
@@ -119,7 +92,7 @@ public class SupervisionPatrolCreatingActivity extends CommonActivity {
         String[] strArr = new String[typeNames.size()];
         typeNames.toArray(strArr);
 
-        Spinner spinner = (Spinner) findViewById(R.id.spinner0);
+        Spinner spinner = (Spinner) findViewById(R.id.spinner_check_type);
 
         // 建立Adapter并且绑定数据源
         ArrayAdapter<String> adapter=new ArrayAdapter<>(this,android.R.layout.simple_spinner_item, strArr);
@@ -130,20 +103,7 @@ public class SupervisionPatrolCreatingActivity extends CommonActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view,
                                        int pos, long id) {
-                CheckItemsModel.Item item = items.get(pos);
-                selectedTypeId = item.getID();
-                SupervisionPatrolService.getInstance().sendQueryApproverList(selectedTypeId, new Callbacks() {
-                    @Override
-                    public void onSuccess(ResponseBase responseModel) {
-                        approverListModel = (ApproverListModel) responseModel;
-                        updateApproverSpinerAfterFetchSuccess();
-                    }
-
-                    @Override
-                    public void onFailed(String error) {
-
-                    }
-                });
+                onCheckTypeSelected(items.get(pos));
             }
 
             @Override
@@ -153,64 +113,109 @@ public class SupervisionPatrolCreatingActivity extends CommonActivity {
         });
     }
 
-    public void updateApproverSpinerAfterFetchSuccess() {
-        final List<ApproverListModel.Item> items = approverListModel.getItems();
-        List<String> names = new ArrayList<>();
-        for (ApproverListModel.Item item : items) {
-            names.add(item.getName());
-        }
-        String[] strArr = new String[names.size()];
-        names.toArray(strArr);
-
-        Spinner spinner = (Spinner) findViewById(R.id.spinner_approver);
-
-        // 建立Adapter并且绑定数据源
-        ArrayAdapter<String> adapter=new ArrayAdapter<>(this,android.R.layout.simple_spinner_item, strArr);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        //绑定 Adapter到控件
-        spinner.setAdapter(adapter);
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+    private void onCheckTypeSelected(CheckItemsModel.Item item) {
+        approverListModel = null;
+        updateApproverSpiner();
+        SupervisionPatrolService.getInstance().sendQueryApproverList(getSelectedCheckTypeId(), new Callbacks() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view,
-                                       int pos, long id) {
-                ApproverListModel.Item item = items.get(pos);
-                selectedApproverId = item.getID();
+            public void onSuccess(ResponseBase responseModel) {
+                approverListModel = (ApproverListModel) responseModel;
+                updateApproverSpiner();
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                // Another interface callback
+            public void onFailed(String error) {
             }
         });
+
+        TextView textView = (TextView) findViewById(R.id.text_view_check_items);
+        textView.setText("");
+        selectedCheckItemIds = null;
+        TextView actionsTextView = (TextView) findViewById(R.id.text_view_check_items_actions);
+        actionsTextView.setText("点击选择");
+    }
+
+    public String[] getApproverNames() {
+        String[] strArr = {};
+        if (approverListModel != null) {
+            final List<ApproverListModel.Item> items = approverListModel.getItems();
+            List<String> names = new ArrayList<>();
+            for (ApproverListModel.Item item : items) {
+                names.add(item.getName());
+            }
+            strArr = new String[names.size()];
+            names.toArray(strArr);
+        }
+
+        return strArr;
+    }
+
+    public void updateApproverSpiner() {
+        Spinner spinner = (Spinner) findViewById(R.id.spinner_approver);
+        ArrayAdapter<String> adapter=new ArrayAdapter<>(this,android.R.layout.simple_spinner_item, getApproverNames());
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+    }
+
+    private String getSelectedCheckTypeId() {
+        if (checkItemsModel != null) {
+            final List<CheckItemsModel.Item> items = checkItemsModel.getCheckTypes();
+            Spinner approvalSpinner = (Spinner) findViewById(R.id.spinner_check_type);
+            int position = approvalSpinner.getSelectedItemPosition();
+            if (items != null && position >= 0 && items.size() > position) {
+                return items.get(position).getID();
+            }
+        }
+        return null;
     }
 
     public void submit() {
-        EditText editText = (EditText) findViewById(R.id.edit_text_subject);
-        final String subject = editText.getText().toString();
-        if (subject.isEmpty()) {
+        EditText editText = (EditText) findViewById(R.id.edit_text_component);
+        String componentName = editText.getText().toString();
+        if (Utils.isStringEmpty(componentName)) {
             Toast.makeText(this, "请输入工程构件", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        if (Utils.isStringEmpty(selectedTypeId)) {
-            Toast.makeText(this, "请输入工程构件", Toast.LENGTH_SHORT).show();
+        String selectedCheckTypeId = getSelectedCheckTypeId();
+        if (Utils.isStringEmpty(selectedCheckTypeId)) {
+            Toast.makeText(this, "请输入检查大项", Toast.LENGTH_SHORT).show();
             return;
         }
 
+        String selectedApproverId = null;
+        if (approverListModel != null) {
+            Spinner approvalSpinner = (Spinner) findViewById(R.id.spinner_approver);
+            selectedApproverId = approverListModel.getIDAtPosition(approvalSpinner.getSelectedItemPosition());
+        }
         if (Utils.isStringEmpty(selectedApproverId)) {
-            Toast.makeText(this, "请输入工程构件", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "请选择审批人", Toast.LENGTH_SHORT).show();
             return;
         }
 
         if (Utils.isStringEmpty(selectedCheckItemIds)) {
-            Toast.makeText(this, "请输入工程构件", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "请选择检查明细", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        SupervisionPatrolService.getInstance().sendCreateSupervisionPatrol(subject,
-                selectedTypeId, selectedCheckItemIds, subject, selectedApproverId, getCommonSelectedPhotoUrls(), new Callbacks() {
+        EditText contentEditText = (EditText) findViewById(R.id.edit_text_content);
+        String content = contentEditText.getText().toString();
+        if (Utils.isStringEmpty(content)) {
+            Toast.makeText(this, "请输入巡查内容", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        SupervisionPatrolService.getInstance().sendCreateSupervisionPatrol(componentName,
+                selectedCheckTypeId,
+                selectedCheckItemIds,
+                content,
+                selectedApproverId,
+                getCommonSelectedPhotoUrls(),
+                new Callbacks() {
             @Override
             public void onSuccess(ResponseBase responseModel) {
+                Toast.makeText(SupervisionPatrolCreatingActivity.this, "提交成功", Toast.LENGTH_SHORT).show();
+                finish();
             }
 
             @Override

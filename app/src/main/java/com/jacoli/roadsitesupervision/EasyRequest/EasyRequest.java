@@ -54,7 +54,7 @@ public class EasyRequest {
                                 onSuccess(model);
                             }
                             else {
-                                onFailed("");
+                                onFailed(model == null ? "" : model.getMsg());
                             }
                         }
                         catch (Exception ex) {

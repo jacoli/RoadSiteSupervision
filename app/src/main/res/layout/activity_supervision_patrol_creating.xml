@@ -22,6 +22,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_margin="16dp"
+            android:paddingTop="16dp"
             android:paddingBottom="64dp"
             android:focusable="true"
             android:focusableInTouchMode="true"
@@ -35,8 +36,7 @@
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
                 android:layout_gravity="center_vertical"
-                android:orientation="horizontal"
-                android:id="@+id/component_id">
+                android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="@dimen/assigned_matter_cell_title_width"
@@ -52,8 +52,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
-                    android:id="@+id/edit_text_subject"
-                    android:hint="请输入主题"/>
+                    android:id="@+id/edit_text_component"
+                    android:hint="请输入"/>
 
             </LinearLayout>
 
@@ -77,7 +77,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
-                    android:id="@+id/spinner0"
+                    android:id="@+id/spinner_check_type"
                     android:paddingStart="24dp"
                     />
 
@@ -134,6 +134,7 @@
                     android:gravity="center_vertical"
                     android:textSize="18sp"
                     android:textColor="@color/secondary_text"
+                    android:id="@+id/text_view_check_items_actions"
                     android:text="点击选择  "
                     />
 
@@ -172,12 +173,12 @@
                 android:layout_height="wrap_content"
                 android:padding="10dp"
                 android:layout_marginBottom="10dp"
-                android:id="@+id/editText"
+                android:id="@+id/edit_text_content"
                 android:singleLine="false"
                 android:gravity="top"
                 android:inputType="textMultiLine"
                 android:scrollbars="vertical"
-                android:hint="请输入内容"
+                android:hint="请输入"
                 />
 
             <include layout="@layout/cell_separator"/>
