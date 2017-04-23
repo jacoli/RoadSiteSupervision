@@ -168,6 +168,43 @@ public class SupervisionPatrolService {
     }
 
     // 获取监理巡查详情
+    public void sendQueryDetail(final String SupervisionCheckID, Callbacks callbacks) {
+        if (!isLogined()) {
+            onFailed("错误：未登录", callbacks);
+            return;
+        }
+
+        if (Utils.isStringEmpty(SupervisionCheckID)) {
+            onFailed("参数错误", callbacks);
+            return;
+        }
+
+        EasyRequest req = new EasyRequest(new Processor() {
+            @Override
+            public Response buildRequestAndWaitingResponse() throws IOException {
+                FormBody body = new FormBody.Builder()
+                        .add("Token", getToken())
+                        .add("SupervisionCheckID", SupervisionCheckID)
+                        .build();
+
+                Request request = new Request.Builder()
+                        .url(requestUrl("GetSupervisionCheckDetail"))
+                        .post(body)
+                        .build();
+
+                return httpClient.newCall(request).execute();
+            }
+
+            @Override
+            public ResponseBase jsonModelParsedFromResponseString(String responseJsonString, Gson gson) {
+                return gson.fromJson(responseJsonString, DetailModel.class);
+            }
+
+            @Override
+            public void onSuccessHandleBeforeNotify(ResponseBase responseModel) {}
+        }, handler, callbacks);
+        req.asyncSend();
+    }
 
     // 创建监理巡查
     public void sendCreateSupervisionPatrol(final String projectPart,
