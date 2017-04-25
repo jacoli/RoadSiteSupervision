@@ -1,61 +1,119 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_supervision_patrol_approval_process"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="com.jacoli.roadsitesupervision.SupervisionPatrol.SupervisionPatrolApprovalProcessActivity">
 
     <com.jacoli.roadsitesupervision.views.TitleBar
         android:id="@+id/title_bar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true" />
+        android:layout_height="wrap_content" />
 
-    <ListView
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/actions"
-        android:layout_below="@+id/title_bar"
-        android:id="@+id/listView"
-        />
+        android:layout_height="0dp"
+        android:layout_weight="1">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:orientation="horizontal"
-        android:id="@+id/actions">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:paddingBottom="64dp"
+            android:orientation="vertical"
+            android:divider="@drawable/divider_between_text_views"
+            android:showDividers="middle"
+            android:focusable="true"
+            android:focusableInTouchMode="true">
 
-        <Button
-            android:layout_width="0dp"
-            android:layout_weight="5"
-            android:layout_height="40dp"
-            android:layout_margin="16dp"
-            android:background="@color/accent"
-            android:text="需整改"
-            android:id="@+id/submit_btn_1" />
+            <requestFocus />
 
-        <Button
-            android:layout_width="0dp"
-            android:layout_weight="5"
-            android:layout_height="40dp"
-            android:layout_margin="16dp"
-            android:background="@color/accent"
-            android:text="不整改"
-            android:id="@+id/submit_btn_2" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:textColor="@color/primary_text"
+                android:id="@+id/text_view"
+                android:text="@string/default_text"
+                />
 
-        <Button
-            android:layout_width="0dp"
-            android:layout_weight="2"
-            android:layout_height="40dp"
-            android:layout_margin="16dp"
-            android:background="@color/warning"
-            android:text="删除"
-            android:id="@+id/submit_btn_3" />
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                />
 
-    </LinearLayout>
+            <include layout="@layout/cell_separator"/>
 
-</RelativeLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:id="@+id/content_layout">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/small_cell_height"
+                    android:gravity="center_vertical"
+                    android:textSize="14sp"
+                    android:textColor="@color/primary_text"
+                    android:text="处理意见"
+                    />
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:minHeight="100dp"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:id="@+id/edit_text_content"
+                    android:singleLine="false"
+                    android:gravity="top"
+                    android:inputType="textMultiLine"
+                    android:scrollbars="vertical"
+                    android:hint="请输入"
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:id="@+id/actions">
+
+                <Button
+                    android:layout_width="0dp"
+                    android:layout_weight="5"
+                    android:layout_height="40dp"
+                    android:layout_margin="8dp"
+                    android:background="@color/accent"
+                    android:text="需整改"
+                    android:id="@+id/submit_btn_1" />
+
+                <Button
+                    android:layout_width="0dp"
+                    android:layout_weight="5"
+                    android:layout_height="40dp"
+                    android:layout_margin="8dp"
+                    android:background="@color/accent"
+                    android:text="不整改"
+                    android:id="@+id/submit_btn_2" />
+
+                <Button
+                    android:layout_width="0dp"
+                    android:layout_weight="2"
+                    android:layout_height="40dp"
+                    android:layout_margin="8dp"
+                    android:background="@color/warning"
+                    android:text="删除"
+                    android:id="@+id/submit_btn_3" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

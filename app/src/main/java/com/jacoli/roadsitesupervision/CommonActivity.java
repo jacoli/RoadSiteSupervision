@@ -199,4 +199,24 @@ public class CommonActivity extends Activity {
             commonPhotoAdaptor.notifyDataSetChanged();
         }
     }
+
+    public void setupPhotoViewer(RecyclerView recyclerView, final ArrayList<String> imgUrls) {
+        if (recyclerView != null && imgUrls != null) {
+            PhotoAdapter photoAdapter = new PhotoAdapter(this, imgUrls, false);
+
+            recyclerView.setLayoutManager(new StaggeredGridLayoutManager(5, OrientationHelper.VERTICAL));
+            recyclerView.setAdapter(photoAdapter);
+
+            recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(this,
+                    new RecyclerItemClickListener.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(View view, int position) {
+                            PhotoPreview.builder()
+                                    .setPhotos(imgUrls)
+                                    .setCurrentItem(position)
+                                    .start(CommonActivity.this);
+                        }
+                    }));
+        }
+    }
 }
