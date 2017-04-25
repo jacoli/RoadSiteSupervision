@@ -112,11 +112,11 @@ public class SupervisionPatrolListActivity extends CommonActivity {
                 textView2.setText(text2);
 
                 TextView textView3 = (TextView)v.findViewById(R.id.textView3);
-                String text3 = "上报人：" + item.getAddBy() + item.getAddTime();
+                String text3 = "上报人：" + item.getAddBy() + " " + item.getAddTime();
                 textView3.setText(text3);
 
                 TextView textView4 = (TextView)v.findViewById(R.id.textView4);
-                String text4 = "最后回复：" + item.getLastUpdateBy() + item.getLastUpdateTime();
+                String text4 = "最后回复：" + item.getLastUpdateBy() + " " + item.getLastUpdateTime();
                 textView4.setText(text4);
 
                 TextView statusTextView = (TextView) v.findViewById(R.id.text_view_status);

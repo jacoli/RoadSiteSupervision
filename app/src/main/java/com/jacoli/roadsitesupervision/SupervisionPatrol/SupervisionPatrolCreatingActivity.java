@@ -65,8 +65,14 @@ public class SupervisionPatrolCreatingActivity extends CommonActivity {
         linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(SupervisionPatrolCreatingActivity.this, CheckItemsSelectionActivity.class);
-                startActivityForResult(intent, CheckItemsSelectionActivity.RequestCode);
+                CheckItemsModel.Item item = getSelectedCheckTypeItem();
+                if (item != null) {
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("object", item);
+                    Intent intent = new Intent(SupervisionPatrolCreatingActivity.this, CheckItemsSelectionActivity.class);
+                    intent.putExtras(bundle);
+                    startActivityForResult(intent, CheckItemsSelectionActivity.RequestCode);
+                }
             }
         });
     }
@@ -164,6 +170,18 @@ public class SupervisionPatrolCreatingActivity extends CommonActivity {
             int position = approvalSpinner.getSelectedItemPosition();
             if (items != null && position >= 0 && items.size() > position) {
                 return items.get(position).getID();
+            }
+        }
+        return null;
+    }
+
+    private CheckItemsModel.Item getSelectedCheckTypeItem() {
+        if (checkItemsModel != null) {
+            final List<CheckItemsModel.Item> items = checkItemsModel.getCheckTypes();
+            Spinner approvalSpinner = (Spinner) findViewById(R.id.spinner_check_type);
+            int position = approvalSpinner.getSelectedItemPosition();
+            if (items != null && position >= 0 && items.size() > position) {
+                return items.get(position);
             }
         }
         return null;

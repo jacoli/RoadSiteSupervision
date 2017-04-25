@@ -41,6 +41,9 @@ public class CheckItemsSelectionActivity extends CommonActivity {
         titleBar.setLeftText("取消");
         titleBar.setTitle("选取巡查明细（可多选）");
 
+        CheckItemsModel.Item item = (CheckItemsModel.Item) getIntent().getExtras().getSerializable("object");
+        flatItems = item.getFlatItems(false);
+
         Button submitBtn = (Button) findViewById(R.id.submit_btn);
         submitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -51,24 +54,6 @@ public class CheckItemsSelectionActivity extends CommonActivity {
 
         ListView listView = (ListView) findViewById(R.id.listView);
         setupListView(listView);
-
-        loadData();
-    }
-
-    public void loadData() {
-        SupervisionPatrolService.getInstance().sendQuerySupervisionPatrolCheckItemList(new Callbacks() {
-            @Override
-            public void onSuccess(ResponseBase responseModel) {
-                CheckItemsModel model = (CheckItemsModel) responseModel;
-                flatItems = model.getFlatItems();
-                adapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onFailed(String error) {
-                Toast.makeText(CheckItemsSelectionActivity.this, error, Toast.LENGTH_SHORT).show();
-            }
-        });
     }
 
     private void setupListView(ListView listView) {

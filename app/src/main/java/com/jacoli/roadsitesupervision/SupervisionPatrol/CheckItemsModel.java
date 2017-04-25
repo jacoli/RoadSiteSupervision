@@ -2,6 +2,7 @@ package com.jacoli.roadsitesupervision.SupervisionPatrol;
 
 import com.jacoli.roadsitesupervision.services.MsgResponseBase;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,7 +11,7 @@ import java.util.List;
  */
 
 public class CheckItemsModel extends MsgResponseBase {
-    public class Item {
+    public class Item implements Serializable {
         private String ID;
         private String Ordinal;
         private String Name;
@@ -90,6 +91,26 @@ public class CheckItemsModel extends MsgResponseBase {
             }
 
             return flatItems;
+        }
+
+        public List<Item> getFlatItems(boolean containSelf) {
+            List<Item> flatItems = new ArrayList<>();
+
+            if (containSelf) {
+                flatItems.add(this);
+            }
+
+            if (getItems() != null) {
+                for (Item subItem : getItems()) {
+                    List<Item> items = subItem.getFlatItems();
+                    for (Item item : items) {
+                        flatItems.add(item);
+                    }
+                }
+            }
+
+            return flatItems;
+
         }
     }
 
