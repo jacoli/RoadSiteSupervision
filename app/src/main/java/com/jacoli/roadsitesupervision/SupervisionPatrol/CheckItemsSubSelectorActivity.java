@@ -12,18 +12,14 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.jacoli.roadsitesupervision.CommonActivity;
-import com.jacoli.roadsitesupervision.EasyRequest.Callbacks;
-import com.jacoli.roadsitesupervision.EasyRequest.ResponseBase;
 import com.jacoli.roadsitesupervision.R;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
-public class CheckItemsSelectionActivity extends CommonActivity {
+public class CheckItemsSubSelectorActivity extends CommonActivity {
 
-    static int RequestCode = 1001;
+    static int RequestCode = 10001;
 
     private BaseAdapter adapter;
     private List<CheckItemsModel.Item> flatItems;
@@ -32,7 +28,7 @@ public class CheckItemsSelectionActivity extends CommonActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_supervision_patrol_check_items_selection);
+        setContentView(R.layout.activity_supervision_patrol_check_items_sub_selector);
 
         flatItems = new ArrayList<>();
         selectedItems = new HashMap<>();
@@ -95,12 +91,8 @@ public class CheckItemsSelectionActivity extends CommonActivity {
                     });
                 } else if (item.getLevel() == 2) {
                     v = getLayoutInflater().inflate(R.layout.list_item_supervision_patrol_check_items_level2, null);
-                } else if (item.getLevel() == 3) {
-                    v = getLayoutInflater().inflate(R.layout.list_item_supervision_patrol_check_items_level3, null);
-                } else if (item.getLevel() == 4) {
-                    v = getLayoutInflater().inflate(R.layout.list_item_supervision_patrol_check_items_level4, null);
                 } else {
-                    v = getLayoutInflater().inflate(R.layout.list_item_supervision_patrol_check_items_level4, null);
+                    v = getLayoutInflater().inflate(R.layout.list_item_supervision_patrol_check_items_level2, null);
                 }
 
                 TextView textView = (TextView) v.findViewById(R.id.textView);
@@ -114,7 +106,7 @@ public class CheckItemsSelectionActivity extends CommonActivity {
 
     public void submit() {
         if (selectedItems.isEmpty()) {
-            Toast.makeText(CheckItemsSelectionActivity.this, "请选择巡查明细", Toast.LENGTH_SHORT).show();
+            Toast.makeText(CheckItemsSubSelectorActivity.this, "请选择巡查明细", Toast.LENGTH_SHORT).show();
             return;
         }
 

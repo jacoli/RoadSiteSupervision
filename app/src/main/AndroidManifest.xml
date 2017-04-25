@@ -73,8 +73,9 @@
         <activity android:name=".SupervisionPatrol.SupervisionPatrolApprovalProcessActivity" />
         <activity android:name=".SupervisionPatrol.SupervisionPatrolNormalProcessActivity" />
         <activity android:name=".SupervisionPatrol.SupervisionPatrolNormalProcessReplyActivity" />
-        <activity android:name=".SupervisionPatrol.CheckItemsSelectionActivity" />
-        <activity android:name=".SupervisionPatrol.SelectPersonActivity"></activity>
+        <activity android:name=".SupervisionPatrol.CheckItemsSubSelectorActivity" />
+        <activity android:name=".SupervisionPatrol.SelectPersonActivity" />
+        <activity android:name=".SupervisionPatrol.CheckItemsMainSelectorActivity"></activity>
     </application>
 
 </manifest>

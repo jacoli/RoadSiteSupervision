@@ -67,11 +67,19 @@ public class SupervisionPatrolCreatingActivity extends CommonActivity {
             public void onClick(View v) {
                 CheckItemsModel.Item item = getSelectedCheckTypeItem();
                 if (item != null) {
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable("object", item);
-                    Intent intent = new Intent(SupervisionPatrolCreatingActivity.this, CheckItemsSelectionActivity.class);
-                    intent.putExtras(bundle);
-                    startActivityForResult(intent, CheckItemsSelectionActivity.RequestCode);
+                    if (item.shouldMultiPageSelection()) {
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("object", item);
+                        Intent intent = new Intent(SupervisionPatrolCreatingActivity.this, CheckItemsMainSelectorActivity.class);
+                        intent.putExtras(bundle);
+                        startActivityForResult(intent, CheckItemsMainSelectorActivity.RequestCode);
+                    } else {
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("object", item);
+                        Intent intent = new Intent(SupervisionPatrolCreatingActivity.this, CheckItemsSubSelectorActivity.class);
+                        intent.putExtras(bundle);
+                        startActivityForResult(intent, CheckItemsSubSelectorActivity.RequestCode);
+                    }
                 }
             }
         });
@@ -80,12 +88,24 @@ public class SupervisionPatrolCreatingActivity extends CommonActivity {
     @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == CheckItemsSelectionActivity.RequestCode && resultCode == RESULT_OK) {
-            TextView textView = (TextView) findViewById(R.id.text_view_check_items);
-            textView.setText(data.getStringExtra("content"));
-            selectedCheckItemIds = data.getStringExtra("checkItemIds");
-            TextView actionsTextView = (TextView) findViewById(R.id.text_view_check_items_actions);
-            actionsTextView.setText("重新选择");
+        if (resultCode == RESULT_OK) {
+            if (requestCode == CheckItemsSubSelectorActivity.RequestCode) {
+                TextView textView = (TextView) findViewById(R.id.text_view_check_items);
+                textView.setText(data.getStringExtra("content"));
+                selectedCheckItemIds = data.getStringExtra("checkItemIds");
+                TextView actionsTextView = (TextView) findViewById(R.id.text_view_check_items_actions);
+                actionsTextView.setText("重新选择");
+            } else if (requestCode == CheckItemsMainSelectorActivity.RequestCode) {
+                CheckItemsModel.Item item = (CheckItemsModel.Item) data.getExtras().getSerializable("object");
+                if (item != null) {
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("object", item);
+                    Intent intent = new Intent(SupervisionPatrolCreatingActivity.this, CheckItemsSubSelectorActivity.class);
+                    intent.putExtras(bundle);
+                    startActivityForResult(intent, CheckItemsSubSelectorActivity.RequestCode);
+                }
+            }
+
         }
     }
 

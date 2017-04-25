@@ -112,6 +112,11 @@ public class CheckItemsModel extends MsgResponseBase {
             return flatItems;
 
         }
+
+        // 是否多页选择
+        public boolean shouldMultiPageSelection() {
+            return getLevel() > 2;
+        }
     }
 
     private List<Item> items;

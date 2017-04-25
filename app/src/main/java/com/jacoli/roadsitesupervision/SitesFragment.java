@@ -11,10 +11,9 @@ import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.jacoli.roadsitesupervision.SupervisionPatrol.CheckItemsSelectionActivity;
+import com.jacoli.roadsitesupervision.SupervisionPatrol.CheckItemsSubSelectorActivity;
 import com.jacoli.roadsitesupervision.SupervisionPatrol.SupervisionPatrolListActivity;
 import com.jacoli.roadsitesupervision.services.MainService;
-import com.jacoli.roadsitesupervision.views.MyToast;
 
 
 public class SitesFragment extends Fragment {
@@ -94,7 +93,7 @@ public class SitesFragment extends Fragment {
                     intent = new Intent(getActivity(), SupervisionPatrolListActivity.class);
                 }
                 else if (position == 6) {
-                    intent = new Intent(getActivity(), CheckItemsSelectionActivity.class);
+                    intent = new Intent(getActivity(), CheckItemsSubSelectorActivity.class);
                 }
 
                 if (intent != null) {
