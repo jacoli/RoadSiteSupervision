@@ -187,16 +187,18 @@ public class CommonActivity extends Activity {
         if (resultCode == RESULT_OK &&
                 (requestCode == PhotoPicker.REQUEST_CODE || requestCode == PhotoPreview.REQUEST_CODE)) {
 
-            List<String> photos = null;
-            if (data != null) {
-                photos = data.getStringArrayListExtra(PhotoPicker.KEY_SELECTED_PHOTOS);
-            }
-            getCommonSelectedPhotoUrls().clear();
+            if (commonPhotoAdaptor != null) {
+                List<String> photos = null;
+                if (data != null) {
+                    photos = data.getStringArrayListExtra(PhotoPicker.KEY_SELECTED_PHOTOS);
+                }
+                getCommonSelectedPhotoUrls().clear();
 
-            if (photos != null) {
-                getCommonSelectedPhotoUrls().addAll(photos);
+                if (photos != null) {
+                    getCommonSelectedPhotoUrls().addAll(photos);
+                }
+                commonPhotoAdaptor.notifyDataSetChanged();
             }
-            commonPhotoAdaptor.notifyDataSetChanged();
         }
     }
 
@@ -204,7 +206,7 @@ public class CommonActivity extends Activity {
         if (recyclerView != null && imgUrls != null) {
             PhotoAdapter photoAdapter = new PhotoAdapter(this, imgUrls, false);
 
-            recyclerView.setLayoutManager(new StaggeredGridLayoutManager(5, OrientationHelper.VERTICAL));
+            recyclerView.setLayoutManager(new StaggeredGridLayoutManager(3, OrientationHelper.VERTICAL));
             recyclerView.setAdapter(photoAdapter);
 
             recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(this,

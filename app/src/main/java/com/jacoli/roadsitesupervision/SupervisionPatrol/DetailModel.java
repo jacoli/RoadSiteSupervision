@@ -2,7 +2,6 @@ package com.jacoli.roadsitesupervision.SupervisionPatrol;
 
 import com.jacoli.roadsitesupervision.services.ImageUrlModel;
 import com.jacoli.roadsitesupervision.services.MsgResponseBase;
-
 import java.util.List;
 
 /**
@@ -20,6 +19,7 @@ public class DetailModel extends MsgResponseBase {
     private String ApprovalComment;
     private String ReceiverName;
     private String Progress;
+    private List<Item> CheckType;
     private List<ImageUrlModel> PhotoList;
     private List<Reply> Reply;
 
@@ -103,6 +103,14 @@ public class DetailModel extends MsgResponseBase {
         Progress = progress;
     }
 
+    public List<Item> getCheckType() {
+        return CheckType;
+    }
+
+    public void setCheckType(List<Item> checkType) {
+        CheckType = checkType;
+    }
+
     public List<ImageUrlModel> getPhotoList() {
         return PhotoList;
     }
@@ -158,6 +166,114 @@ public class DetailModel extends MsgResponseBase {
         }
     }
 
-    // TODO
-    //        "CheckType":与GetAllSupervisionCheckItem的返回结构基本相同,
+    public class Item {
+        private String ID;
+        private String Ordinal;
+        private String Name;
+        private String Remark;
+        private String Code;
+        private int Level;
+        private boolean IsCheck;
+        private List<Item> items;
+
+        public String getID() {
+            return ID;
+        }
+
+        public void setID(String ID) {
+            this.ID = ID;
+        }
+
+        public String getOrdinal() {
+            return Ordinal;
+        }
+
+        public void setOrdinal(String ordinal) {
+            Ordinal = ordinal;
+        }
+
+        public String getName() {
+            return Name;
+        }
+
+        public void setName(String name) {
+            Name = name;
+        }
+
+        public String getRemark() {
+            return Remark;
+        }
+
+        public void setRemark(String remark) {
+            Remark = remark;
+        }
+
+        public String getCode() {
+            return Code;
+        }
+
+        public void setCode(String code) {
+            Code = code;
+        }
+
+        public int getLevel() {
+            return Level;
+        }
+
+        public void setLevel(int level) {
+            Level = level;
+        }
+
+        public boolean isCheck() {
+            return IsCheck;
+        }
+
+        public void setCheck(boolean check) {
+            IsCheck = check;
+        }
+
+        public List<Item> getItems() {
+            return items;
+        }
+
+        public void setItems(List<Item> items) {
+            this.items = items;
+        }
+
+        public String getCheckItemsDescription() {
+            String desc = "";
+            if (getItems() != null && getItems().size() > 0) {
+
+                for (Item item : getItems()) {
+                    if (item.isCheck()) {
+                        desc += item.getName() + "(否)\n";
+                    } else {
+                        desc += item.getCheckItemsDescription();
+                    }
+                }
+            }
+
+            return desc;
+        }
+    }
+
+    public String getCheckTypeDescription() {
+        if (getCheckType() != null && getCheckType().size() > 0) {
+            return getCheckType().get(0).getName();
+        } else {
+            return "";
+        }
+    }
+
+    public String getCheckItemsDescription() {
+        String desc = "";
+        if (getCheckType() != null && getCheckType().size() > 0) {
+            for (Item item : getCheckType()) {
+                desc += item.getCheckItemsDescription();
+            }
+        }
+
+        return desc;
+    }
 }
+
