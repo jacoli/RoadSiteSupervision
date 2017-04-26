@@ -18,7 +18,7 @@ import com.jacoli.roadsitesupervision.services.MainService;
 
 public class SitesFragment extends Fragment {
     //final String[] models = {"施工旁站", "质量巡视", "安全巡视", "环保巡视", "质量抽检"};
-    final String[] models = {"施工旁站", "质量巡视", "安全巡视", "环保巡视", "质量抽检", "监理巡查", "测试"};
+    final String[] models = {"施工旁站", "质量巡视", "安全巡视", "环保巡视", "质量抽检", "监理巡查"};
 
     public SitesFragment() {
         // Required empty public constructor
@@ -91,9 +91,6 @@ public class SitesFragment extends Fragment {
                 }
                 else if (position == 5) {
                     intent = new Intent(getActivity(), SupervisionPatrolListActivity.class);
-                }
-                else if (position == 6) {
-                    intent = new Intent(getActivity(), CheckItemsSubSelectorActivity.class);
                 }
 
                 if (intent != null) {

@@ -21,11 +21,13 @@ import com.jacoli.roadsitesupervision.services.Utils;
 import java.util.ArrayList;
 
 public class SupervisionPatrolApprovalProcessActivity extends CommonActivity {
-    private String modelId;
+
     private Button button1;
     private Button button2;
     private Button button3;
     private LinearLayout contentLayout;
+
+    private String modelId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +85,30 @@ public class SupervisionPatrolApprovalProcessActivity extends CommonActivity {
         contentLayout.setVisibility(View.INVISIBLE);
     }
 
+    private void updateSubviews(DetailModel model) {
+        TextView textView = (TextView) findViewById(R.id.text_view);
+        String text = "工程构件：" + model.getProjectPart() + "\n"
+                + "检查大项：" + model.getCheckTypeDescription() + "\n"
+                + "检查细目：" + model.getCheckItemsDescription()
+                + "上报人：" + model.getAddByName() + "\n"
+                + "上报时间：" + model.getAddTime() + "\n"
+                + "补充说明：" + model.getDescription() + "\n";
+        textView.setText(text);
+
+        ArrayList<String> imageUrls = new ArrayList<>();
+        for (ImageUrlModel imageUrlModel : model.getPhotoList()) {
+            imageUrls.add(imageUrlModel.getWebPath());
+        }
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        setupPhotoViewer(recyclerView, imageUrls);
+
+        if (model.getApprovalBy().equals(MainService.getInstance().getLoginModel().getID())) {
+            button1.setVisibility(View.VISIBLE);
+            button2.setVisibility(View.VISIBLE);
+            button3.setVisibility(View.VISIBLE);
+            contentLayout.setVisibility(View.VISIBLE);
+        }
+    }
 
     private void submit1() {
         EditText editText = (EditText) findViewById(R.id.edit_text_content);
@@ -129,32 +155,6 @@ public class SupervisionPatrolApprovalProcessActivity extends CommonActivity {
         });
         builder.setNegativeButton("否", null);
         builder.create().show();
-    }
-
-    private void updateSubviews(DetailModel model) {
-        TextView textView = (TextView) findViewById(R.id.text_view);
-        String text = "● 工程构件：" + model.getProjectPart() + "\n\n"
-                + "● 检查大项：" + model.getCheckTypeDescription() + "\n\n"
-                + "● 检查细目：" + model.getCheckItemsDescription() + "\n"
-                + "● 上报人：" + model.getAddByName() + "\n\n"
-                + "● 上报时间：" + model.getAddTime() + "\n\n"
-                + "● 补充说明：" + model.getDescription() + "\n";
-        textView.setText(text);
-
-        ArrayList<String> imageUrls = new ArrayList<>();
-        for (ImageUrlModel imageUrlModel : model.getPhotoList()) {
-            imageUrls.add(imageUrlModel.getWebPath());
-        }
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-        setupPhotoViewer(recyclerView, imageUrls);
-
-        // TODO
-        if (model.getApprovalByName().equals(MainService.getInstance().getLoginModel().getName())) {
-            button1.setVisibility(View.VISIBLE);
-            button2.setVisibility(View.VISIBLE);
-            button3.setVisibility(View.VISIBLE);
-            contentLayout.setVisibility(View.VISIBLE);
-        }
     }
 
     @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {

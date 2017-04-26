@@ -35,7 +35,7 @@ public class CheckItemsSubSelectorActivity extends CommonActivity {
 
         createTitleBar();
         titleBar.setLeftText("取消");
-        titleBar.setTitle("选取巡查明细（可多选）");
+        titleBar.setTitle("选取巡查细目");
 
         CheckItemsModel.Item item = (CheckItemsModel.Item) getIntent().getExtras().getSerializable("object");
         flatItems = item.getFlatItems(false);
