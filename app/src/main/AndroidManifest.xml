@@ -25,6 +25,7 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
     <application
+        android:name=".Upgrade.A"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -57,7 +58,24 @@
         <activity android:name=".AssignedMatterDetailActivity" />
         <activity android:name=".AssignedMatterReplyActivity" />
         <activity android:name=".AssignedMatterCreateActivity" />
-        <activity android:name=".StaffsActivity"></activity>
+        <activity android:name=".StaffsActivity" />
+        <activity android:name=".SupervisionPatrol.SupervisionPatrolListActivity" />
+        <activity android:name=".SupervisionPatrol.SupervisionPatrolCreatingActivity" />
+        <activity android:name=".SupervisionPatrol.SupervisionPatrolProjectDetailActivity" />
+        <activity android:name=".SupervisionPatrol.SupervisionPatrolUnitProjectDetailActivity" />
+
+        <receiver android:name=".Upgrade.download.ApkInstallReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.DOWNLOAD_COMPLETE" />
+            </intent-filter>
+        </receiver>
+
+        <activity android:name=".SupervisionPatrol.SupervisionPatrolApprovalProcessActivity" />
+        <activity android:name=".SupervisionPatrol.SupervisionPatrolNormalProcessActivity" />
+        <activity android:name=".SupervisionPatrol.SupervisionPatrolNormalProcessReplyActivity" />
+        <activity android:name=".SupervisionPatrol.CheckItemsSubSelectorActivity" />
+        <activity android:name=".SupervisionPatrol.SelectPersonActivity" />
+        <activity android:name=".SupervisionPatrol.CheckItemsMainSelectorActivity"></activity>
     </application>
 
 </manifest>

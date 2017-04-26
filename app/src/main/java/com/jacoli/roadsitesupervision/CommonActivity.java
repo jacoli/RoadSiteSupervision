@@ -1,11 +1,15 @@
 package com.jacoli.roadsitesupervision;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.OrientationHelper;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.View;
 import android.os.Handler;
@@ -16,6 +20,11 @@ import com.jacoli.roadsitesupervision.views.TitleBar;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.List;
+
+import me.iwf.photopicker.PhotoPicker;
+import me.iwf.photopicker.PhotoPreview;
 
 public class CommonActivity extends Activity {
 
@@ -126,6 +135,90 @@ public class CommonActivity extends Activity {
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
+        }
+    }
+
+    /*
+    * 图片选择器
+    * */
+
+    private PhotoAdapter commonPhotoAdaptor;
+    private ArrayList<String> commonSelectedPhotoUrls = new ArrayList<>();
+
+    public ArrayList<String> getCommonSelectedPhotoUrls() {
+        return commonSelectedPhotoUrls;
+    }
+
+    public void setCommonSelectedPhotoUrls(ArrayList<String> commonSelectedPhotoUrls) {
+        this.commonSelectedPhotoUrls = commonSelectedPhotoUrls;
+    }
+
+    public void setupDefaultImagePicker() {
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        commonPhotoAdaptor = new PhotoAdapter(this, getCommonSelectedPhotoUrls());
+
+        recyclerView.setLayoutManager(new StaggeredGridLayoutManager(3, OrientationHelper.VERTICAL));
+        recyclerView.setAdapter(commonPhotoAdaptor);
+
+        recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(this,
+                new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        if (commonPhotoAdaptor.getItemViewType(position) == PhotoAdapter.TYPE_ADD) {
+                            PhotoPicker.builder()
+                                    .setPhotoCount(PhotoAdapter.MAX)
+                                    .setShowCamera(true)
+                                    .setPreviewEnabled(false)
+                                    .setSelected(getCommonSelectedPhotoUrls())
+                                    .start(CommonActivity.this);
+                        } else {
+                            PhotoPreview.builder()
+                                    .setPhotos(getCommonSelectedPhotoUrls())
+                                    .setCurrentItem(position)
+                                    .start(CommonActivity.this);
+                        }
+                    }
+                }));
+    }
+
+    @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == RESULT_OK &&
+                (requestCode == PhotoPicker.REQUEST_CODE || requestCode == PhotoPreview.REQUEST_CODE)) {
+
+            if (commonPhotoAdaptor != null) {
+                List<String> photos = null;
+                if (data != null) {
+                    photos = data.getStringArrayListExtra(PhotoPicker.KEY_SELECTED_PHOTOS);
+                }
+                getCommonSelectedPhotoUrls().clear();
+
+                if (photos != null) {
+                    getCommonSelectedPhotoUrls().addAll(photos);
+                }
+                commonPhotoAdaptor.notifyDataSetChanged();
+            }
+        }
+    }
+
+    public void setupPhotoViewer(RecyclerView recyclerView, final ArrayList<String> imgUrls) {
+        if (recyclerView != null && imgUrls != null) {
+            PhotoAdapter photoAdapter = new PhotoAdapter(this, imgUrls, false);
+
+            recyclerView.setLayoutManager(new StaggeredGridLayoutManager(3, OrientationHelper.VERTICAL));
+            recyclerView.setAdapter(photoAdapter);
+
+            recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(this,
+                    new RecyclerItemClickListener.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(View view, int position) {
+                            PhotoPreview.builder()
+                                    .setPhotos(imgUrls)
+                                    .setCurrentItem(position)
+                                    .start(CommonActivity.this);
+                        }
+                    }));
         }
     }
 }

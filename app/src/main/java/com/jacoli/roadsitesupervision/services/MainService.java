@@ -1,7 +1,5 @@
 package com.jacoli.roadsitesupervision.services;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
@@ -91,6 +89,14 @@ public class MainService {
     private WeatherModel weatherModel;
     private Handler handler = new Handler();
 
+    public String getServerBaseUrl() {
+        return serverBaseUrl;
+    }
+
+    public void setServerBaseUrl(String serverBaseUrl) {
+        this.serverBaseUrl = serverBaseUrl;
+    }
+
     public WeatherModel getWeatherModel() { return weatherModel; }
 
     private static MainService ourInstance = new MainService();
@@ -122,7 +128,7 @@ public class MainService {
             return false;
         }
 
-        serverBaseUrl = "http://" + address + ":" + port;
+        setServerBaseUrl("http://" + address + ":" + port);
 
         return true;
     }
@@ -170,7 +176,7 @@ public class MainService {
             @Override
             public void run() {
                 try {
-                    String url = serverBaseUrl + "/APP.ashx?Type=Login";
+                    String url = getServerBaseUrl() + "/APP.ashx?Type=Login";
 
                     FormBody body = new FormBody.Builder()
                             .add("Username", username)
@@ -283,7 +289,7 @@ public class MainService {
         return new MyRequest(handler, MSG_QUERY_PROJECT_DETAIL_SUCCESS, MSG_QUERY_PROJECT_DETAIL_FAILED, new RequestAndResponseHandler() {
             @Override
             public Response buildRequestAndWaitingResponse() throws IOException {
-                String url = serverBaseUrl + "/APP.ashx?Type=GetUnitProjectList";
+                String url = getServerBaseUrl() + "/APP.ashx?Type=GetUnitProjectList";
 
                 FormBody body = new FormBody.Builder()
                         .add("Token", getLoginModel().getToken())
@@ -324,7 +330,7 @@ public class MainService {
             @Override
             public void run() {
                 try {
-                    String url = serverBaseUrl + "/APP.ashx?Type=ActiveUnitProject";
+                    String url = getServerBaseUrl() + "/APP.ashx?Type=ActiveUnitProject";
 
                     FormBody body = new FormBody.Builder()
                             .add("Token", getLoginModel().getToken())
@@ -385,7 +391,7 @@ public class MainService {
             @Override
             public void run() {
                 try {
-                    String url = serverBaseUrl + "/APP.ashx?Type=GetComponentList";
+                    String url = getServerBaseUrl() + "/APP.ashx?Type=GetComponentList";
 
                     FormBody body = new FormBody.Builder()
                             .add("Token", getLoginModel().getToken())
@@ -445,7 +451,7 @@ public class MainService {
             @Override
             public void run() {
                 try {
-                    String url = serverBaseUrl + "/APP.ashx?Type=ActiveComponent";
+                    String url = getServerBaseUrl() + "/APP.ashx?Type=ActiveComponent";
 
                     FormBody body = new FormBody.Builder()
                             .add("Token", getLoginModel().getToken())
@@ -505,7 +511,7 @@ public class MainService {
             @Override
             public void run() {
                 try {
-                    String url = serverBaseUrl + "/APP.ashx?Type=GetPZContentList";
+                    String url = getServerBaseUrl() + "/APP.ashx?Type=GetPZContentList";
 
                     FormBody body = new FormBody.Builder()
                             .add("Token", getLoginModel().getToken())
@@ -565,7 +571,7 @@ public class MainService {
             @Override
             public void run() {
                 try {
-                    String url = serverBaseUrl + "/APP.ashx?Type=GetZJYList";
+                    String url = getServerBaseUrl() + "/APP.ashx?Type=GetZJYList";
 
                     FormBody body = new FormBody.Builder()
                             .add("Token", getLoginModel().getToken())
@@ -625,7 +631,7 @@ public class MainService {
             @Override
             public void run() {
                 try {
-                    String url = serverBaseUrl + "/APP.ashx?Type=GetPZContentDetail";
+                    String url = getServerBaseUrl() + "/APP.ashx?Type=GetPZContentDetail";
 
                     FormBody body = new FormBody.Builder()
                             .add("Token", getLoginModel().getToken())
@@ -695,7 +701,7 @@ public class MainService {
             @Override
             public void run() {
                 try {
-                    String url = serverBaseUrl + "/APP.ashx?Type=SubmitPZContentDetail";
+                    String url = getServerBaseUrl() + "/APP.ashx?Type=SubmitPZContentDetail";
 
                     MultipartBody.Builder builder = new MultipartBody.Builder()
                             .setType(MultipartBody.FORM)
@@ -773,7 +779,7 @@ public class MainService {
             @Override
             public void run() {
                 try {
-                    String url = serverBaseUrl + "/APP.ashx?Type=CompleteComponent";
+                    String url = getServerBaseUrl() + "/APP.ashx?Type=CompleteComponent";
 
                     FormBody body = new FormBody.Builder()
                             .add("Token", getLoginModel().getToken())
@@ -833,7 +839,7 @@ public class MainService {
             @Override
             public void run() {
                 try {
-                    String url = serverBaseUrl + "/APP.ashx?Type=GetProjectPatrolDay";
+                    String url = getServerBaseUrl() + "/APP.ashx?Type=GetProjectPatrolDay";
 
                     FormBody body = new FormBody.Builder()
                             .add("Token", getLoginModel().getToken())
@@ -910,7 +916,7 @@ public class MainService {
             @Override
             public void run() {
                 try {
-                    String url = serverBaseUrl + "/APP.ashx?Type=SubmitProjectPatrolAPP";
+                    String url = getServerBaseUrl() + "/APP.ashx?Type=SubmitProjectPatrolAPP";
 
                     MultipartBody.Builder builder = new MultipartBody.Builder()
                             .setType(MultipartBody.FORM)
@@ -986,7 +992,7 @@ public class MainService {
             @Override
             public void run() {
                 try {
-                    String url = serverBaseUrl + "/APP.ashx?Type=GetComponentCheckData";
+                    String url = getServerBaseUrl() + "/APP.ashx?Type=GetComponentCheckData";
 
                     FormBody body = new FormBody.Builder()
                             .add("Token", getLoginModel().getToken())
@@ -1060,7 +1066,7 @@ public class MainService {
             @Override
             public void run() {
                 try {
-                    String url = serverBaseUrl + "/APP.ashx?Type=SubmitComponentCheckData";
+                    String url = getServerBaseUrl() + "/APP.ashx?Type=SubmitComponentCheckData";
 
                     MultipartBody.Builder builder = new MultipartBody.Builder()
                             .setType(MultipartBody.FORM)
@@ -1134,7 +1140,7 @@ public class MainService {
         return new MyRequest(handler, MSG_QUERY_WEATHER_SUCCESS, MSG_QUERY_WEATHER_FAILED, new RequestAndResponseHandler() {
             @Override
             public Response buildRequestAndWaitingResponse() throws IOException {
-                String url = serverBaseUrl + "/APP.ashx?Type=GetWeather";
+                String url = getServerBaseUrl() + "/APP.ashx?Type=GetWeather";
 
                 FormBody body = new FormBody.Builder()
                         .add("Token", getLoginModel().getToken())
@@ -1181,7 +1187,7 @@ public class MainService {
         return new MyRequest(handler, MSG_SUBMIT_ASSIGNED_MATTER_SUCCESS, MSG_SUBMIT_ASSIGNED_MATTER_FAILED, new RequestAndResponseHandler() {
             @Override
             public Response buildRequestAndWaitingResponse() throws IOException {
-                String url = serverBaseUrl + "/APP.ashx?Type=SubmitAssignedMatter";
+                String url = getServerBaseUrl() + "/APP.ashx?Type=SubmitAssignedMatter";
 
                 MultipartBody.Builder builder = new MultipartBody.Builder()
                         .setType(MultipartBody.FORM)
@@ -1230,7 +1236,7 @@ public class MainService {
         return new MyRequest(handler, MSG_REPLY_ASSIGNED_MATTER_SUCCESS, MSG_REPLY_ASSIGNED_MATTER_FAILED, new RequestAndResponseHandler() {
             @Override
             public Response buildRequestAndWaitingResponse() throws IOException {
-                String url = serverBaseUrl + "/APP.ashx?Type=SubmitAssignedMatterReply";
+                String url = getServerBaseUrl() + "/APP.ashx?Type=SubmitAssignedMatterReply";
 
                 MultipartBody.Builder builder = new MultipartBody.Builder()
                         .setType(MultipartBody.FORM)
@@ -1273,7 +1279,7 @@ public class MainService {
         return new MyRequest(handler, MSG_QUERY_ASSIGNED_MATTERS_SUCCESS, MSG_QUERY_ASSIGNED_MATTERS_FAILED, new RequestAndResponseHandler() {
             @Override
             public Response buildRequestAndWaitingResponse() throws IOException {
-                String url = serverBaseUrl + "/APP.ashx?Type=GetMyAssignedMatterList";
+                String url = getServerBaseUrl() + "/APP.ashx?Type=GetMyAssignedMatterList";
 
                 FormBody body = new FormBody.Builder()
                         .add("Token", getLoginModel().getToken())
@@ -1309,7 +1315,7 @@ public class MainService {
         return new MyRequest(handler, MSG_QUERY_ASSIGNED_MATTER_DETAIL_SUCCESS, MSG_QUERY_ASSIGNED_MATTER_DETAIL_FAILED, new RequestAndResponseHandler() {
             @Override
             public Response buildRequestAndWaitingResponse() throws IOException {
-                String url = serverBaseUrl + "/APP.ashx?Type=GetAssignedMatterDetail";
+                String url = getServerBaseUrl() + "/APP.ashx?Type=GetAssignedMatterDetail";
 
                 FormBody body = new FormBody.Builder()
                         .add("Token", getLoginModel().getToken())
@@ -1350,7 +1356,7 @@ public class MainService {
         EasyRequest req = new EasyRequest(new Processor() {
             @Override
             public Response buildRequestAndWaitingResponse() throws IOException {
-                String url = serverBaseUrl + "/APP.ashx?Type=GetStaffList";
+                String url = getServerBaseUrl() + "/APP.ashx?Type=GetStaffList";
 
                 FormBody body = new FormBody.Builder()
                         .add("Token", getLoginModel().getToken())
@@ -1402,7 +1408,7 @@ public class MainService {
         EasyRequest req = new EasyRequest(new Processor() {
             @Override
             public Response buildRequestAndWaitingResponse() throws IOException {
-                String url = serverBaseUrl + "/APP.ashx?Type=FileAssignedMatter";
+                String url = getServerBaseUrl() + "/APP.ashx?Type=FileAssignedMatter";
 
                 FormBody body = new FormBody.Builder()
                         .add("Token", getLoginModel().getToken())
@@ -1420,6 +1426,34 @@ public class MainService {
             @Override
             public ResponseBase jsonModelParsedFromResponseString(String responseJsonString, Gson gson) {
                 return gson.fromJson(responseJsonString, ResponseBase.class);
+            }
+
+            @Override
+            public void onSuccessHandleBeforeNotify(ResponseBase responseModel) {}
+        }, handler, callbacks);
+        req.asyncSend();
+    }
+
+    public void sendQueryUpgrade(Callbacks callbacks) {
+        EasyRequest req = new EasyRequest(new Processor() {
+            @Override
+            public Response buildRequestAndWaitingResponse() throws IOException {
+                String url = getServerBaseUrl() + "/APP.ashx?Type=GetAPPInfo";
+
+                FormBody body = new FormBody.Builder()
+                        .build();
+
+                Request request = new Request.Builder()
+                        .url(url)
+                        .post(body)
+                        .build();
+
+                return httpClient.newCall(request).execute();
+            }
+
+            @Override
+            public ResponseBase jsonModelParsedFromResponseString(String responseJsonString, Gson gson) {
+                return gson.fromJson(responseJsonString, UpgradeModel.class);
             }
 
             @Override

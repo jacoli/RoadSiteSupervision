@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_supervision_patrol_creating"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.jacoli.roadsitesupervision.SupervisionPatrol.SupervisionPatrolCreatingActivity">
+
+    <com.jacoli.roadsitesupervision.views.TitleBar
+        android:id="@+id/title_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_margin="16dp"
+            android:paddingTop="16dp"
+            android:paddingBottom="64dp"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:divider="@drawable/divider_between_cells"
+            android:showDividers="middle">
+
+            <requestFocus />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:layout_gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="@dimen/assigned_matter_cell_title_width"
+                    android:layout_height="@dimen/cell_height"
+                    android:gravity="center_vertical"
+                    android:textSize="18sp"
+                    android:textColor="@color/primary_text"
+                    android:text="工程构件:"
+                    />
+
+                <EditText
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:id="@+id/edit_text_component"
+                    android:hint="请输入"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="@dimen/assigned_matter_cell_title_width"
+                    android:layout_height="@dimen/cell_height"
+                    android:gravity="center_vertical"
+                    android:textSize="18sp"
+                    android:textColor="@color/primary_text"
+                    android:text="检查大项:"
+                    />
+
+                <Spinner
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:id="@+id/spinner_check_type"
+                    android:paddingStart="24dp"
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="@dimen/assigned_matter_cell_title_width"
+                    android:layout_height="@dimen/cell_height"
+                    android:gravity="center_vertical"
+                    android:textSize="18sp"
+                    android:textColor="@color/primary_text"
+                    android:text="审批人："
+                    />
+
+                <Spinner
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:id="@+id/spinner_approver"
+                    android:paddingStart="24dp"
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:layout_gravity="center_vertical"
+                android:orientation="horizontal"
+                android:clickable="true"
+                android:id="@+id/check_items">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="@dimen/cell_height"
+                    android:gravity="center_vertical"
+                    android:textSize="18sp"
+                    android:textColor="@color/primary_text"
+                    android:text="检查明细:"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:textSize="18sp"
+                    android:textColor="@color/secondary_text"
+                    android:id="@+id/text_view_check_items_actions"
+                    android:text="点击选择  "
+                    />
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/next_arrow"
+                    android:scaleType="fitCenter"/>
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:textSize="18sp"
+                android:textColor="@color/secondary_text"
+                android:id="@+id/text_view_check_items"
+                android:text="@string/default_text"
+                />
+
+            <include layout="@layout/cell_separator"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/small_cell_height"
+                android:gravity="center_vertical"
+                android:textSize="18sp"
+                android:textColor="@color/primary_text"
+                android:text="巡查内容"
+                />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:minHeight="100dp"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:layout_marginBottom="10dp"
+                android:id="@+id/edit_text_content"
+                android:singleLine="false"
+                android:gravity="top"
+                android:inputType="textMultiLine"
+                android:scrollbars="vertical"
+                android:hint="请输入"
+                />
+
+            <include layout="@layout/cell_separator"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/small_cell_height"
+                android:gravity="center_vertical"
+                android:textSize="18sp"
+                android:textColor="@color/primary_text"
+                android:text="上传图片（最多9张，可选）"
+                />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/cell_height"
+                android:layout_margin="16dp"
+                android:background="@color/accent"
+                android:text="发送"
+                android:id="@+id/submit_btn" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

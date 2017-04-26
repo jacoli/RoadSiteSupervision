@@ -1,11 +1,16 @@
 package com.jacoli.roadsitesupervision;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import android.content.Intent;
@@ -19,8 +24,14 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.jacoli.roadsitesupervision.EasyRequest.Callbacks;
+import com.jacoli.roadsitesupervision.EasyRequest.ResponseBase;
 import com.jacoli.roadsitesupervision.R;
+import com.jacoli.roadsitesupervision.Upgrade.download.DownLoadUtils;
+import com.jacoli.roadsitesupervision.Upgrade.download.DownloadApk;
+import com.jacoli.roadsitesupervision.Utils.*;
 import com.jacoli.roadsitesupervision.services.*;
+import com.jacoli.roadsitesupervision.services.Utils;
 import com.jacoli.roadsitesupervision.views.MyToast;
 
 import java.io.FileInputStream;
@@ -139,6 +150,80 @@ public class LoginActivity extends CommonActivity {
         } catch (Exception e) {
         } finally {
         }
+
+        TextView versionTextView = (TextView) findViewById(R.id.version_text);
+        String version = "版本：" + CommonUtils.getVersionName(getApplicationContext());
+        versionTextView.setText(version);
+
+        setupUpgradeCheck();
+    }
+
+    private void setupUpgradeCheck() {
+        // 1.注册下载广播接收器
+        DownloadApk.registerBroadcast(this);
+
+        // 2.删除已存在的Apk
+        DownloadApk.removeFile(this);
+
+        // 3.查询是否有更新
+        MainService.getInstance().sendQueryUpgrade(new Callbacks() {
+            @Override
+            public void onSuccess(ResponseBase responseModel) {
+                UpgradeModel model = (UpgradeModel) responseModel;
+                if (!Utils.isStringEmpty(model.getVer())
+                        && !Utils.isStringEmpty(model.getURL())) {
+                    try {
+                        String latestVersion = model.getVer().replace(".", "");
+                        String currentVersion = CommonUtils.getVersionName(getApplicationContext()).replace(".", "");
+                        int latestVersionCode = Integer.valueOf(latestVersion);
+                        int currentVersionCode = Integer.valueOf(currentVersion);
+                        if (currentVersionCode < latestVersionCode) {
+                            onUpgrade(model);
+                        }
+                    } catch (Exception e) {
+                        Log.e("LoginActivity", e.toString());
+                    }
+                }
+            }
+
+            @Override
+            public void onFailed(String error) {
+            }
+        });
+    }
+
+    public void onUpgrade(final UpgradeModel model) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("有新版本");
+        builder.setMessage(model.getUpdate());
+
+        builder.setPositiveButton("马上更新", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int which) {
+                // 4.如果手机已经启动下载程序，执行downloadApk。否则跳转到设置界面
+                if (DownLoadUtils.getInstance(getApplicationContext()).canDownload()) {
+                    DownloadApk.downloadApk(getApplicationContext(), model.getURL(), model.getUpdate(), CommonUtils.getApplicationName(getApplicationContext()));
+                } else {
+                    DownLoadUtils.getInstance(LoginActivity.this).skipToDownloadManager();
+                }
+            }
+        });
+
+        builder.setNegativeButton("下次再说", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int which) {
+            }
+        });
+
+        builder.create().show();
+    }
+
+    @Override
+    protected void onDestroy() {
+
+        // 5.反注册广播接收器
+        DownloadApk.unregisterBroadcast(this);
+        super.onDestroy();
     }
 
     @Override

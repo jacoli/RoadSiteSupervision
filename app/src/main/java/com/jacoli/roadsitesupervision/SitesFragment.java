@@ -11,12 +11,14 @@ import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.jacoli.roadsitesupervision.SupervisionPatrol.CheckItemsSubSelectorActivity;
+import com.jacoli.roadsitesupervision.SupervisionPatrol.SupervisionPatrolListActivity;
 import com.jacoli.roadsitesupervision.services.MainService;
-import com.jacoli.roadsitesupervision.views.MyToast;
 
 
 public class SitesFragment extends Fragment {
-    final String[] models = {"施工旁站", "质量巡视", "安全巡视", "环保巡视", "质量抽检"};
+    //final String[] models = {"施工旁站", "质量巡视", "安全巡视", "环保巡视", "质量抽检"};
+    final String[] models = {"施工旁站", "质量巡视", "安全巡视", "环保巡视", "质量抽检", "监理巡查", "测试"};
 
     public SitesFragment() {
         // Required empty public constructor
@@ -60,11 +62,11 @@ public class SitesFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //final String[] models = {"施工旁站", "质量巡视", "安全巡视", "环保巡视", "质量抽检"};
 
-                if (position < 0 || position > 4) {
-                    return;
-                }
-
-                MyToast.showMessage(getActivity(), models[position]);
+//                if (position < 0 || position > 4) {
+//                    return;
+//                }
+//
+//                MyToast.showMessage(getActivity(), models[position]);
 
                 Intent intent = null;
                 if (position == 0) {
@@ -86,6 +88,12 @@ public class SitesFragment extends Fragment {
                 else if (position == 4) {
                     intent = new Intent(getActivity(), ProjectDetailActivity.class);
                     intent.putExtra("type", MainService.project_detail_type_quality_sampling_inspection);
+                }
+                else if (position == 5) {
+                    intent = new Intent(getActivity(), SupervisionPatrolListActivity.class);
+                }
+                else if (position == 6) {
+                    intent = new Intent(getActivity(), CheckItemsSubSelectorActivity.class);
                 }
 
                 if (intent != null) {
