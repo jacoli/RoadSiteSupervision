@@ -36,7 +36,7 @@ public class SupervisionPatrolUnitProjectDetailActivity extends CommonActivity {
 
         createTitleBar();
         titleBar.setLeftText("返回");
-        titleBar.setTitle(SupervisionPatrolUtils.title);
+        titleBar.setTitle("选择工程构件");
 
         Intent intent = getIntent();
         String id = intent.getStringExtra("id");
@@ -47,7 +47,7 @@ public class SupervisionPatrolUnitProjectDetailActivity extends CommonActivity {
             Toast.makeText(getBaseContext(), "获取单位工程详情失败", Toast.LENGTH_SHORT).show();
         }
 
-        String name = intent.getStringExtra("name") + "\n旁站情况:";
+        String name = intent.getStringExtra("title");
         TextView textView = (TextView) findViewById(R.id.project_name_text);
         textView.setText(name);
     }
@@ -126,6 +126,10 @@ public class SupervisionPatrolUnitProjectDetailActivity extends CommonActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String title = getIntent().getStringExtra("title") + "-" + subProjectModel.getName() + "-" + componentModel.getName();
+                Intent intent = new Intent();
+                intent.putExtra("title", title);
+                setResult(RESULT_OK, intent);
                 finish();
             }
         });
