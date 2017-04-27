@@ -18,7 +18,7 @@ import com.jacoli.roadsitesupervision.services.MainService;
 
 public class SitesFragment extends Fragment {
     //final String[] models = {"施工旁站", "质量巡视", "安全巡视", "环保巡视", "质量抽检"};
-    final String[] models = {"施工旁站", "质量巡视", "安全巡视", "环保巡视", "质量抽检", "监理巡查"};
+    final String[] models = {"施工旁站", "监理巡查", "质量巡视", "安全巡视", "环保巡视", "质量抽检"};
 
     public SitesFragment() {
         // Required empty public constructor
@@ -74,23 +74,23 @@ public class SitesFragment extends Fragment {
                     intent.putExtra("type", MainService.project_detail_type_pz);
                 }
                 else if (position == 1) {
-                    intent = new Intent(getActivity(), ProjectDetailForInspectionActivity.class);
-                    intent.putExtra("type", MainService.project_detail_type_quality_inspection);
+                    intent = new Intent(getActivity(), SupervisionPatrolListActivity.class);
                 }
                 else if (position == 2) {
                     intent = new Intent(getActivity(), ProjectDetailForInspectionActivity.class);
-                    intent.putExtra("type", MainService.project_detail_type_safety_inspection);
+                    intent.putExtra("type", MainService.project_detail_type_quality_inspection);
                 }
                 else if (position == 3) {
                     intent = new Intent(getActivity(), ProjectDetailForInspectionActivity.class);
-                    intent.putExtra("type", MainService.project_detail_type_environmental_inspection);
+                    intent.putExtra("type", MainService.project_detail_type_safety_inspection);
                 }
                 else if (position == 4) {
-                    intent = new Intent(getActivity(), ProjectDetailActivity.class);
-                    intent.putExtra("type", MainService.project_detail_type_quality_sampling_inspection);
+                    intent = new Intent(getActivity(), ProjectDetailForInspectionActivity.class);
+                    intent.putExtra("type", MainService.project_detail_type_environmental_inspection);
                 }
                 else if (position == 5) {
-                    intent = new Intent(getActivity(), SupervisionPatrolListActivity.class);
+                    intent = new Intent(getActivity(), ProjectDetailActivity.class);
+                    intent.putExtra("type", MainService.project_detail_type_quality_sampling_inspection);
                 }
 
                 if (intent != null) {
