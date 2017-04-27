@@ -36,8 +36,8 @@ import me.iwf.photopicker.PhotoPreview;
 
 public class SupervisionPatrolNormalProcessActivity extends CommonActivity {
 
-    public String matterId;
-    private AssignedMatterDetailModel model;
+    private String modelId;
+    private DetailModel model;
     private BaseAdapter adapter;
 
     @Override
@@ -50,10 +50,7 @@ public class SupervisionPatrolNormalProcessActivity extends CommonActivity {
         titleBar.setTitle(SupervisionPatrolUtils.title);
 
         Intent intent = getIntent();
-        matterId = intent.getStringExtra("id");
-        if (!MainService.getInstance().sendQueryAssignedMatterDetail(matterId, handler)) {
-            Toast.makeText(getBaseContext(), "获取交办事项详情失败", Toast.LENGTH_SHORT).show();
-        }
+        modelId = intent.getStringExtra("id");
 
         Button submitBtn = (Button) findViewById(R.id.submit_btn_1);
         submitBtn.setOnClickListener(new View.OnClickListener() {
@@ -69,12 +66,34 @@ public class SupervisionPatrolNormalProcessActivity extends CommonActivity {
         submit2Btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finishAssignedMatter();
+                alertToDocument();
             }
         });
 
         ListView listView = (ListView) findViewById(R.id.listView);
         setupListView(listView);
+
+        loadData();
+    }
+
+    private void loadData() {
+        SupervisionPatrolService.getInstance().sendQueryDetail(modelId, new Callbacks() {
+            @Override
+            public void onSuccess(ResponseBase responseModel) {
+                model = (DetailModel) responseModel;
+                adapter.notifyDataSetChanged();
+
+                if (adapter.getCount() > 1) {
+                    ListView listView = (ListView) findViewById(R.id.listView);
+                    listView.smoothScrollToPosition(adapter.getCount() - 1);
+                }
+            }
+
+            @Override
+            public void onFailed(String error) {
+                Toast.makeText(getBaseContext(), error, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void setupListView(ListView listView) {
@@ -82,7 +101,7 @@ public class SupervisionPatrolNormalProcessActivity extends CommonActivity {
 
             @Override
             public int getCount() {
-                return model == null ? 0 : (1 + model.getReply().size());
+                return model == null ? 0 : (2 + model.getReply().size());
             }
 
             @Override
@@ -102,7 +121,12 @@ public class SupervisionPatrolNormalProcessActivity extends CommonActivity {
                 RecyclerView recyclerView = (RecyclerView) v.findViewById(R.id.recycler_view);
 
                 if (position == 0) {
-                    String text = "上报人：\n时间：\n工程构件：\n检查大项：\n检查细目：\n\n审批人：\n处理意见：\n时间：";
+                    String text = "工程构件：" + model.getProjectPart() + "\n"
+                            + "检查大项：" + model.getCheckTypeDescription() + "\n"
+                            + "检查细目：" + model.getCheckItemsDescription()
+                            + "上报人：" + model.getAddByName() + "\n"
+                            + "上报时间：" + model.getAddTime() + "\n"
+                            + "补充说明：" + model.getDescription() + "\n";
                     textView.setText(text);
 
                     final ArrayList<String> imageUrls = new ArrayList<>();
@@ -110,17 +134,27 @@ public class SupervisionPatrolNormalProcessActivity extends CommonActivity {
                         imageUrls.add(imageUrlModel.getWebPath());
                     }
 
-                    setupPhotoPicker(recyclerView, imageUrls);
+                    setupPhotoViewer(recyclerView, imageUrls);
+                } else if (position == 1) {
+                    String text = "审批人：" + model.getApprovalByName() + "\n"
+                            + "处理意见：" + model.getApprovalComment() + "\n"
+                            + "审批时间：" + model.getApprovalTime() + "\n"
+                            + "承办人：" + model.getReceiverName() + "\n";
+                    textView.setText(text);
                 } else {
-                    String text = "回复人：\n时间：\n内容：";
+                    DetailModel.Reply reply = model.getReply().get(position - 2);
+
+                    String text = "回复人：" + reply.getReplyName() + "\n"
+                            + "时间：" + reply.getAddTime() + "\n"
+                            + "内容：" + reply.getReplyContent() + "\n";
                     textView.setText(text);
 
                     final ArrayList<String> imageUrls = new ArrayList<>();
-                    for (ImageUrlModel imageUrlModel : model.getPhotoList()) {
+                    for (ImageUrlModel imageUrlModel : reply.getPhotoList()) {
                         imageUrls.add(imageUrlModel.getWebPath());
                     }
 
-                    setupPhotoPicker(recyclerView, imageUrls);
+                    setupPhotoViewer(recyclerView, imageUrls);
                 }
 
                 return v;
@@ -137,88 +171,42 @@ public class SupervisionPatrolNormalProcessActivity extends CommonActivity {
         listView.setFooterDividersEnabled(true);
     }
 
-    private void setupPhotoPicker(RecyclerView recyclerView, final ArrayList<String> imgUrls) {
-        if (recyclerView != null && imgUrls != null) {
-            PhotoAdapter photoAdapter = new PhotoAdapter(SupervisionPatrolNormalProcessActivity.this, imgUrls, false);
-
-            recyclerView.setLayoutManager(new StaggeredGridLayoutManager(5, OrientationHelper.VERTICAL));
-            recyclerView.setAdapter(photoAdapter);
-
-            recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(SupervisionPatrolNormalProcessActivity.this,
-                    new RecyclerItemClickListener.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(View view, int position) {
-                            PhotoPreview.builder()
-                                    .setPhotos(imgUrls)
-                                    .setCurrentItem(position)
-                                    .start(SupervisionPatrolNormalProcessActivity.this);
-                        }
-                    }));
-        }
-    }
-
-    @Override
-    public void onResponse(int msgCode, Object obj) {
-        switch (msgCode) {
-            case MainService.MSG_QUERY_ASSIGNED_MATTER_DETAIL_SUCCESS:
-                model = (AssignedMatterDetailModel) obj;
-                adapter.notifyDataSetChanged();
-
-                if (adapter.getCount() > 1) {
-                    ListView listView = (ListView) findViewById(R.id.listView);
-                    listView.smoothScrollToPosition(adapter.getCount() - 1);
-                }
-
-                break;
-            case MainService.MSG_QUERY_ASSIGNED_MATTER_DETAIL_FAILED:
-                Toast.makeText(getBaseContext(), "获取交办事项详情失败", Toast.LENGTH_SHORT).show();
-                break;
-            default:
-                break;
-        }
-    }
-
     @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == SupervisionPatrolNormalProcessReplyActivity.RequestCode) {
             if (resultCode == RESULT_OK) {
-                if (!MainService.getInstance().sendQueryAssignedMatterDetail(matterId, handler)) {
-                    Toast.makeText(getBaseContext(), "获取交办事项详情失败", Toast.LENGTH_SHORT).show();
-                }
+                loadData();
             }
         }
     }
 
-    void finishAssignedMatter() {
+    private void alertToDocument() {
         AlertDialog.Builder builder = new AlertDialog.Builder(SupervisionPatrolNormalProcessActivity.this);
         builder.setTitle("提示");
-        builder.setMessage("是否归档交办事项？");
-
+        builder.setMessage("是否归档监理巡查？");
         builder.setPositiveButton("是", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int which) {
-                MainService.getInstance().sendFinishAssignedMatter(matterId, new Callbacks() {
-                    @Override
-                    public void onSuccess(ResponseBase responseModel) {
-                        Toast.makeText(getBaseContext(), " 归档交办事项成功", Toast.LENGTH_LONG).show();
-                        finish();
-                    }
-
-                    @Override
-                    public void onFailed(String error) {
-                        Toast.makeText(getBaseContext(), " 归档交办事项失败", Toast.LENGTH_SHORT).show();
-                    }
-                });
+                document();
             }
         });
-
-        builder.setNegativeButton("否", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int which) {
-            }
-        });
-
+        builder.setNegativeButton("否", null);
         builder.create().show();
+    }
+
+    private void document() {
+        SupervisionPatrolService.getInstance().sendFinishSupervisionPatrol(modelId, new Callbacks() {
+            @Override
+            public void onSuccess(ResponseBase responseModel) {
+                Toast.makeText(getBaseContext(), " 归档监理巡查成功", Toast.LENGTH_LONG).show();
+                finish();
+            }
+
+            @Override
+            public void onFailed(String error) {
+                Toast.makeText(getBaseContext(), error, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

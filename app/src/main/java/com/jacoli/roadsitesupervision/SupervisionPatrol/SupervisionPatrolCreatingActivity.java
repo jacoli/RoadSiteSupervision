@@ -22,6 +22,9 @@ import java.util.List;
 // 创建监理巡查
 public class SupervisionPatrolCreatingActivity extends CommonActivity {
 
+    static int ProjectDetailSelectorRequestCode = 1000;
+    static int UnitProjectSelectorRequestCode = 1001;
+
     private CheckItemsModel checkItemsModel;
     private String selectedCheckItemIds;
     private ApproverListModel approverListModel;
@@ -56,6 +59,19 @@ public class SupervisionPatrolCreatingActivity extends CommonActivity {
             @Override
             public void onClick(View v) {
                 submit();
+            }
+        });
+
+        setupComponentSelector();
+    }
+
+    private void setupComponentSelector() {
+        Button submitBtn = (Button) findViewById(R.id.btn_component);
+        submitBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getBaseContext(), SupervisionPatrolProjectDetailActivity.class);
+                startActivityForResult(intent, ProjectDetailSelectorRequestCode);
             }
         });
     }
@@ -104,8 +120,15 @@ public class SupervisionPatrolCreatingActivity extends CommonActivity {
                     intent.putExtras(bundle);
                     startActivityForResult(intent, CheckItemsSubSelectorActivity.RequestCode);
                 }
+            } else if (requestCode == ProjectDetailSelectorRequestCode) {
+                Intent intent = new Intent(getBaseContext(), SupervisionPatrolUnitProjectDetailActivity.class);
+                intent.putExtra("title", data.getStringExtra("title"));
+                intent.putExtra("id", data.getStringExtra("id"));
+                startActivityForResult(intent, UnitProjectSelectorRequestCode);
+            } else if (requestCode == UnitProjectSelectorRequestCode) {
+                EditText editText = (EditText) findViewById(R.id.edit_text_component);
+                editText.setText(data.getStringExtra("title"));
             }
-
         }
     }
 

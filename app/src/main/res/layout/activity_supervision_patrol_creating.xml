@@ -33,7 +33,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:layout_gravity="center_vertical"
                 android:orientation="horizontal">
@@ -50,10 +50,18 @@
                 <EditText
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:minHeight="@dimen/cell_height"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
                     android:id="@+id/edit_text_component"
                     android:hint="请输入"/>
+
+                <Button
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:background="@color/accent"
+                    android:text="选择"
+                    android:id="@+id/btn_component" />
 
             </LinearLayout>
 
@@ -135,12 +143,13 @@
                     android:textSize="18sp"
                     android:textColor="@color/secondary_text"
                     android:id="@+id/text_view_check_items_actions"
-                    android:text="点击选择  "
+                    android:text="点击选择"
                     />
 
                 <ImageView
                     android:layout_width="24dp"
                     android:layout_height="24dp"
+                    android:layout_marginStart="16dp"
                     android:src="@drawable/next_arrow"
                     android:scaleType="fitCenter"/>
 
