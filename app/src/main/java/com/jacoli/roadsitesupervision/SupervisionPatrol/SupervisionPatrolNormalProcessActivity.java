@@ -47,7 +47,7 @@ public class SupervisionPatrolNormalProcessActivity extends CommonActivity {
 
         createTitleBar();
         titleBar.setLeftText("返回");
-        titleBar.setTitle(SupervisionPatrolUtils.title);
+        titleBar.setTitle("监理巡查");
 
         Intent intent = getIntent();
         modelId = intent.getStringExtra("id");

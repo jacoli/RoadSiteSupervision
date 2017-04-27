@@ -19,8 +19,6 @@ import java.util.List;
 
 public class CheckItemsSubSelectorActivity extends CommonActivity {
 
-    static int RequestCode = 10001;
-
     private BaseAdapter adapter;
     private List<CheckItemsModel.Item> flatItems;
     private HashMap<String, CheckItemsModel.Item> selectedItems;
@@ -38,7 +36,7 @@ public class CheckItemsSubSelectorActivity extends CommonActivity {
         titleBar.setTitle("选取巡查细目");
 
         CheckItemsModel.Item item = (CheckItemsModel.Item) getIntent().getExtras().getSerializable("object");
-        flatItems = item.getFlatItems(false);
+        flatItems = item.getFlatSubItems();
 
         Button submitBtn = (Button) findViewById(R.id.submit_btn);
         submitBtn.setOnClickListener(new View.OnClickListener() {
@@ -106,7 +104,7 @@ public class CheckItemsSubSelectorActivity extends CommonActivity {
 
     public void submit() {
         if (selectedItems.isEmpty()) {
-            Toast.makeText(CheckItemsSubSelectorActivity.this, "请选择巡查明细", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "请选择巡查明细", Toast.LENGTH_SHORT).show();
             return;
         }
 

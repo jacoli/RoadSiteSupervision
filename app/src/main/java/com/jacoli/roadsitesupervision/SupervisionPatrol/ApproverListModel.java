@@ -1,7 +1,6 @@
 package com.jacoli.roadsitesupervision.SupervisionPatrol;
 
 import com.jacoli.roadsitesupervision.services.MsgResponseBase;
-
 import java.util.List;
 
 /**

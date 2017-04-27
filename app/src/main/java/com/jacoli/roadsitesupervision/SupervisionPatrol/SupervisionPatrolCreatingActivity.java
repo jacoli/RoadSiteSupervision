@@ -24,6 +24,8 @@ public class SupervisionPatrolCreatingActivity extends CommonActivity {
 
     static int ProjectDetailSelectorRequestCode = 1000;
     static int UnitProjectSelectorRequestCode = 1001;
+    static int CheckItemsMainSelectorRequestCode = 1002;
+    static int CheckItemsSubSelectorRequestCode = 1003;
 
     private CheckItemsModel checkItemsModel;
     private String selectedCheckItemIds;
@@ -42,7 +44,7 @@ public class SupervisionPatrolCreatingActivity extends CommonActivity {
             @Override
             public void onSuccess(ResponseBase responseModel) {
                 checkItemsModel = (CheckItemsModel) responseModel;
-                updateCheckTypeSelectionAfterFetchSuccess();
+                updateCheckTypeSelectorAfterFetchSuccess();
             }
 
             @Override
@@ -65,6 +67,27 @@ public class SupervisionPatrolCreatingActivity extends CommonActivity {
         setupComponentSelector();
     }
 
+    public void updateCheckTypeSelectorAfterFetchSuccess() {
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_spinner_item,
+                checkItemsModel.getCheckTypeDescriptions());
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        Spinner spinner = (Spinner) findViewById(R.id.spinner_check_type);
+        spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view,
+                                       int pos, long id) {
+                onCheckTypeSelected(checkItemsModel.getCheckTypes().get(pos));
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+    }
+
     private void setupComponentSelector() {
         Button submitBtn = (Button) findViewById(R.id.btn_component);
         submitBtn.setOnClickListener(new View.OnClickListener() {
@@ -74,6 +97,18 @@ public class SupervisionPatrolCreatingActivity extends CommonActivity {
                 startActivityForResult(intent, ProjectDetailSelectorRequestCode);
             }
         });
+    }
+
+    private CheckItemsModel.Item getSelectedCheckTypeItem() {
+        if (checkItemsModel != null) {
+            final List<CheckItemsModel.Item> items = checkItemsModel.getCheckTypes();
+            Spinner approvalSpinner = (Spinner) findViewById(R.id.spinner_check_type);
+            int position = approvalSpinner.getSelectedItemPosition();
+            if (items != null && position >= 0 && items.size() > position) {
+                return items.get(position);
+            }
+        }
+        return null;
     }
 
     private void setupCheckItems() {
@@ -88,13 +123,13 @@ public class SupervisionPatrolCreatingActivity extends CommonActivity {
                         bundle.putSerializable("object", item);
                         Intent intent = new Intent(SupervisionPatrolCreatingActivity.this, CheckItemsMainSelectorActivity.class);
                         intent.putExtras(bundle);
-                        startActivityForResult(intent, CheckItemsMainSelectorActivity.RequestCode);
+                        startActivityForResult(intent, CheckItemsMainSelectorRequestCode);
                     } else {
                         Bundle bundle = new Bundle();
                         bundle.putSerializable("object", item);
                         Intent intent = new Intent(SupervisionPatrolCreatingActivity.this, CheckItemsSubSelectorActivity.class);
                         intent.putExtras(bundle);
-                        startActivityForResult(intent, CheckItemsSubSelectorActivity.RequestCode);
+                        startActivityForResult(intent, CheckItemsSubSelectorRequestCode);
                     }
                 }
             }
@@ -105,20 +140,20 @@ public class SupervisionPatrolCreatingActivity extends CommonActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == RESULT_OK) {
-            if (requestCode == CheckItemsSubSelectorActivity.RequestCode) {
+            if (requestCode == CheckItemsSubSelectorRequestCode) {
                 TextView textView = (TextView) findViewById(R.id.text_view_check_items);
                 textView.setText(data.getStringExtra("content"));
                 selectedCheckItemIds = data.getStringExtra("checkItemIds");
                 TextView actionsTextView = (TextView) findViewById(R.id.text_view_check_items_actions);
                 actionsTextView.setText("重新选择");
-            } else if (requestCode == CheckItemsMainSelectorActivity.RequestCode) {
+            } else if (requestCode == CheckItemsMainSelectorRequestCode) {
                 CheckItemsModel.Item item = (CheckItemsModel.Item) data.getExtras().getSerializable("object");
                 if (item != null) {
                     Bundle bundle = new Bundle();
                     bundle.putSerializable("object", item);
                     Intent intent = new Intent(SupervisionPatrolCreatingActivity.this, CheckItemsSubSelectorActivity.class);
                     intent.putExtras(bundle);
-                    startActivityForResult(intent, CheckItemsSubSelectorActivity.RequestCode);
+                    startActivityForResult(intent, CheckItemsSubSelectorRequestCode);
                 }
             } else if (requestCode == ProjectDetailSelectorRequestCode) {
                 Intent intent = new Intent(getBaseContext(), SupervisionPatrolUnitProjectDetailActivity.class);
@@ -132,39 +167,10 @@ public class SupervisionPatrolCreatingActivity extends CommonActivity {
         }
     }
 
-    public void updateCheckTypeSelectionAfterFetchSuccess() {
-        final List<CheckItemsModel.Item> items = checkItemsModel.getCheckTypes();
-        List<String> typeNames = new ArrayList<>();
-        for (CheckItemsModel.Item item : items) {
-            typeNames.add(item.getName());
-        }
-        String[] strArr = new String[typeNames.size()];
-        typeNames.toArray(strArr);
-
-        Spinner spinner = (Spinner) findViewById(R.id.spinner_check_type);
-
-        // 建立Adapter并且绑定数据源
-        ArrayAdapter<String> adapter=new ArrayAdapter<>(this,android.R.layout.simple_spinner_item, strArr);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        //绑定 Adapter到控件
-        spinner.setAdapter(adapter);
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view,
-                                       int pos, long id) {
-                onCheckTypeSelected(items.get(pos));
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                // Another interface callback
-            }
-        });
-    }
-
     private void onCheckTypeSelected(CheckItemsModel.Item item) {
         approverListModel = null;
         updateApproverSpiner();
+
         SupervisionPatrolService.getInstance().sendQueryApproverList(getSelectedCheckTypeId(), new Callbacks() {
             @Override
             public void onSuccess(ResponseBase responseModel) {
@@ -218,51 +224,44 @@ public class SupervisionPatrolCreatingActivity extends CommonActivity {
         return null;
     }
 
-    private CheckItemsModel.Item getSelectedCheckTypeItem() {
-        if (checkItemsModel != null) {
-            final List<CheckItemsModel.Item> items = checkItemsModel.getCheckTypes();
-            Spinner approvalSpinner = (Spinner) findViewById(R.id.spinner_check_type);
-            int position = approvalSpinner.getSelectedItemPosition();
-            if (items != null && position >= 0 && items.size() > position) {
-                return items.get(position);
-            }
+    private String getSelectedApproverId() {
+        String selectedApproverId = null;
+        if (approverListModel != null) {
+            Spinner approvalSpinner = (Spinner) findViewById(R.id.spinner_approver);
+            selectedApproverId = approverListModel.getIDAtPosition(approvalSpinner.getSelectedItemPosition());
         }
-        return null;
+        return selectedApproverId;
     }
 
     public void submit() {
         EditText editText = (EditText) findViewById(R.id.edit_text_component);
         String componentName = editText.getText().toString();
         if (Utils.isStringEmpty(componentName)) {
-            Toast.makeText(this, "请输入工程构件", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "工程构件名称不能为空", Toast.LENGTH_SHORT).show();
             return;
         }
 
         String selectedCheckTypeId = getSelectedCheckTypeId();
         if (Utils.isStringEmpty(selectedCheckTypeId)) {
-            Toast.makeText(this, "请输入检查大项", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "检查大项不能为空", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        String selectedApproverId = null;
-        if (approverListModel != null) {
-            Spinner approvalSpinner = (Spinner) findViewById(R.id.spinner_approver);
-            selectedApproverId = approverListModel.getIDAtPosition(approvalSpinner.getSelectedItemPosition());
-        }
+        String selectedApproverId = getSelectedApproverId();
         if (Utils.isStringEmpty(selectedApproverId)) {
-            Toast.makeText(this, "请选择审批人", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "审批人不能为空", Toast.LENGTH_SHORT).show();
             return;
         }
 
         if (Utils.isStringEmpty(selectedCheckItemIds)) {
-            Toast.makeText(this, "请选择检查明细", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "检查细目不能为空", Toast.LENGTH_SHORT).show();
             return;
         }
 
         EditText contentEditText = (EditText) findViewById(R.id.edit_text_content);
         String content = contentEditText.getText().toString();
         if (Utils.isStringEmpty(content)) {
-            Toast.makeText(this, "请输入巡查内容", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "巡查内容不能为空", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -275,7 +274,7 @@ public class SupervisionPatrolCreatingActivity extends CommonActivity {
                 new Callbacks() {
             @Override
             public void onSuccess(ResponseBase responseModel) {
-                Toast.makeText(SupervisionPatrolCreatingActivity.this, "提交成功", Toast.LENGTH_SHORT).show();
+                Toast.makeText(SupervisionPatrolCreatingActivity.this, "提交成功", Toast.LENGTH_LONG).show();
                 finish();
             }
 
@@ -283,7 +282,7 @@ public class SupervisionPatrolCreatingActivity extends CommonActivity {
             public void onFailed(String error) {
                 Button submitBtn = (Button) findViewById(R.id.submit_btn);
                 submitBtn.setEnabled(true);
-                Toast.makeText(SupervisionPatrolCreatingActivity.this, error, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getBaseContext(), error, Toast.LENGTH_SHORT).show();
             }
         });
 

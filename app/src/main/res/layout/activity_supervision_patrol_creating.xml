@@ -122,9 +122,7 @@
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
                 android:layout_gravity="center_vertical"
-                android:orientation="horizontal"
-                android:clickable="true"
-                android:id="@+id/check_items">
+                android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="0dp"
@@ -133,25 +131,36 @@
                     android:gravity="center_vertical"
                     android:textSize="18sp"
                     android:textColor="@color/primary_text"
-                    android:text="检查明细:"
+                    android:text="检查细目:"
                     />
 
-                <TextView
+                <LinearLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="@dimen/cell_height"
                     android:gravity="center_vertical"
-                    android:textSize="18sp"
-                    android:textColor="@color/secondary_text"
-                    android:id="@+id/text_view_check_items_actions"
-                    android:text="点击选择"
-                    />
+                    android:layout_gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:clickable="true"
+                    android:id="@+id/check_items">
 
-                <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_marginStart="16dp"
-                    android:src="@drawable/next_arrow"
-                    android:scaleType="fitCenter"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:textSize="18sp"
+                        android:textColor="@color/secondary_text"
+                        android:id="@+id/text_view_check_items_actions"
+                        android:text="点击选择"
+                        />
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginStart="16dp"
+                        android:src="@drawable/next_arrow"
+                        android:scaleType="fitCenter"/>
+
+                </LinearLayout>
 
             </LinearLayout>
 

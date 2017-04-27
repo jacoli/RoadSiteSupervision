@@ -93,12 +93,8 @@ public class CheckItemsModel extends MsgResponseBase {
             return flatItems;
         }
 
-        public List<Item> getFlatItems(boolean containSelf) {
+        public List<Item> getFlatSubItems() {
             List<Item> flatItems = new ArrayList<>();
-
-            if (containSelf) {
-                flatItems.add(this);
-            }
 
             if (getItems() != null) {
                 for (Item subItem : getItems()) {
@@ -129,22 +125,19 @@ public class CheckItemsModel extends MsgResponseBase {
         this.items = items;
     }
 
-    public List<Item> getFlatItems() {
-        List<Item> flatItems = new ArrayList<>();
-
-        if (getItems() != null) {
-            for (Item subItem : getItems()) {
-                List<Item> items = subItem.getFlatItems();
-                for (Item item : items) {
-                    flatItems.add(item);
-                }
-            }
-        }
-
-        return flatItems;
-    }
-
     public List<Item> getCheckTypes() {
         return getItems();
+    }
+
+    public String[] getCheckTypeDescriptions() {
+        final List<CheckItemsModel.Item> items = getCheckTypes();
+        List<String> typeNames = new ArrayList<>();
+        for (CheckItemsModel.Item item : items) {
+            typeNames.add(item.getName());
+        }
+        String[] strArr = new String[typeNames.size()];
+        typeNames.toArray(strArr);
+
+        return strArr;
     }
 }

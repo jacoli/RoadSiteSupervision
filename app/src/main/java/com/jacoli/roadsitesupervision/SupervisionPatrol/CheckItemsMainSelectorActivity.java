@@ -15,39 +15,33 @@ import java.util.List;
 
 public class CheckItemsMainSelectorActivity extends CommonActivity {
 
-    static int RequestCode = 10099;
-
-    private BaseAdapter adapter;
-    private List<CheckItemsModel.Item> flatItems;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_supervision_patrol_check_items_main_seletor);
 
-        flatItems = new ArrayList<>();
-
         createTitleBar();
         titleBar.setLeftText("取消");
-        titleBar.setTitle("选取巡查明细");
+        titleBar.setTitle("选取巡查细目");
 
+        List<CheckItemsModel.Item> subItems = new ArrayList<>();
         CheckItemsModel.Item item = (CheckItemsModel.Item) getIntent().getExtras().getSerializable("object");
         if (item.getItems() != null) {
-            for (CheckItemsModel.Item subitem : item.getItems()) {
-                flatItems.add(subitem);
+            for (CheckItemsModel.Item subItem : item.getItems()) {
+                subItems.add(subItem);
             }
         }
 
         ListView listView = (ListView) findViewById(R.id.listView);
-        setupListView(listView);
+        setupListView(listView, subItems);
     }
 
-    private void setupListView(ListView listView) {
-        adapter = new BaseAdapter() {
+    private void setupListView(ListView listView, final List<CheckItemsModel.Item> subItems) {
+        BaseAdapter adapter = new BaseAdapter() {
 
             @Override
             public int getCount() {
-                return flatItems.size();
+                return subItems.size();
             }
 
             @Override
@@ -62,7 +56,7 @@ public class CheckItemsMainSelectorActivity extends CommonActivity {
 
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
-                final CheckItemsModel.Item item = flatItems.get(position);
+                final CheckItemsModel.Item item = subItems.get(position);
                 View v = getLayoutInflater().inflate(R.layout.list_item_supervision_patrol_check_items_level2, null);
                 TextView textView = (TextView) v.findViewById(R.id.textView);
                 textView.setText(item.getName());
@@ -74,7 +68,7 @@ public class CheckItemsMainSelectorActivity extends CommonActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                CheckItemsModel.Item item = flatItems.get(position);
+                CheckItemsModel.Item item = subItems.get(position);
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("object", item);
                 Intent intent = new Intent();
