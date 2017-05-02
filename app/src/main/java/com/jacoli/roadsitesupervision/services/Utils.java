@@ -92,6 +92,10 @@ public class Utils {
         return testString == null || testString.isEmpty();
     }
 
+    static public String notNullString(String inString) {
+        return inString == null ? "" : inString;
+    }
+
     static public String getDeadLineStart() {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH");
         Date curDate = new Date();

@@ -260,10 +260,6 @@ public class SupervisionPatrolCreatingActivity extends CommonActivity {
 
         EditText contentEditText = (EditText) findViewById(R.id.edit_text_content);
         String content = contentEditText.getText().toString();
-        if (Utils.isStringEmpty(content)) {
-            Toast.makeText(this, "巡查内容不能为空", Toast.LENGTH_SHORT).show();
-            return;
-        }
 
         SupervisionPatrolService.getInstance().sendCreateSupervisionPatrol(componentName,
                 selectedCheckTypeId,

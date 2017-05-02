@@ -234,7 +234,7 @@ public class SupervisionPatrolService {
                         .addFormDataPart("ProjectPart", projectPart)
                         .addFormDataPart("CheckTypeID", typeId)
                         .addFormDataPart("ItemIDs", itemIds)
-                        .addFormDataPart("Description", description)
+                        .addFormDataPart("Description", Utils.notNullString(description))
                         .addFormDataPart("ApprovalBy", approvalById);
 
                 if (imgUrls != null) {
@@ -373,7 +373,7 @@ public class SupervisionPatrolService {
                         .build();
 
                 Request request = new Request.Builder()
-                        .url(requestUrl("FileAssignedMatter"))
+                        .url(requestUrl("FileSupervisionCheck"))
                         .post(body)
                         .build();
 
