@@ -250,8 +250,10 @@ public class UnitProjectDetailActivity extends CommonActivity {
     }
 
     private void showComponentDetailActivity(final UnitProjectModel.SubProjectModel subProjectModel, final UnitProjectModel.ComponentModel componentModel) {
+        String componentName = subProjectModel.getName() + "-" + componentModel.getName();
+
         Intent intent = new Intent(this ,ComponentDetailActivity.class);
-        intent.putExtra("title", getIntent().getStringExtra("title"));
+        intent.putExtra("name", componentName);
         intent.putExtra("id", componentModel.getID());
         startActivity(intent);
     }
