@@ -32,19 +32,29 @@
                 android:id="@+id/project_name_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
                 android:textSize="20sp"
                 android:text="@string/default_text" />
+
+            <View android:layout_height="2dp"
+                android:layout_width="match_parent"
+                android:background="@color/divider"/>
 
             <TextView
                 android:id="@+id/progress_check_status"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
                 android:textSize="16sp"
                 android:text="@string/default_text" />
+
+            <View android:layout_height="2dp"
+                android:layout_width="match_parent"
+                android:background="@color/divider"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:text="选择工序：" />
 
             <org.apmem.tools.layouts.FlowLayout
                 android:layout_width="match_parent"

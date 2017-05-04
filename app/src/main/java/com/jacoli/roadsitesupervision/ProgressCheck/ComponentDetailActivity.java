@@ -9,18 +9,13 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.jacoli.roadsitesupervision.CommonActivity;
 import com.jacoli.roadsitesupervision.EasyRequest.Callbacks;
 import com.jacoli.roadsitesupervision.EasyRequest.ResponseBase;
 import com.jacoli.roadsitesupervision.R;
-import com.jacoli.roadsitesupervision.SupervisionPatrol.SelectPersonActivity;
-import com.jacoli.roadsitesupervision.services.Utils;
-
 import org.apmem.tools.layouts.FlowLayout;
-
 import java.util.List;
 
 public class ComponentDetailActivity extends CommonActivity {
@@ -35,7 +30,7 @@ public class ComponentDetailActivity extends CommonActivity {
 
         createTitleBar();
         titleBar.setLeftText("返回");
-        titleBar.setTitle("进度巡查");
+        titleBar.setTitle("选择工序");
 
         Intent intent = getIntent();
 
@@ -105,7 +100,6 @@ public class ComponentDetailActivity extends CommonActivity {
                 Toast.makeText(getBaseContext(), error, Toast.LENGTH_SHORT).show();
             }
         });
-
     }
 
     private void submit2() {
@@ -144,6 +138,8 @@ public class ComponentDetailActivity extends CommonActivity {
                 text += item.getProcessName() + " " + item.getAddTime() + "\n";
             }
         }
+        text += "\n";
+
         text += "最新状态：";
         if (selectedItem != null) {
             text += selectedItem.getName();

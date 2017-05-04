@@ -1,6 +1,5 @@
 package com.jacoli.roadsitesupervision.ProgressCheck;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -11,16 +10,13 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.jacoli.roadsitesupervision.CommonActivity;
-import com.jacoli.roadsitesupervision.InspectionDetailActivity;
 import com.jacoli.roadsitesupervision.R;
 import com.jacoli.roadsitesupervision.services.ActiveComponetResp;
 import com.jacoli.roadsitesupervision.services.FinishComponentResp;
 import com.jacoli.roadsitesupervision.services.MainService;
 import com.jacoli.roadsitesupervision.services.UnitProjectModel;
 import com.jacoli.roadsitesupervision.views.MyToast;
-
 import org.apmem.tools.layouts.FlowLayout;
 
 public class UnitProjectDetailActivity extends CommonActivity {
@@ -36,25 +32,30 @@ public class UnitProjectDetailActivity extends CommonActivity {
         titleBar.setLeftText("返回");
         titleBar.setTitle("进度巡查");
 
+        String name = getIntent().getStringExtra("name") + "\n巡视情况:";
+        TextView textView = (TextView) findViewById(R.id.project_name_text);
+        textView.setText(name);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
         Intent intent = getIntent();
         String id = intent.getStringExtra("id");
         if (MainService.getInstance().sendUnitProjectDetailQuery(id, handler)) {
-            Toast.makeText(getBaseContext(), "获取单位工程详情中", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getBaseContext(), "获取单位工程详情中", Toast.LENGTH_SHORT).show();
         }
         else {
             Toast.makeText(getBaseContext(), "获取单位工程详情失败", Toast.LENGTH_SHORT).show();
         }
-
-        String name = intent.getStringExtra("name") + "\n巡视情况:";
-        TextView textView = (TextView) findViewById(R.id.project_name_text);
-        textView.setText(name);
     }
 
     @Override
     public void onResponse(int msgCode, Object obj) {
         switch (msgCode) {
             case MainService.MSG_QUERY_UNIT_PROJECT_DETAIL_SUCCESS:
-                MyToast.showMessage(getBaseContext(), "获取单位工程详情成功");
+                //MyToast.showMessage(getBaseContext(), "获取单位工程详情成功");
                 model = (UnitProjectModel) obj;
                 initSubviewsAfterFetchSuccess();
                 break;
@@ -88,6 +89,8 @@ public class UnitProjectDetailActivity extends CommonActivity {
         }
 
         FlowLayout flowLayout = (FlowLayout) findViewById(R.id.flow_layout);
+
+        flowLayout.removeAllViews();
 
         for (final UnitProjectModel.SubProjectModel subProjectModel : model.getSubProjects()) {
             // header
@@ -123,17 +126,6 @@ public class UnitProjectDetailActivity extends CommonActivity {
                 flowLayout.addView(button);
             }
         }
-
-        addBottomPaddingViewToFlowLayout(flowLayout);
-    }
-
-    // fix : flowlayout底部无法滑倒底，增加一个padding
-    private void addBottomPaddingViewToFlowLayout(FlowLayout layout) {
-        View view = new View(this);
-        int size = getResources().getDimensionPixelSize(R.dimen.unit_project_detail_button_size);
-        FlowLayout.LayoutParams layoutParams = new FlowLayout.LayoutParams(size, size);
-        layoutParams.setNewLine(true);
-        layout.addView(view, layoutParams);
     }
 
     private void updateWithActiveComponentResp(ActiveComponetResp resp) {
