@@ -15,6 +15,8 @@ import com.jacoli.roadsitesupervision.CommonActivity;
 import com.jacoli.roadsitesupervision.EasyRequest.Callbacks;
 import com.jacoli.roadsitesupervision.EasyRequest.ResponseBase;
 import com.jacoli.roadsitesupervision.R;
+import com.kaopiz.kprogresshud.KProgressHUD;
+
 import org.apmem.tools.layouts.FlowLayout;
 import java.util.List;
 
@@ -29,7 +31,7 @@ public class ComponentDetailActivity extends CommonActivity {
         setContentView(R.layout.activity_progress_check_component_detail);
 
         createTitleBar();
-        titleBar.setLeftText("返回");
+        titleBar.setLeftText("取消");
         titleBar.setTitle("选择工序");
 
         Intent intent = getIntent();
@@ -38,17 +40,20 @@ public class ComponentDetailActivity extends CommonActivity {
         TextView textView = (TextView) findViewById(R.id.project_name_text);
         textView.setText(name);
 
+        showHUD();
 
         Service.getInstance().sendQueryProgressItems(new Callbacks() {
             @Override
             public void onSuccess(ResponseBase responseModel) {
                 ProgressItemsModel model = (ProgressItemsModel) responseModel;
                 updateItemsView(model);
+                dismissHUD();
             }
 
             @Override
             public void onFailed(String error) {
                 Toast.makeText(getBaseContext(), error, Toast.LENGTH_SHORT).show();
+                dismissHUD();
             }
         });
 
@@ -105,7 +110,7 @@ public class ComponentDetailActivity extends CommonActivity {
     private void submit2() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("提示");
-        builder.setMessage("确定归档？");
+        builder.setMessage("确定完工？");
         builder.setPositiveButton("是", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int which) {
@@ -120,7 +125,7 @@ public class ComponentDetailActivity extends CommonActivity {
         Service.getInstance().sendFileProgressCheck(getIntent().getStringExtra("id"), new Callbacks() {
             @Override
             public void onSuccess(ResponseBase responseModel) {
-                Toast.makeText(getBaseContext(), "归档成功", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getBaseContext(), "发送成功", Toast.LENGTH_SHORT).show();
                 finish();
             }
 

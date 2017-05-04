@@ -16,6 +16,7 @@ import android.os.Handler;
 import android.os.Message;
 
 import com.jacoli.roadsitesupervision.views.TitleBar;
+import com.kaopiz.kprogresshud.KProgressHUD;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -219,6 +220,27 @@ public class CommonActivity extends Activity {
                                     .start(CommonActivity.this);
                         }
                     }));
+        }
+    }
+
+    private KProgressHUD hud;
+
+    public void showHUD() {
+        if (hud != null) {
+            hud.dismiss();
+        }
+
+        hud = KProgressHUD.create(this)
+                .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
+                .setCancellable(true)
+                .setAnimationSpeed(2)
+                .setDimAmount(0.5f)
+                .show();
+    }
+
+    public void dismissHUD() {
+        if (hud != null) {
+            hud.dismiss();
         }
     }
 }
