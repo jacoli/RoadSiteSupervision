@@ -4,7 +4,16 @@ android {
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
     defaultConfig {
+
+        // 8001
+        //applicationId "com.jacoli.roadsitesupervision.master"
+
+        // 8002
         applicationId "com.jacoli.roadsitesupervision"
+
+        // 8003
+        //applicationId "com.jacoli.roadsitesupervision.shilibu"
+
         minSdkVersion 19
         targetSdkVersion 25
         versionCode 103
