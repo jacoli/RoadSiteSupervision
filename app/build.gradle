@@ -9,13 +9,13 @@ android {
         //applicationId "com.jacoli.roadsitesupervision.master"
 
         // 8002
-        applicationId "com.jacoli.roadsitesupervision"
+        //applicationId "com.jacoli.roadsitesupervision"
 
         // 8003
         //applicationId "com.jacoli.roadsitesupervision.shilibu"
 
         // 9008
-        //applicationId "com.jacoli.roadsitesupervision.usersystem"
+        applicationId "com.jacoli.roadsitesupervision.usersystem"
 
         minSdkVersion 19
         targetSdkVersion 25

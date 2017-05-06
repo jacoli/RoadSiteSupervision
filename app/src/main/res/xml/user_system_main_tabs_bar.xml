@@ -1,0 +1,22 @@
+<tabs>
+    <tab
+        id="@+id/tab_todo_list"
+        icon="@drawable/ic_main_todo_list"
+        title="交办事项" />
+    <tab
+        id="@+id/tab_sites"
+        icon="@drawable/ic_main_sites"
+        title="现场工作" />
+    <tab
+        id="@+id/tab_informations"
+        icon="@drawable/ic_main_informations"
+        title="报表" />
+    <tab
+        id="@+id/tab_component_info"
+        icon="@drawable/ic_main_informations"
+        title="构件信息" />
+    <tab
+        id="@+id/tab_settings"
+        icon="@drawable/ic_main_settings"
+        title="系统设置" />
+</tabs>

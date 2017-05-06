@@ -21,9 +21,9 @@ tools:context=".LoginActivity">
         android:id="@+id/login_main_pic"
         android:layout_below="@id/login_title"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="200dp"
         android:scaleType="centerCrop"
-        android:src="@drawable/app_main_8001"
+        android:src="@drawable/app_main_9008"
         />
 
     <LinearLayout

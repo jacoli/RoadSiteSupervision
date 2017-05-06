@@ -21,6 +21,7 @@ import com.jacoli.roadsitesupervision.EasyRequest.ResponseBase;
 import com.jacoli.roadsitesupervision.ProjectConfigs.Configs;
 import com.jacoli.roadsitesupervision.Upgrade.download.DownLoadUtils;
 import com.jacoli.roadsitesupervision.Upgrade.download.DownloadApk;
+import com.jacoli.roadsitesupervision.UserSystem.MainTabActivity;
 import com.jacoli.roadsitesupervision.Utils.*;
 import com.jacoli.roadsitesupervision.services.*;
 import com.jacoli.roadsitesupervision.services.Utils;
@@ -149,8 +150,8 @@ public class LoginActivity extends CommonActivity {
                     // 自动登录
                     MainService.getInstance().setLoginModel(model);
                     MyToast.showMessage(getApplicationContext(), "Token仍有效，自动登录");
-                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                    startActivity(intent);
+
+                    showMainActivity();
                 }
             }
         } catch (Exception e) {
@@ -305,8 +306,7 @@ public class LoginActivity extends CommonActivity {
 
                 MyToast.showMessage(getApplicationContext(), "登录成功");
 
-                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                startActivity(intent);
+                showMainActivity();
                 break;
             }
             case MainService.MSG_LOGIN_FAILED: {
@@ -315,6 +315,16 @@ public class LoginActivity extends CommonActivity {
             }
             default:
                 break;
+        }
+    }
+
+    private void showMainActivity() {
+        if (Configs.projectType() == Configs.project_type_9008) {
+            Intent intent = new Intent(LoginActivity.this, MainTabActivity.class);
+            startActivity(intent);
+        } else {
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            startActivity(intent);
         }
     }
 }

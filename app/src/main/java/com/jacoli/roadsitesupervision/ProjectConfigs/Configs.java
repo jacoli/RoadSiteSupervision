@@ -19,7 +19,7 @@ public class Configs {
 
     // 返回项目系统类型
     static public int projectType() {
-        return Configs.project_type_8002;
+        return Configs.project_type_9008;
     }
 
     // 默认服务器端口
