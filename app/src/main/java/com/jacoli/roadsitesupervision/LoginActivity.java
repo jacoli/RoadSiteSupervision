@@ -1,32 +1,24 @@
 package com.jacoli.roadsitesupervision;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v7.widget.Toolbar;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
-import android.view.Window;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import android.content.Intent;
-import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.view.Window;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.jacoli.roadsitesupervision.EasyRequest.Callbacks;
 import com.jacoli.roadsitesupervision.EasyRequest.ResponseBase;
-import com.jacoli.roadsitesupervision.R;
+import com.jacoli.roadsitesupervision.ProjectConfigs.Configs;
 import com.jacoli.roadsitesupervision.Upgrade.download.DownLoadUtils;
 import com.jacoli.roadsitesupervision.Upgrade.download.DownloadApk;
 import com.jacoli.roadsitesupervision.Utils.*;
@@ -38,7 +30,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.List;
 
 public class LoginActivity extends CommonActivity {
 
@@ -46,10 +37,25 @@ public class LoginActivity extends CommonActivity {
 
     private BGConfigsModel configsModel;
 
+    private void setupMainImageView() {
+        ImageView imageView = (ImageView) findViewById(R.id.login_main_pic);
+        if (Configs.projectType() == Configs.project_type_8001) {
+            imageView.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.app_main_8001));
+        } else if (Configs.projectType() == Configs.project_type_8002) {
+            imageView.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.app_main_8002));
+        } else if (Configs.projectType() == Configs.project_type_8003) {
+            imageView.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.app_main_8003));
+        } else if (Configs.projectType() == Configs.project_type_9008) {
+            imageView.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.app_main_9008));
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        setupMainImageView();
 
         final Button loginBtn = (Button) findViewById(R.id.login_btn);
         final EditText usernameEdit = (EditText) findViewById(R.id.usernameEdit);

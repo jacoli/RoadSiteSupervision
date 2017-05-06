@@ -5,6 +5,7 @@ import android.content.ContextWrapper;
 import android.content.res.Resources;
 import android.util.Log;
 
+import com.jacoli.roadsitesupervision.ProjectConfigs.Configs;
 import com.jacoli.roadsitesupervision.R;
 
 import java.io.FileInputStream;
@@ -18,7 +19,7 @@ import java.io.Serializable;
  */
 public class BGConfigsModel implements Serializable {
     static public String configFileName = "bg_configs_file";
-    static public String defaultServerPort = "8002";
+    static public String defaultServerPort = Configs.defaultServerPort();
 
     static BGConfigsModel __mainConfigModel;
 

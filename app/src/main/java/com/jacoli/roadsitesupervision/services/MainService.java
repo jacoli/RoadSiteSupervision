@@ -6,6 +6,7 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.jacoli.roadsitesupervision.EasyRequest.*;
+import com.jacoli.roadsitesupervision.ProjectConfigs.Configs;
 
 import java.io.File;
 import java.io.IOException;
@@ -83,7 +84,7 @@ public class MainService {
     public static final int MSG_QUERY_ASSIGNED_MATTER_DETAIL_SUCCESS = 3006;
     public static final int MSG_QUERY_ASSIGNED_MATTER_DETAIL_FAILED = 3007;
 
-    private String serverBaseUrl = "http://118.178.92.22:" + BGConfigsModel.defaultServerPort;
+    private String serverBaseUrl = Configs.defaultServerAddress();
     private OkHttpClient httpClient;
     private LoginModel loginModel;
     private WeatherModel weatherModel;

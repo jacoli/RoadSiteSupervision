@@ -14,6 +14,9 @@ android {
         // 8003
         //applicationId "com.jacoli.roadsitesupervision.shilibu"
 
+        // 9008
+        //applicationId "com.jacoli.roadsitesupervision.usersystem"
+
         minSdkVersion 19
         targetSdkVersion 25
         versionCode 104
