@@ -1,6 +1,5 @@
 package com.jacoli.roadsitesupervision.UserSystem;
 
-import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,10 +9,8 @@ import android.view.View;
 import com.jacoli.roadsitesupervision.AssignedMatterCreateActivity;
 import com.jacoli.roadsitesupervision.CommonActivity;
 import com.jacoli.roadsitesupervision.InformationFragment;
-import com.jacoli.roadsitesupervision.MainActivity;
 import com.jacoli.roadsitesupervision.R;
 import com.jacoli.roadsitesupervision.SettingsFragment;
-import com.jacoli.roadsitesupervision.SitesFragment;
 import com.jacoli.roadsitesupervision.TodoListFragment;
 import com.jacoli.roadsitesupervision.views.TitleBar;
 import com.lichuange.bridges.scan.scan.qrmodule.CaptureActivity;
