@@ -19,7 +19,7 @@ import com.jacoli.roadsitesupervision.SupervisionPatrol.SupervisionPatrolListAct
  */
 public class SitesFragment extends Fragment {
 
-    final String[] models = {"监理巡查"};
+    final String[] models = {"巡查"};
 
     public SitesFragment() {
         // Required empty public constructor

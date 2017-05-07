@@ -24,6 +24,7 @@ import com.jacoli.roadsitesupervision.EasyRequest.Callbacks;
 import com.jacoli.roadsitesupervision.EasyRequest.ResponseBase;
 import com.jacoli.roadsitesupervision.EasyRequest.StringNullAdapter;
 import com.jacoli.roadsitesupervision.PhotoAdapter;
+import com.jacoli.roadsitesupervision.ProjectConfigs.Configs;
 import com.jacoli.roadsitesupervision.R;
 import com.jacoli.roadsitesupervision.RecyclerItemClickListener;
 import com.jacoli.roadsitesupervision.services.AssignedMatterDetailModel;
@@ -47,7 +48,11 @@ public class SupervisionPatrolNormalProcessActivity extends CommonActivity {
 
         createTitleBar();
         titleBar.setLeftText("返回");
-        titleBar.setTitle("监理巡查");
+        if (Configs.projectType() == Configs.project_type_9008) {
+            titleBar.setTitle("巡查");
+        } else {
+            titleBar.setTitle("监理巡查");
+        }
 
         Intent intent = getIntent();
         modelId = intent.getStringExtra("id");

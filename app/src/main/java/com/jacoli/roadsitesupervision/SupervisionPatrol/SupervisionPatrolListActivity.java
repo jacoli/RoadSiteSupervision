@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.jacoli.roadsitesupervision.CommonActivity;
 import com.jacoli.roadsitesupervision.EasyRequest.Callbacks;
 import com.jacoli.roadsitesupervision.EasyRequest.ResponseBase;
+import com.jacoli.roadsitesupervision.ProjectConfigs.Configs;
 import com.jacoli.roadsitesupervision.R;
 
 // 监理巡查列表页
@@ -30,7 +31,11 @@ public class SupervisionPatrolListActivity extends CommonActivity {
 
         createTitleBar();
         titleBar.setLeftText("返回");
-        titleBar.setTitle("监理巡查");
+        if (Configs.projectType() == Configs.project_type_9008) {
+            titleBar.setTitle("巡查");
+        } else {
+            titleBar.setTitle("监理巡查");
+        }
 
         Button submitBtn = (Button) findViewById(R.id.submit_btn);
         submitBtn.setOnClickListener(new View.OnClickListener() {

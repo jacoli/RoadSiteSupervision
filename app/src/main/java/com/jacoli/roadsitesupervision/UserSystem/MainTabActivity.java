@@ -1,9 +1,13 @@
 package com.jacoli.roadsitesupervision.UserSystem;
 
+import android.Manifest;
 import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 
 import com.jacoli.roadsitesupervision.AssignedMatterCreateActivity;
@@ -20,6 +24,10 @@ import com.roughike.bottombar.OnTabSelectListener;
 import java.lang.ref.WeakReference;
 
 public class MainTabActivity extends CommonActivity {
+
+    static public final int request_camera_auth_code = 1001;
+    static public final int requset_scanner_code = 1002;
+
     private TodoListFragment todoListFragment;
     private SitesFragment sitesFragment;
     private InformationFragment informationFragment;
@@ -150,14 +158,19 @@ public class MainTabActivity extends CommonActivity {
     }
 
     public void scan() {
-        Intent intent = new Intent(this, CaptureActivity.class);
-        startActivityForResult(intent, 100);
+        int permission = ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA);
+        if (permission == PackageManager.PERMISSION_GRANTED) {
+            Intent intent = new Intent(this, CaptureActivity.class);
+            startActivityForResult(intent, requset_scanner_code);
+        } else {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, request_camera_auth_code);
+        }
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
-            case 100: {
+            case requset_scanner_code: {
                 if (resultCode == CaptureActivity.ZXING_SCAN_RESULT_CODE && data != null) {
                     final String contentUri = data.getStringExtra(CaptureActivity.ZXING_SCAN_CONTENT_DATA);
                     //showToast(("扫码成功，二维码：" + contentUri));
@@ -170,5 +183,21 @@ public class MainTabActivity extends CommonActivity {
                 // ignored
         }
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode == request_camera_auth_code) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission Granted
+                Intent intent = new Intent(this, CaptureActivity.class);
+                startActivityForResult(intent, requset_scanner_code);
+            } else {
+                // Permission Denied
+                showToast("扫码需要相机权限，请在设置中打开");
+            }
+        }
     }
 }
