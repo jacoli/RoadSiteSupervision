@@ -84,9 +84,14 @@ public final class ViewfinderView extends View {
     if (cameraManager == null) {
       return; // not ready yet, early draw before done configuring
     }
-    Rect frameOriginal = cameraManager.getFramingRect();
+
+    //Rect frame = cameraManager.getFramingRect();
 
     // 缩小扫码框大小 by lcg
+    Rect frameOriginal = cameraManager.getFramingRect();
+    if (frameOriginal == null) {
+      return;
+    }
     Rect frame = new Rect(frameOriginal.left + 10,
             frameOriginal.top + 40, frameOriginal.right - 20, frameOriginal.bottom - 80);
 
