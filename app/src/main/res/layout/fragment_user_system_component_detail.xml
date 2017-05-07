@@ -1,0 +1,41 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:divider="@drawable/divider_between_text_views"
+    android:showDividers="middle"
+    tools:context="com.jacoli.roadsitesupervision.UserSystem.ComponentDetailFragment">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/cell_height"
+        android:textSize="20sp"
+        android:text="构件详细信息：" />
+
+    <View android:layout_height="2dp"
+        android:layout_width="match_parent"
+        android:background="@color/divider"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:text=""
+        android:id="@+id/text_view_content"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:padding="8dp"
+        android:paddingStart="24dp"
+        android:paddingEnd="24dp"
+        android:gravity="center"
+        android:background="@color/accent"
+        android:drawableLeft="@drawable/ic_code_scaner"
+        android:text="扫码查看构件信息"
+        android:id="@+id/submit_btn" />
+
+</LinearLayout>

@@ -1,5 +1,6 @@
 package com.jacoli.roadsitesupervision.UserSystem;
 
+import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,14 +16,17 @@ import com.jacoli.roadsitesupervision.SettingsFragment;
 import com.jacoli.roadsitesupervision.SitesFragment;
 import com.jacoli.roadsitesupervision.TodoListFragment;
 import com.jacoli.roadsitesupervision.views.TitleBar;
+import com.lichuange.bridges.scan.scan.qrmodule.CaptureActivity;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabSelectListener;
+
+import java.lang.ref.WeakReference;
 
 public class MainTabActivity extends CommonActivity {
     private TodoListFragment todoListFragment;
     private SitesFragment sitesFragment;
     private InformationFragment informationFragment;
-    private InformationFragment componentInfoFragment;
+    private ComponentDetailFragment componentInfoFragment;
     private SettingsFragment settingsFragment;
 
     @Override
@@ -102,7 +106,8 @@ public class MainTabActivity extends CommonActivity {
 
                 if (componentInfoFragment == null) {
                     // 如果MessageFragment为空，则创建一个并添加到界面上
-                    componentInfoFragment = new InformationFragment();
+                    componentInfoFragment = new ComponentDetailFragment();
+                    componentInfoFragment.mainTabActivityWeakReference = new WeakReference<>(this);
                     transaction.add(R.id.contentContainer, componentInfoFragment);
                 } else {
                     // 如果MessageFragment不为空，则直接将它显示出来
@@ -145,5 +150,28 @@ public class MainTabActivity extends CommonActivity {
         }
 
         titleBar.removeAllActions();
+    }
+
+    public void scan() {
+        Intent intent = new Intent(this, CaptureActivity.class);
+        startActivityForResult(intent, 100);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case 100: {
+                if (resultCode == CaptureActivity.ZXING_SCAN_RESULT_CODE && data != null) {
+                    final String contentUri = data.getStringExtra(CaptureActivity.ZXING_SCAN_CONTENT_DATA);
+                    //showToast(("扫码成功，二维码：" + contentUri));
+                    showToast("获取构件详情成功");
+                    componentInfoFragment.onScanedSuccess(contentUri);
+                }
+                break;
+            }
+            default:
+                // ignored
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }

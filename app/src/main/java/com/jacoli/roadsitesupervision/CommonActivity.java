@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.View;
 import android.os.Handler;
 import android.os.Message;
+import android.widget.Toast;
 
 import com.jacoli.roadsitesupervision.views.TitleBar;
 import com.kaopiz.kprogresshud.KProgressHUD;
@@ -242,5 +243,9 @@ public class CommonActivity extends Activity {
         if (hud != null) {
             hud.dismiss();
         }
+    }
+
+    public void showToast(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 }
