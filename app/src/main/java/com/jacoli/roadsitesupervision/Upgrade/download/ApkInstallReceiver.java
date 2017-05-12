@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.widget.Toast;
 
 import com.jacoli.roadsitesupervision.Upgrade.config.SystemParams;
+import com.jacoli.roadsitesupervision.Utils.CommonUtils;
 
 /**
  * Created by Song on 2016/11/2.
@@ -32,6 +33,10 @@ public class ApkInstallReceiver extends BroadcastReceiver {
         if(downloadId == downId) {
             DownloadManager downManager= (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
             Uri downloadUri = downManager.getUriForDownloadedFile(downloadId);
+            String downloadPath = CommonUtils.getRealFilePath(context, downloadUri);
+            if (downloadPath != null) {
+                downloadUri = Uri.parse("file://" + downloadPath);
+            }
             SystemParams.getInstance().setString("downloadApk",downloadUri.getPath());
             if (downloadUri != null) {
                 Intent install= new Intent(Intent.ACTION_VIEW);

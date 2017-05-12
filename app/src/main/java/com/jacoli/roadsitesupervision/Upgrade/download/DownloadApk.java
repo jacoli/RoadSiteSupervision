@@ -12,6 +12,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.jacoli.roadsitesupervision.Upgrade.config.SystemParams;
+import com.jacoli.roadsitesupervision.Utils.CommonUtils;
 
 import java.io.File;
 
@@ -43,6 +44,10 @@ public class DownloadApk {
                 //状态为下载成功
                 //获取下载路径URI
                 Uri downloadUri = downLoadUtils.getDownloadUri(downloadId);
+                String downloadPath = CommonUtils.getRealFilePath(context, downloadUri);
+                if (downloadPath != null) {
+                    downloadUri = Uri.parse("file://" + downloadPath);
+                }
                 if(null != downloadUri) {
                     //存在下载的APK，如果两个APK相同，启动更新界面。否之则删除，重新下载。
                     if(compare(getApkInfo(context,downloadUri.getPath()),context)) {
