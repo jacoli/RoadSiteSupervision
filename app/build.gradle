@@ -15,7 +15,10 @@ android {
         //applicationId "com.jacoli.roadsitesupervision.shilibu"
 
         // 9008
-        applicationId "com.jacoli.roadsitesupervision.usersystem"
+        //applicationId "com.jacoli.roadsitesupervision.usersystem"
+
+        // 8075
+        applicationId "com.jacoli.usersystem.shilibu"
 
         minSdkVersion 19
         targetSdkVersion 25

@@ -17,9 +17,12 @@ public class Configs {
     // 320业主系统
     static public int project_type_9008 = 4;
 
+    // 十里埠业主系统
+    static public int project_type_8075 = 5;
+
     // 返回项目系统类型
     static public int projectType() {
-        return Configs.project_type_9008;
+        return Configs.project_type_8075;
     }
 
     // 默认服务器端口
@@ -33,6 +36,8 @@ public class Configs {
             return "8003";
         } else if (projectType == project_type_9008) {
             return "9008";
+        } else if (projectType == project_type_8075) {
+            return "8075";
         } else {
             return "8001";
         }

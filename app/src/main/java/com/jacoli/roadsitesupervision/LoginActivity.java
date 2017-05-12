@@ -48,6 +48,8 @@ public class LoginActivity extends CommonActivity {
             imageView.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.app_main_8003));
         } else if (Configs.projectType() == Configs.project_type_9008) {
             imageView.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.app_main_9008));
+        } else if (Configs.projectType() == Configs.project_type_8075) {
+            imageView.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.app_main_8075));
         }
     }
 
@@ -319,7 +321,8 @@ public class LoginActivity extends CommonActivity {
     }
 
     private void showMainActivity() {
-        if (Configs.projectType() == Configs.project_type_9008) {
+        if (Configs.projectType() == Configs.project_type_9008
+                || Configs.projectType() == Configs.project_type_8075) {
             Intent intent = new Intent(LoginActivity.this, MainTabActivity.class);
             startActivity(intent);
         } else {
