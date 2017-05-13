@@ -14,10 +14,10 @@ android {
         // 8003
         //applicationId "com.jacoli.roadsitesupervision.shilibu"
 
-        // 9008
+        // 9002
         //applicationId "com.jacoli.roadsitesupervision.usersystem"
 
-        // 8075
+        // 9003
         applicationId "com.jacoli.usersystem.shilibu"
 
         minSdkVersion 19

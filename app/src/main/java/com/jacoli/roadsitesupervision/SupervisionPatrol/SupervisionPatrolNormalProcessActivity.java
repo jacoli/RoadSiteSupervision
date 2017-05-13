@@ -1,13 +1,10 @@
 package com.jacoli.roadsitesupervision.SupervisionPatrol;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -17,23 +14,14 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.jacoli.roadsitesupervision.AssignedMatterDetailActivity;
-import com.jacoli.roadsitesupervision.AssignedMatterReplyActivity;
 import com.jacoli.roadsitesupervision.CommonActivity;
 import com.jacoli.roadsitesupervision.EasyRequest.Callbacks;
 import com.jacoli.roadsitesupervision.EasyRequest.ResponseBase;
-import com.jacoli.roadsitesupervision.EasyRequest.StringNullAdapter;
-import com.jacoli.roadsitesupervision.PhotoAdapter;
 import com.jacoli.roadsitesupervision.ProjectConfigs.Configs;
 import com.jacoli.roadsitesupervision.R;
-import com.jacoli.roadsitesupervision.RecyclerItemClickListener;
-import com.jacoli.roadsitesupervision.services.AssignedMatterDetailModel;
 import com.jacoli.roadsitesupervision.services.ImageUrlModel;
-import com.jacoli.roadsitesupervision.services.MainService;
 
 import java.util.ArrayList;
-
-import me.iwf.photopicker.PhotoPreview;
 
 public class SupervisionPatrolNormalProcessActivity extends CommonActivity {
 
@@ -48,8 +36,8 @@ public class SupervisionPatrolNormalProcessActivity extends CommonActivity {
 
         createTitleBar();
         titleBar.setLeftText("返回");
-        if (Configs.projectType() == Configs.project_type_9008
-                || Configs.projectType() == Configs.project_type_8075) {
+        if (Configs.projectType() == Configs.project_type_9002
+                || Configs.projectType() == Configs.project_type_9003) {
             titleBar.setTitle("巡查");
         } else {
             titleBar.setTitle("监理巡查");

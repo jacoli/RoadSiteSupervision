@@ -46,10 +46,10 @@ public class LoginActivity extends CommonActivity {
             imageView.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.app_main_8002));
         } else if (Configs.projectType() == Configs.project_type_8003) {
             imageView.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.app_main_8003));
-        } else if (Configs.projectType() == Configs.project_type_9008) {
-            imageView.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.app_main_9008));
-        } else if (Configs.projectType() == Configs.project_type_8075) {
-            imageView.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.app_main_8075));
+        } else if (Configs.projectType() == Configs.project_type_9002) {
+            imageView.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.app_main_9002));
+        } else if (Configs.projectType() == Configs.project_type_9003) {
+            imageView.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.app_main_9003));
         }
     }
 
@@ -321,8 +321,8 @@ public class LoginActivity extends CommonActivity {
     }
 
     private void showMainActivity() {
-        if (Configs.projectType() == Configs.project_type_9008
-                || Configs.projectType() == Configs.project_type_8075) {
+        if (Configs.projectType() == Configs.project_type_9002
+                || Configs.projectType() == Configs.project_type_9003) {
             Intent intent = new Intent(LoginActivity.this, MainTabActivity.class);
             startActivity(intent);
         } else {

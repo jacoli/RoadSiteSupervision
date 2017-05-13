@@ -31,8 +31,8 @@ public class SupervisionPatrolListActivity extends CommonActivity {
 
         createTitleBar();
         titleBar.setLeftText("返回");
-        if (Configs.projectType() == Configs.project_type_9008
-            || Configs.projectType() == Configs.project_type_8075) {
+        if (Configs.projectType() == Configs.project_type_9002
+            || Configs.projectType() == Configs.project_type_9003) {
             titleBar.setTitle("巡查");
         } else {
             titleBar.setTitle("监理巡查");

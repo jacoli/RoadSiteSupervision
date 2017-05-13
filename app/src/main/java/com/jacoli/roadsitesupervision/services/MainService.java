@@ -179,6 +179,8 @@ public class MainService {
                 try {
                     String url = getServerBaseUrl() + "/APP.ashx?Type=Login";
 
+                    Log.i("MainService", "request url = " + url);
+
                     FormBody body = new FormBody.Builder()
                             .add("Username", username)
                             .add("Password", password)
@@ -1317,7 +1319,7 @@ public class MainService {
             @Override
             public Response buildRequestAndWaitingResponse() throws IOException {
                 String url = getServerBaseUrl() + "/APP.ashx?Type=GetAssignedMatterDetail";
-
+                Log.i("MainService", "request url = " + url);
                 FormBody body = new FormBody.Builder()
                         .add("Token", getLoginModel().getToken())
                         .add("AssignedMatterID", matterId)
@@ -1358,7 +1360,7 @@ public class MainService {
             @Override
             public Response buildRequestAndWaitingResponse() throws IOException {
                 String url = getServerBaseUrl() + "/APP.ashx?Type=GetStaffList";
-
+                Log.i("MainService", "request url = " + url);
                 FormBody body = new FormBody.Builder()
                         .add("Token", getLoginModel().getToken())
                         .add("ProjectID", getLoginModel().getProjectID())
@@ -1410,7 +1412,7 @@ public class MainService {
             @Override
             public Response buildRequestAndWaitingResponse() throws IOException {
                 String url = getServerBaseUrl() + "/APP.ashx?Type=FileAssignedMatter";
-
+                Log.i("MainService", "request url = " + url);
                 FormBody body = new FormBody.Builder()
                         .add("Token", getLoginModel().getToken())
                         .add("AssignedMatterID", assignedMatterId)
@@ -1440,7 +1442,7 @@ public class MainService {
             @Override
             public Response buildRequestAndWaitingResponse() throws IOException {
                 String url = getServerBaseUrl() + "/APP.ashx?Type=GetAPPInfo";
-
+                Log.i("MainService", "request url = " + url);
                 FormBody body = new FormBody.Builder()
                         .build();
 
