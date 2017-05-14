@@ -80,6 +80,7 @@ public class SupervisionPatrolService {
                 FormBody body = new FormBody.Builder()
                         .add("Token", getToken())
                         .add("SupervisionCheckItemID", SupervisionCheckItemID)
+                        .add("ProjectID", MainService.getInstance().getLoginModel().getProjectID())
                         .build();
 
                 Request request = new Request.Builder()

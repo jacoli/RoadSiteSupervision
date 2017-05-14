@@ -46,40 +46,41 @@ public class ApproverListModel extends MsgResponseBase {
     private List<Item> items;
 
     public List<Item> getItems() {
+        return items;
 
-        // 临时方案，根据tag返回审批人列表
-        String tag = "JL01";
-        String userName = MainService.getInstance().getLoginModel().getName();
-        if (!Utils.isStringEmpty(userName)) {
-            if (userName.contains("JL01")) {
-                tag = "JL01";
-            }
-            if (userName.contains("JL02")) {
-                tag = "JL02";
-            }
-            if (userName.contains("JL03")) {
-                tag = "JL03";
-            }
-            if (userName.contains("JL04")) {
-                tag = "JL04";
-            }
-            if (userName.contains("JL05")) {
-                tag = "JL05";
-            }
-            if (userName.contains("JL06")) {
-                tag = "JL06";
-            }
-        }
-
-        List<Item> processedItems = new ArrayList<>();
-
-        for (Item item: items) {
-            if (item.getName().contains(tag)) {
-                processedItems.add(item);
-            }
-        }
-
-        return processedItems;
+//        // 临时方案，根据tag返回审批人列表
+//        String tag = "JL01";
+//        String userName = MainService.getInstance().getLoginModel().getName();
+//        if (!Utils.isStringEmpty(userName)) {
+//            if (userName.contains("JL01")) {
+//                tag = "JL01";
+//            }
+//            if (userName.contains("JL02")) {
+//                tag = "JL02";
+//            }
+//            if (userName.contains("JL03")) {
+//                tag = "JL03";
+//            }
+//            if (userName.contains("JL04")) {
+//                tag = "JL04";
+//            }
+//            if (userName.contains("JL05")) {
+//                tag = "JL05";
+//            }
+//            if (userName.contains("JL06")) {
+//                tag = "JL06";
+//            }
+//        }
+//
+//        List<Item> processedItems = new ArrayList<>();
+//
+//        for (Item item: items) {
+//            if (item.getName().contains(tag)) {
+//                processedItems.add(item);
+//            }
+//        }
+//
+//        return processedItems;
     }
 
     public void setItems(List<Item> items) {
