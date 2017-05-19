@@ -11,6 +11,8 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.jacoli.roadsitesupervision.BuildConfig;
 import com.jacoli.roadsitesupervision.CommonActivity;
 import com.jacoli.roadsitesupervision.EasyRequest.Callbacks;
 import com.jacoli.roadsitesupervision.EasyRequest.ResponseBase;
@@ -31,12 +33,7 @@ public class SupervisionPatrolListActivity extends CommonActivity {
 
         createTitleBar();
         titleBar.setLeftText("返回");
-        if (Configs.projectType() == Configs.project_type_9002
-            || Configs.projectType() == Configs.project_type_9003) {
-            titleBar.setTitle("巡查");
-        } else {
-            titleBar.setTitle("监理巡查");
-        }
+        titleBar.setTitle(BuildConfig.SupervisionPatrolTitle);
 
         Button submitBtn = (Button) findViewById(R.id.submit_btn);
         submitBtn.setOnClickListener(new View.OnClickListener() {

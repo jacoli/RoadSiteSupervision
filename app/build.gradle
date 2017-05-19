@@ -1,35 +1,149 @@
 apply plugin: 'com.android.application'
 
+def releaseTime() {
+    return new Date().format("yyyy-MM-dd", TimeZone.getTimeZone("UTC"))
+}
+
 android {
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
     defaultConfig {
-
-        // 8001
-        //applicationId "com.jacoli.roadsitesupervision.master"
-
-        // 8002
-        //applicationId "com.jacoli.roadsitesupervision"
-
-        // 8003
-        //applicationId "com.jacoli.roadsitesupervision.shilibu"
-
-        // 9002
-        //applicationId "com.jacoli.roadsitesupervision.usersystem"
-
-        // 9003
-        applicationId "com.jacoli.usersystem.shilibu"
-
+        applicationId "com.jacoli.roadsitesupervision"
         minSdkVersion 19
         targetSdkVersion 25
         versionCode 104
         versionName "1.4"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+
+    signingConfigs {
+        config {
+            keyAlias 'jacoli'
+            keyPassword '111111'
+            storeFile file('../jacoli.jks')
+            storePassword '111111'
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.config
+
+            // 批量打包
+            applicationVariants.all { variant ->
+                variant.outputs.each { output ->
+                    def outputFile = output.outputFile
+                    if (outputFile != null && outputFile.name.endsWith('.apk')) {
+                        //输出apk名称为：渠道名_版本名_时间.apk
+                        def fileName = "${variant.productFlavors[0].name}_v${defaultConfig.versionName}_${releaseTime()}.apk"
+                        output.outputFile = new File(outputFile.parent, fileName)
+                    }
+                }
+            }
+        }
+    }
+
+    productFlavors {
+        // 8001监理系统
+        project_8001 {
+            // 项目
+            buildConfigField("String", "ProjectIdentifer", '"Project8001"')
+            // appId
+            applicationId 'com.jacoli.roadsitesupervision.master'
+            // 应用图标、应用名称
+            manifestPlaceholders = [ICON_RES_VALUE: '@mipmap/ic_launcher_8001', APP_NAME_VALUE: '公路监理']
+            // 服务器地址
+            buildConfigField("String", "ServerAddress", '"http://118.178.92.22"')
+            // 服务器端口
+            buildConfigField("String", "ServerPort", '"8001"')
+            // 应用标题
+            buildConfigField("String", "AppTitle", '"公路工程监理现场作业系统"')
+            // 公司名称
+            buildConfigField("String", "CompanyName", '"杭州公路工程监理咨询有限公司"')
+            // 监理巡查页的标题
+            buildConfigField("String", "SupervisionPatrolTitle", '"监理巡查"')
+        }
+
+        // 320监理系统
+        project_8002 {
+            // 项目
+            buildConfigField("String", "ProjectIdentifer", '"Project8002"')
+            // appId
+            applicationId 'com.jacoli.roadsitesupervision'
+            // 应用图标、应用名称
+            manifestPlaceholders = [ICON_RES_VALUE: '@mipmap/ic_launcher_8002', APP_NAME_VALUE: '监理现场作业']
+            // 服务器地址
+            buildConfigField("String", "ServerAddress", '"http://118.178.92.22"')
+            // 服务器端口
+            buildConfigField("String", "ServerPort", '"8002"')
+            // 应用标题
+            buildConfigField("String", "AppTitle", '"公路工程监理现场作业系统"')
+            // 公司名称
+            buildConfigField("String", "CompanyName", '"崇贤至东湖路连接线工程一期工程"')
+            // 监理巡查页的标题
+            buildConfigField("String", "SupervisionPatrolTitle", '"监理巡查"')
+        }
+
+        // 十里埠监理系统
+        project_8003 {
+            // 项目
+            buildConfigField("String", "ProjectIdentifer", '"Project8003"')
+            // appId
+            applicationId 'com.jacoli.roadsitesupervision.shilibu'
+            // 应用图标、应用名称
+            manifestPlaceholders = [ICON_RES_VALUE: '@mipmap/ic_launcher_8003', APP_NAME_VALUE: '十里埠监理']
+            // 服务器地址
+            buildConfigField("String", "ServerAddress", '"http://118.178.92.22"')
+            // 服务器端口
+            buildConfigField("String", "ServerPort", '"8003"')
+            // 应用标题
+            buildConfigField("String", "AppTitle", '"水运工程监理现场作业系统"')
+            // 公司名称
+            buildConfigField("String", "CompanyName", '"杭州港建德港区十里埠综合作业区工程"')
+            // 监理巡查页的标题
+            buildConfigField("String", "SupervisionPatrolTitle", '"监理巡查"')
+        }
+
+        // 320业主系统
+        project_9002 {
+            // 项目
+            buildConfigField("String", "ProjectIdentifer", '"Project9002"')
+            // appId
+            applicationId 'com.jacoli.roadsitesupervision.usersystem'
+            // 应用图标、应用名称
+            manifestPlaceholders = [ICON_RES_VALUE: '@mipmap/ic_launcher_9002', APP_NAME_VALUE: '320管理']
+            // 服务器地址
+            buildConfigField("String", "ServerAddress", '"http://118.178.92.22"')
+            // 服务器端口
+            buildConfigField("String", "ServerPort", '"9002"')
+            // 应用标题
+            buildConfigField("String", "AppTitle", '"公路工程业主现场管理系统"')
+            // 公司名称
+            buildConfigField("String", "CompanyName", '"崇贤至东湖路连接线工程一期工程"')
+            // 监理巡查页的标题
+            buildConfigField("String", "SupervisionPatrolTitle", '"巡查"')
+        }
+
+        // 十里埠业主系统
+        project_9003 {
+            // 项目
+            buildConfigField("String", "ProjectIdentifer", '"Project9003"')
+            // appId
+            applicationId 'com.jacoli.usersystem.shilibu'
+            // 应用图标、应用名称
+            manifestPlaceholders = [ICON_RES_VALUE: '@mipmap/ic_launcher_9003', APP_NAME_VALUE: '十里埠管理']
+            // 服务器地址
+            buildConfigField("String", "ServerAddress", '"http://118.178.92.22"')
+            // 服务器端口
+            buildConfigField("String", "ServerPort", '"9003"')
+            // 应用标题
+            buildConfigField("String", "AppTitle", '"水运工程业主现场管理系统"')
+            // 公司名称
+            buildConfigField("String", "CompanyName", '"杭州港建德港区十里埠综合作业区工程"')
+            // 监理巡查页的标题
+            buildConfigField("String", "SupervisionPatrolTitle", '"巡查"')
         }
     }
 }

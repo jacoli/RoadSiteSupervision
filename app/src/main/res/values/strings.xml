@@ -1,30 +1,4 @@
 <resources>
-
-    <!--8001-->
-    <!--<string name="app_name">公路监理</string>
-     <string name="app_title">公路工程监理现场作业系统</string>
-     <string name="vendor_name">杭州公路工程监理咨询有限公司</string>-->
-
-    <!--8002  320监理系统 -->
-    <!--<string name="app_name">监理现场作业</string>-->
-    <!--<string name="app_title">公路工程监理现场作业系统</string>-->
-    <!--<string name="vendor_name">崇贤至东湖路连接线工程一期工程</string>-->
-
-    <!--8003 十里埠监理系统 -->
-    <!--<string name="app_name">十里埠监理</string>-->
-    <!-- <string name="app_title">水运工程监理现场作业系统</string>-->
-    <!-- <string name="vendor_name">杭州港建德港区十里埠综合作业区工程</string>-->
-
-    <!--9002 320业主系统 -->
-    <!--<string name="app_name">320管理</string>-->
-    <!--<string name="app_title">公路工程业主现场管理系统</string>-->
-    <!--<string name="vendor_name">崇贤至东湖路连接线工程一期工程</string>-->
-
-    <!--9003 十里埠业主系统-->
-    <string name="app_name">十里埠管理</string>
-    <string name="app_title">水运工程业主现场管理系统</string>
-    <string name="vendor_name">杭州港建德港区十里埠综合作业区工程</string>
-
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 

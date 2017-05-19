@@ -3,6 +3,7 @@ package com.jacoli.roadsitesupervision;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
@@ -27,6 +28,8 @@ import com.jacoli.roadsitesupervision.services.*;
 import com.jacoli.roadsitesupervision.services.Utils;
 import com.jacoli.roadsitesupervision.views.MyToast;
 
+import org.w3c.dom.Text;
+
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
@@ -40,15 +43,16 @@ public class LoginActivity extends CommonActivity {
 
     private void setupMainImageView() {
         ImageView imageView = (ImageView) findViewById(R.id.login_main_pic);
-        if (Configs.projectType() == Configs.project_type_8001) {
+
+        if (BuildConfig.ProjectIdentifer.equals("Project8001")) {
             imageView.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.app_main_8001));
-        } else if (Configs.projectType() == Configs.project_type_8002) {
+        } else if (BuildConfig.ProjectIdentifer.equals("Project8002")) {
             imageView.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.app_main_8002));
-        } else if (Configs.projectType() == Configs.project_type_8003) {
+        } else if (BuildConfig.ProjectIdentifer.equals("Project8003")) {
             imageView.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.app_main_8003));
-        } else if (Configs.projectType() == Configs.project_type_9002) {
+        } else if (BuildConfig.ProjectIdentifer.equals("Project9002")) {
             imageView.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.app_main_9002));
-        } else if (Configs.projectType() == Configs.project_type_9003) {
+        } else if (BuildConfig.ProjectIdentifer.equals("Project9003")) {
             imageView.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.app_main_9003));
         }
     }
@@ -59,6 +63,12 @@ public class LoginActivity extends CommonActivity {
         setContentView(R.layout.activity_login);
 
         setupMainImageView();
+
+        TextView titleTextView = (TextView) findViewById(R.id.login_title);
+        titleTextView.setText(BuildConfig.AppTitle);
+
+        TextView vendorTextView = (TextView) findViewById(R.id.text_view_vendor);
+        vendorTextView.setText(BuildConfig.CompanyName);
 
         final Button loginBtn = (Button) findViewById(R.id.login_btn);
         final EditText usernameEdit = (EditText) findViewById(R.id.usernameEdit);
@@ -321,8 +331,8 @@ public class LoginActivity extends CommonActivity {
     }
 
     private void showMainActivity() {
-        if (Configs.projectType() == Configs.project_type_9002
-                || Configs.projectType() == Configs.project_type_9003) {
+        if (BuildConfig.ProjectIdentifer.equals("Project9002")
+            || BuildConfig.ProjectIdentifer.equals("Project9003")) {
             Intent intent = new Intent(LoginActivity.this, MainTabActivity.class);
             startActivity(intent);
         } else {

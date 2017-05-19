@@ -11,7 +11,7 @@ tools:context=".LoginActivity">
         android:layout_height="64dp"
         android:gravity="center"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="@string/app_title"
+        android:text=""
         android:textSize="24sp"
         android:textColor="@android:color/white"
         android:background="@color/primary_dark"
@@ -121,10 +121,11 @@ tools:context=".LoginActivity">
     </LinearLayout>
 
     <TextView
+        android:id="@+id/text_view_vendor"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="@string/vendor_name"
+        android:text=""
         android:textSize="18dp"
         android:gravity="center"
         android:layout_above="@+id/version_text" />
