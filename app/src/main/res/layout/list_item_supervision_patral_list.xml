@@ -4,6 +4,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="16dp"
+    android:paddingStart="24dp"
     android:divider="@drawable/divider_between_text_views"
     android:showDividers="middle">
 

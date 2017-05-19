@@ -28,6 +28,7 @@ public class SupervisionPatrolListModel extends MsgResponseBase {
         private String LastUpdateTime;
         private String Status;
         private int SupervisionCheckStatus;
+        private boolean IsRead;
 
         public String getID() {
             return ID;
@@ -99,6 +100,14 @@ public class SupervisionPatrolListModel extends MsgResponseBase {
 
         public void setSupervisionCheckStatus(int supervisionCheckStatus) {
             SupervisionCheckStatus = supervisionCheckStatus;
+        }
+
+        public boolean isRead() {
+            return IsRead;
+        }
+
+        public void setRead(boolean read) {
+            IsRead = read;
         }
     }
 }

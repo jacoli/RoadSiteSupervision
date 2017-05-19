@@ -105,7 +105,9 @@ public class SupervisionPatrolListActivity extends CommonActivity {
             public View getView(int position, View convertView, ViewGroup parent) {
                 SupervisionPatrolListModel.Item item = model.getItems().get(position);
 
-                View v = getLayoutInflater().inflate(R.layout.list_item_supervision_patral_list, null);
+                int layoutId = item.isRead() ? R.layout.list_item_supervision_patral_list : R.layout.list_item_supervision_patral_list_unread;
+
+                View v = getLayoutInflater().inflate(layoutId, null);
                 TextView textView = (TextView)v.findViewById(R.id.textView);
                 String text = "项目：" + item.getProjectName();
                 textView.setText(text);
