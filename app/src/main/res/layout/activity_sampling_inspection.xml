@@ -57,7 +57,7 @@
                 android:gravity="top"
                 android:inputType="textMultiLine"
                 android:scrollbars="vertical"
-                android:hint="请输入巡视情况"
+                android:hint="请输入抽检情况"
                 />
 
             <android.support.v7.widget.RecyclerView

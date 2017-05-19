@@ -16,11 +16,12 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.hh.timeselector.timeutil.datedialog.DateListener;
+import com.hh.timeselector.timeutil.datedialog.TimeConfig;
+import com.hh.timeselector.timeutil.datedialog.TimeSelectorDialog;
 import com.jacoli.roadsitesupervision.services.MainService;
 import com.jacoli.roadsitesupervision.services.Utils;
-
-import org.feezu.liuli.timeselector.TimeSelector;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -86,14 +87,27 @@ public class AssignedMatterCreateActivity extends CommonActivity {
     }
 
     void onDeadLineEditClicked(final EditText editText) {
-        TimeSelector timeSelector = new TimeSelector(this, new TimeSelector.ResultHandler() {
+        TimeSelectorDialog dialog = new TimeSelectorDialog(this);
+        //设置标题
+        dialog.setTimeTitle("选择时间:");
+        //显示类型
+        dialog.setIsShowtype(TimeConfig.YEAR_MONTH_DAY_HOUR_MINUTE);
+        //默认时间
+        dialog.setCurrentDate(Utils.getCurrentDateStr());
+        //隐藏清除按钮
+        dialog.setEmptyIsShow(false);
+        //设置起始时间
+        dialog.setStartYear(2010);
+        dialog.setDateListener(new DateListener() {
             @Override
-            public void handle(String time) {
+            public void onReturnDate(String time,int year, int month, int day, int hour, int minute, int isShowType) {
                 editText.setText(time);
             }
-        }, Utils.getDeadLineStart(), Utils.getDeadLineEnd());
-        timeSelector.disScrollUnit(TimeSelector.SCROLLTYPE.MINUTE);
-        timeSelector.show();
+            @Override
+            public void onReturnDate(String empty) {
+            }
+        });
+        dialog.show();
     }
 
     private void setupImagePicker() {
