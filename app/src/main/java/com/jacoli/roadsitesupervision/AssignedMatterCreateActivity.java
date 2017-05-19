@@ -91,7 +91,7 @@ public class AssignedMatterCreateActivity extends CommonActivity {
         //设置标题
         dialog.setTimeTitle("选择时间:");
         //显示类型
-        dialog.setIsShowtype(TimeConfig.YEAR_MONTH_DAY_HOUR_MINUTE);
+        dialog.setIsShowtype(TimeConfig.YEAR_MONTH_DAY_HOUR);
         //默认时间
         dialog.setCurrentDate(Utils.getCurrentDateStr());
         //隐藏清除按钮
@@ -101,7 +101,7 @@ public class AssignedMatterCreateActivity extends CommonActivity {
         dialog.setDateListener(new DateListener() {
             @Override
             public void onReturnDate(String time,int year, int month, int day, int hour, int minute, int isShowType) {
-                editText.setText(time);
+                editText.setText(time + ":00:00");
             }
             @Override
             public void onReturnDate(String empty) {
@@ -187,7 +187,7 @@ public class AssignedMatterCreateActivity extends CommonActivity {
             Toast.makeText(this, "请输入截止时间", Toast.LENGTH_SHORT).show();
             return;
         }
-        final String deadline = deadlineEditText.getText().toString() + ":00";
+        final String deadline = deadlineEditText.getText().toString();
 
         EditText contentEditText = (EditText) findViewById(R.id.editText);
         final String content = contentEditText.getText().toString();
