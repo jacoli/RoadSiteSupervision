@@ -154,6 +154,7 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     compile project(':falcon_scanner')
+    compile project(':PushSDK')
 
 
     compile 'com.android.support:appcompat-v7:25.1.1'

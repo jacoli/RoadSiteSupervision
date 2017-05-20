@@ -1,1 +1,1 @@
-include ':app', ':falcon_scanner'
+include ':app', ':falcon_scanner', ':PushSDK'
