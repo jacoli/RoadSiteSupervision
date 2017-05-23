@@ -16,6 +16,16 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
+    sourceSets {
+        main {
+            res.srcDirs = [
+                    'src/main/res/layouts/monitor',
+                    'src/main/res/layouts',
+                    'src/main/res'
+            ]
+        }
+    }
+
     signingConfigs {
         config {
             keyAlias 'jacoli'
@@ -144,6 +154,26 @@ android {
             buildConfigField("String", "CompanyName", '"杭州港建德港区十里埠综合作业区工程"')
             // 监理巡查页的标题
             buildConfigField("String", "SupervisionPatrolTitle", '"巡查"')
+        }
+
+        // 320支架安全监测系统
+        project_monitor {
+            // 项目
+            buildConfigField("String", "ProjectIdentifer", '"ProjectMonitor"')
+            // appId
+            applicationId 'com.jacoli.monitor'
+            // 应用图标、应用名称
+            manifestPlaceholders = [ICON_RES_VALUE: '@mipmap/ic_launcher_9003', APP_NAME_VALUE: '320安全监测']
+            // 服务器地址
+            buildConfigField("String", "ServerAddress", '"http://118.178.92.22"')
+            // 服务器端口
+            buildConfigField("String", "ServerPort", '"9003"')
+            // 应用标题
+            buildConfigField("String", "AppTitle", '"水运工程业主现场管理系统"')
+            // 公司名称
+            buildConfigField("String", "CompanyName", '"杭州港建德港区十里埠综合作业区工程"')
+            // 监理巡查页的标题
+            buildConfigField("String", "SupervisionPatrolTitle", '"安全巡查"')
         }
     }
 }

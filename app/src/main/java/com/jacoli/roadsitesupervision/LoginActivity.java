@@ -19,6 +19,7 @@ import android.widget.EditText;
 
 import com.jacoli.roadsitesupervision.EasyRequest.Callbacks;
 import com.jacoli.roadsitesupervision.EasyRequest.ResponseBase;
+import com.jacoli.roadsitesupervision.MonitorMain.MonitorMainActivity;
 import com.jacoli.roadsitesupervision.ProjectConfigs.Configs;
 import com.jacoli.roadsitesupervision.Upgrade.download.DownLoadUtils;
 import com.jacoli.roadsitesupervision.Upgrade.download.DownloadApk;
@@ -41,6 +42,20 @@ public class LoginActivity extends CommonActivity {
 
     private BGConfigsModel configsModel;
 
+    private void showMainActivity() {
+        if (BuildConfig.ProjectIdentifer.equals("Project9002")
+                || BuildConfig.ProjectIdentifer.equals("Project9003")) {
+            Intent intent = new Intent(LoginActivity.this, MainTabActivity.class);
+            startActivity(intent);
+        } else if (BuildConfig.ProjectIdentifer.equals("ProjectMonitor")) {
+            Intent intent = new Intent(LoginActivity.this, MonitorMainActivity.class);
+            startActivity(intent);
+        } else {
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            startActivity(intent);
+        }
+    }
+
     private void setupMainImageView() {
         ImageView imageView = (ImageView) findViewById(R.id.login_main_pic);
 
@@ -53,6 +68,8 @@ public class LoginActivity extends CommonActivity {
         } else if (BuildConfig.ProjectIdentifer.equals("Project9002")) {
             imageView.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.app_main_9002));
         } else if (BuildConfig.ProjectIdentifer.equals("Project9003")) {
+            imageView.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.app_main_9003));
+        } else if (BuildConfig.ProjectIdentifer.equals("ProjectMonitor")) {
             imageView.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.app_main_9003));
         }
     }
@@ -327,17 +344,6 @@ public class LoginActivity extends CommonActivity {
             }
             default:
                 break;
-        }
-    }
-
-    private void showMainActivity() {
-        if (BuildConfig.ProjectIdentifer.equals("Project9002")
-            || BuildConfig.ProjectIdentifer.equals("Project9003")) {
-            Intent intent = new Intent(LoginActivity.this, MainTabActivity.class);
-            startActivity(intent);
-        } else {
-            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-            startActivity(intent);
         }
     }
 }
