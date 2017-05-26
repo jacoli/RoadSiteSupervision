@@ -2,6 +2,7 @@ package com.jacoli.roadsitesupervision.MonitorMain;
 
 import android.os.Bundle;
 import com.jacoli.roadsitesupervision.CommonActivity;
+import com.jacoli.roadsitesupervision.DataMonitor.DataMonitorFragment;
 import com.jacoli.roadsitesupervision.R;
 import android.app.FragmentTransaction;
 import android.content.Intent;
@@ -19,7 +20,7 @@ public class MonitorMainActivity extends CommonActivity {
 
     private TodoListFragment todoListFragment;
     private SitesFragment sitesFragment;
-    private InformationFragment informationFragment;
+    private DataMonitorFragment informationFragment;
     private ComponentDetailFragment componentInfoFragment;
     private SettingsFragment settingsFragment;
 
@@ -88,7 +89,7 @@ public class MonitorMainActivity extends CommonActivity {
 
                 if (informationFragment == null) {
                     // 如果MessageFragment为空，则创建一个并添加到界面上
-                    informationFragment = new InformationFragment();
+                    informationFragment = new DataMonitorFragment();
                     transaction.add(R.id.contentContainer, informationFragment);
                 } else {
                     // 如果MessageFragment不为空，则直接将它显示出来

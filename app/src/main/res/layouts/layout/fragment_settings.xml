@@ -35,7 +35,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/cell_height"
                 android:layout_margin="16dp"
-                android:background="@color/bg_delete_btn_normal"
+                android:background="@color/material_red_500"
                 android:text="注销"
                 android:id="@+id/submit_btn" />
 
