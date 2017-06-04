@@ -23,7 +23,7 @@
         android:name=".Upgrade.A"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
-        android:label="${APP_NAME_VALUE}"
+        android:label="@string/AppName"
         android:supportsRtl="true"
         android:theme="@android:style/Theme.Light.NoTitleBar"
         tools:replace="android:label">

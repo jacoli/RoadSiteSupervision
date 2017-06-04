@@ -33,7 +33,7 @@ public class SupervisionPatrolListActivity extends CommonActivity {
 
         createTitleBar();
         titleBar.setLeftText("返回");
-        titleBar.setTitle(BuildConfig.SupervisionPatrolTitle);
+        titleBar.setTitle(getString(R.string.SupervisionPatrolTitle));
 
         Button submitBtn = (Button) findViewById(R.id.submit_btn);
         submitBtn.setOnClickListener(new View.OnClickListener() {

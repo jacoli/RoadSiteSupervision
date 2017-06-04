@@ -61,12 +61,6 @@ public class LoginActivity extends CommonActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        TextView titleTextView = (TextView) findViewById(R.id.login_title);
-        titleTextView.setText(BuildConfig.AppTitle);
-
-        TextView vendorTextView = (TextView) findViewById(R.id.text_view_vendor);
-        vendorTextView.setText(BuildConfig.CompanyName);
-
         final Button loginBtn = (Button) findViewById(R.id.login_btn);
         final EditText usernameEdit = (EditText) findViewById(R.id.usernameEdit);
         final EditText passwordEdit = (EditText) findViewById(R.id.passwordEdit);

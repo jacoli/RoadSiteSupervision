@@ -58,26 +58,10 @@ android {
             buildConfigField("String", "ProjectIdentifer", '"Project8001"')
             // appId
             applicationId 'com.jacoli.roadsitesupervision.master'
-            // 应用图标、应用名称
-            manifestPlaceholders = [APP_NAME_VALUE: '公路监理']
             // 服务器地址
             buildConfigField("String", "ServerAddress", '"http://118.178.92.22"')
             // 服务器端口
             buildConfigField("String", "ServerPort", '"8001"')
-            // 应用标题
-            buildConfigField("String", "AppTitle", '"公路工程监理现场作业系统"')
-            // 公司名称
-            buildConfigField("String", "CompanyName", '"杭州公路工程监理咨询有限公司"')
-            // 监理巡查页的标题
-            buildConfigField("String", "SupervisionPatrolTitle", '"监理巡查"')
-
-            sourceSets {
-                main {
-                    res.srcDirs = [
-                            'src/main/project_configs/8001'
-                    ]
-                }
-            }
         }
 
         // 320监理系统
@@ -86,26 +70,10 @@ android {
             buildConfigField("String", "ProjectIdentifer", '"Project8002"')
             // appId
             applicationId 'com.jacoli.roadsitesupervision'
-            // 应用图标、应用名称
-            manifestPlaceholders = [APP_NAME_VALUE: '监理现场作业']
             // 服务器地址
             buildConfigField("String", "ServerAddress", '"http://118.178.92.22"')
             // 服务器端口
             buildConfigField("String", "ServerPort", '"8002"')
-            // 应用标题
-            buildConfigField("String", "AppTitle", '"公路工程监理现场作业系统"')
-            // 公司名称
-            buildConfigField("String", "CompanyName", '"崇贤至东湖路连接线工程一期工程"')
-            // 监理巡查页的标题
-            buildConfigField("String", "SupervisionPatrolTitle", '"监理巡查"')
-
-            sourceSets {
-                main {
-                    res.srcDirs = [
-                            'src/main/project_configs/8002'
-                    ]
-                }
-            }
         }
 
         // 十里埠监理系统
@@ -114,24 +82,10 @@ android {
             buildConfigField("String", "ProjectIdentifer", '"Project8003"')
             // appId
             applicationId 'com.jacoli.roadsitesupervision.shilibu'
-            // 应用图标、应用名称
-            manifestPlaceholders = [APP_NAME_VALUE: '十里埠监理']
             // 服务器地址
             buildConfigField("String", "ServerAddress", '"http://118.178.92.22"')
             // 服务器端口
             buildConfigField("String", "ServerPort", '"8003"')
-            // 应用标题
-            buildConfigField("String", "AppTitle", '"水运工程监理现场作业系统"')
-            // 公司名称
-            buildConfigField("String", "CompanyName", '"杭州港建德港区十里埠综合作业区工程"')
-            // 监理巡查页的标题
-            buildConfigField("String", "SupervisionPatrolTitle", '"监理巡查"')
-
-            sourceSets {
-                main {
-                    res.srcDirs = ['src/main/project_configs/8003']
-                }
-            }
         }
 
         // 320业主系统
@@ -140,24 +94,10 @@ android {
             buildConfigField("String", "ProjectIdentifer", '"Project9002"')
             // appId
             applicationId 'com.jacoli.roadsitesupervision.usersystem'
-            // 应用图标、应用名称
-            manifestPlaceholders = [APP_NAME_VALUE: '320管理']
             // 服务器地址
             buildConfigField("String", "ServerAddress", '"http://118.178.92.22"')
             // 服务器端口
             buildConfigField("String", "ServerPort", '"9002"')
-            // 应用标题
-            buildConfigField("String", "AppTitle", '"公路工程业主现场管理系统"')
-            // 公司名称
-            buildConfigField("String", "CompanyName", '"崇贤至东湖路连接线工程一期工程"')
-            // 监理巡查页的标题
-            buildConfigField("String", "SupervisionPatrolTitle", '"巡查"')
-
-            sourceSets {
-                main {
-                    res.srcDirs = ['src/main/project_configs/9002']
-                }
-            }
         }
 
         // 十里埠业主系统
@@ -166,24 +106,10 @@ android {
             buildConfigField("String", "ProjectIdentifer", '"Project9003"')
             // appId
             applicationId 'com.jacoli.usersystem.shilibu'
-            // 应用图标、应用名称
-            manifestPlaceholders = [APP_NAME_VALUE: '十里埠管理']
             // 服务器地址
             buildConfigField("String", "ServerAddress", '"http://118.178.92.22"')
             // 服务器端口
             buildConfigField("String", "ServerPort", '"9003"')
-            // 应用标题
-            buildConfigField("String", "AppTitle", '"水运工程业主现场管理系统"')
-            // 公司名称
-            buildConfigField("String", "CompanyName", '"杭州港建德港区十里埠综合作业区工程"')
-            // 监理巡查页的标题
-            buildConfigField("String", "SupervisionPatrolTitle", '"巡查"')
-
-            sourceSets {
-                main {
-                    res.srcDirs = ['src/main/project_configs/9003']
-                }
-            }
         }
 
         // 320支架安全监测系统
@@ -192,36 +118,39 @@ android {
             buildConfigField("String", "ProjectIdentifer", '"ProjectMonitor"')
             // appId
             applicationId 'com.jacoli.monitor'
-            // 应用图标、应用名称
-            manifestPlaceholders = [APP_NAME_VALUE: '320安全监测']
             // 服务器地址
             buildConfigField("String", "ServerAddress", '"http://118.178.92.22"')
             // 服务器端口
-            buildConfigField("String", "ServerPort", '"9003"')
-            // 应用标题
-            buildConfigField("String", "AppTitle", '"水运工程业主现场管理系统"')
-            // 公司名称
-            buildConfigField("String", "CompanyName", '"杭州港建德港区十里埠综合作业区工程"')
-            // 监理巡查页的标题
-            buildConfigField("String", "SupervisionPatrolTitle", '"安全巡查"')
-
-            sourceSets {
-                main {
-                    res.srcDirs = ['src/main/project_configs/monitor']
-                }
-            }
+            buildConfigField("String", "ServerPort", '"7002"')
         }
+    }
 
-
-        sourceSets {
+    sourceSets {
         main {
-            res.srcDirs += [
+            res.srcDirs = [
                     'src/main/res/monitor',
                     'src/main/res/layouts',
                     'src/main/res'
             ]
         }
-    }
+        project_8001.res.srcDirs = [
+                'src/main/project_configs/8001'
+        ]
+        project_8002.res.srcDirs = [
+                'src/main/project_configs/8002'
+        ]
+        project_8003.res.srcDirs = [
+                'src/main/project_configs/8003'
+        ]
+        project_9002.res.srcDirs = [
+                'src/main/project_configs/9002'
+        ]
+        project_9003.res.srcDirs = [
+                'src/main/project_configs/9003'
+        ]
+        project_monitor.res.srcDirs = [
+                'src/main/project_configs/monitor'
+        ]
     }
 }
 
