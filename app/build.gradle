@@ -59,7 +59,7 @@ android {
             // appId
             applicationId 'com.jacoli.roadsitesupervision.master'
             // 应用图标、应用名称
-            manifestPlaceholders = [ICON_RES_VALUE: '@mipmap/ic_launcher_8001', APP_NAME_VALUE: '公路监理']
+            manifestPlaceholders = [APP_NAME_VALUE: '公路监理']
             // 服务器地址
             buildConfigField("String", "ServerAddress", '"http://118.178.92.22"')
             // 服务器端口
@@ -87,7 +87,7 @@ android {
             // appId
             applicationId 'com.jacoli.roadsitesupervision'
             // 应用图标、应用名称
-            manifestPlaceholders = [ICON_RES_VALUE: '@mipmap/ic_launcher_8002', APP_NAME_VALUE: '监理现场作业']
+            manifestPlaceholders = [APP_NAME_VALUE: '监理现场作业']
             // 服务器地址
             buildConfigField("String", "ServerAddress", '"http://118.178.92.22"')
             // 服务器端口
@@ -115,7 +115,7 @@ android {
             // appId
             applicationId 'com.jacoli.roadsitesupervision.shilibu'
             // 应用图标、应用名称
-            manifestPlaceholders = [ICON_RES_VALUE: '@mipmap/ic_launcher_8003', APP_NAME_VALUE: '十里埠监理']
+            manifestPlaceholders = [APP_NAME_VALUE: '十里埠监理']
             // 服务器地址
             buildConfigField("String", "ServerAddress", '"http://118.178.92.22"')
             // 服务器端口
@@ -141,7 +141,7 @@ android {
             // appId
             applicationId 'com.jacoli.roadsitesupervision.usersystem'
             // 应用图标、应用名称
-            manifestPlaceholders = [ICON_RES_VALUE: '@mipmap/ic_launcher_9002', APP_NAME_VALUE: '320管理']
+            manifestPlaceholders = [APP_NAME_VALUE: '320管理']
             // 服务器地址
             buildConfigField("String", "ServerAddress", '"http://118.178.92.22"')
             // 服务器端口
@@ -167,7 +167,7 @@ android {
             // appId
             applicationId 'com.jacoli.usersystem.shilibu'
             // 应用图标、应用名称
-            manifestPlaceholders = [ICON_RES_VALUE: '@mipmap/ic_launcher_9003', APP_NAME_VALUE: '十里埠管理']
+            manifestPlaceholders = [APP_NAME_VALUE: '十里埠管理']
             // 服务器地址
             buildConfigField("String", "ServerAddress", '"http://118.178.92.22"')
             // 服务器端口
@@ -193,7 +193,7 @@ android {
             // appId
             applicationId 'com.jacoli.monitor'
             // 应用图标、应用名称
-            manifestPlaceholders = [ICON_RES_VALUE: '@mipmap/ic_launcher_9003', APP_NAME_VALUE: '320安全监测']
+            manifestPlaceholders = [APP_NAME_VALUE: '320安全监测']
             // 服务器地址
             buildConfigField("String", "ServerAddress", '"http://118.178.92.22"')
             // 服务器端口
