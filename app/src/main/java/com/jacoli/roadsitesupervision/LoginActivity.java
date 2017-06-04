@@ -56,30 +56,10 @@ public class LoginActivity extends CommonActivity {
         }
     }
 
-    private void setupMainImageView() {
-        ImageView imageView = (ImageView) findViewById(R.id.login_main_pic);
-
-        if (BuildConfig.ProjectIdentifer.equals("Project8001")) {
-            imageView.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.app_main_8001));
-        } else if (BuildConfig.ProjectIdentifer.equals("Project8002")) {
-            imageView.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.app_main_8002));
-        } else if (BuildConfig.ProjectIdentifer.equals("Project8003")) {
-            imageView.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.app_main_8003));
-        } else if (BuildConfig.ProjectIdentifer.equals("Project9002")) {
-            imageView.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.app_main_9002));
-        } else if (BuildConfig.ProjectIdentifer.equals("Project9003")) {
-            imageView.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.app_main_9003));
-        } else if (BuildConfig.ProjectIdentifer.equals("ProjectMonitor")) {
-            imageView.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.app_main_9003));
-        }
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
-        setupMainImageView();
 
         TextView titleTextView = (TextView) findViewById(R.id.login_title);
         titleTextView.setText(BuildConfig.AppTitle);

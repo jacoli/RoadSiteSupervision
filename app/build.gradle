@@ -22,16 +22,6 @@ android {
     * 新增320支架安全监测系统
     * */
 
-    sourceSets {
-        main {
-            res.srcDirs = [
-                    'src/main/res/monitor',
-                    'src/main/res/layouts',
-                    'src/main/res'
-            ]
-        }
-    }
-
     signingConfigs {
         config {
             keyAlias 'jacoli'
@@ -80,6 +70,14 @@ android {
             buildConfigField("String", "CompanyName", '"杭州公路工程监理咨询有限公司"')
             // 监理巡查页的标题
             buildConfigField("String", "SupervisionPatrolTitle", '"监理巡查"')
+
+            sourceSets {
+                main {
+                    res.srcDirs = [
+                            'src/main/project_configs/8001'
+                    ]
+                }
+            }
         }
 
         // 320监理系统
@@ -100,6 +98,14 @@ android {
             buildConfigField("String", "CompanyName", '"崇贤至东湖路连接线工程一期工程"')
             // 监理巡查页的标题
             buildConfigField("String", "SupervisionPatrolTitle", '"监理巡查"')
+
+            sourceSets {
+                main {
+                    res.srcDirs = [
+                            'src/main/project_configs/8002'
+                    ]
+                }
+            }
         }
 
         // 十里埠监理系统
@@ -120,6 +126,12 @@ android {
             buildConfigField("String", "CompanyName", '"杭州港建德港区十里埠综合作业区工程"')
             // 监理巡查页的标题
             buildConfigField("String", "SupervisionPatrolTitle", '"监理巡查"')
+
+            sourceSets {
+                main {
+                    res.srcDirs = ['src/main/project_configs/8003']
+                }
+            }
         }
 
         // 320业主系统
@@ -140,6 +152,12 @@ android {
             buildConfigField("String", "CompanyName", '"崇贤至东湖路连接线工程一期工程"')
             // 监理巡查页的标题
             buildConfigField("String", "SupervisionPatrolTitle", '"巡查"')
+
+            sourceSets {
+                main {
+                    res.srcDirs = ['src/main/project_configs/9002']
+                }
+            }
         }
 
         // 十里埠业主系统
@@ -160,6 +178,12 @@ android {
             buildConfigField("String", "CompanyName", '"杭州港建德港区十里埠综合作业区工程"')
             // 监理巡查页的标题
             buildConfigField("String", "SupervisionPatrolTitle", '"巡查"')
+
+            sourceSets {
+                main {
+                    res.srcDirs = ['src/main/project_configs/9003']
+                }
+            }
         }
 
         // 320支架安全监测系统
@@ -180,7 +204,24 @@ android {
             buildConfigField("String", "CompanyName", '"杭州港建德港区十里埠综合作业区工程"')
             // 监理巡查页的标题
             buildConfigField("String", "SupervisionPatrolTitle", '"安全巡查"')
+
+            sourceSets {
+                main {
+                    res.srcDirs = ['src/main/project_configs/monitor']
+                }
+            }
         }
+
+
+        sourceSets {
+        main {
+            res.srcDirs += [
+                    'src/main/res/monitor',
+                    'src/main/res/layouts',
+                    'src/main/res'
+            ]
+        }
+    }
     }
 }
 
