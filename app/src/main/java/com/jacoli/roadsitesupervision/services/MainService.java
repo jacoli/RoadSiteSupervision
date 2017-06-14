@@ -7,6 +7,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.jacoli.roadsitesupervision.EasyRequest.*;
 import com.jacoli.roadsitesupervision.ProjectConfigs.Configs;
+import com.jacoli.roadsitesupervision.SupervisionPatrol.CheckItemsModel;
 
 import java.io.File;
 import java.io.IOException;

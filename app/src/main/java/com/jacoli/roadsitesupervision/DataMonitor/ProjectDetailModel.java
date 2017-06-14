@@ -1,14 +1,15 @@
-package com.jacoli.roadsitesupervision.services;
+package com.jacoli.roadsitesupervision.DataMonitor;
+
+import com.jacoli.roadsitesupervision.EasyRequest.ResponseBase;
+import com.jacoli.roadsitesupervision.services.Utils;
 
 import java.util.List;
 
 /**
- * Created by lichuange on 17/2/10.
+ * Created by lichuange on 2017/6/14.
  */
 
-// 项目详情
-public class ProjectDetailModel extends MsgResponseBase {
-
+public class ProjectDetailModel extends ResponseBase {
     // 单位工程
     public class UnitProjectModel {
 
@@ -26,12 +27,6 @@ public class ProjectDetailModel extends MsgResponseBase {
 
         // 施工进度，0表示未开工，1表示正在施工，2表示施工完成
         private int Progress;
-
-        // 旁站状态，0表示未旁站，2表示旁站完成
-        private int PZStatus;
-
-        // 抽检状态，0表示抽检未完成，2表示抽检完成
-        private String CheckStatus;
 
         private boolean IsAlarm;
 
@@ -75,22 +70,6 @@ public class ProjectDetailModel extends MsgResponseBase {
             Progress = progress;
         }
 
-        public int getPZStatus() {
-            return PZStatus;
-        }
-
-        public void setPZStatus(int PZStatus) {
-            this.PZStatus = PZStatus;
-        }
-
-        public String getCheckStatus() {
-            return CheckStatus;
-        }
-
-        public void setCheckStatus(String checkStatus) {
-            CheckStatus = checkStatus;
-        }
-
         public boolean isAlarm() {
             return IsAlarm;
         }
@@ -100,19 +79,8 @@ public class ProjectDetailModel extends MsgResponseBase {
         }
     }
 
-    // 项目名称
-    private String UnitProjectName;
-
     // 单位工程列表
     private List<UnitProjectModel> items;
-
-    public String getUnitProjectName() {
-        return UnitProjectName;
-    }
-
-    public void setUnitProjectName(String unitProjectName) {
-        UnitProjectName = unitProjectName;
-    }
 
     public List<UnitProjectModel> getItems() {
         return items;
@@ -123,13 +91,15 @@ public class ProjectDetailModel extends MsgResponseBase {
     }
 
     // apis
-    public UnitProjectModel queryUnitProjectModelWithID(String ID) {
-        for (UnitProjectModel unitProjectModel : items) {
-            if (unitProjectModel.getID().equals(ID)) {
-                return unitProjectModel;
-            }
+    public void setUnitProjectProgress(String id, int progress) {
+        if (Utils.isStringEmpty(id)) {
+            return;
         }
 
-        return null;
+        for (UnitProjectModel unitProjectModel: getItems()) {
+            if (unitProjectModel.getID().equals(id)) {
+                unitProjectModel.setProgress(progress);
+            }
+        }
     }
 }
