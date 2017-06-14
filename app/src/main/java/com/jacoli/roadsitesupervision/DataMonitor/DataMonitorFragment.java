@@ -7,9 +7,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.TextView;
@@ -31,6 +33,9 @@ public class DataMonitorFragment extends Fragment {
 
     @BindView(R.id.grid_view)
     GridView gridView;
+
+    @BindView(R.id.id_swipe_ly)
+    SwipeRefreshLayout swipeRefreshLayout;
 
     private BaseAdapter baseAdapter;
 
@@ -89,42 +94,55 @@ public class DataMonitorFragment extends Fragment {
                     convertView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.material_red_500));
                 }
 
-                convertView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (unitProjectModel.getProgress() == 0) {
-                            alertToActiveUnitProject(unitProjectModel);
-                        } else {
-                            showUnitProjectDetailActivity(unitProjectModel);
-                        }
-                    }
-                });
-
                 return convertView;
             }
         };
 
         gridView.setAdapter(baseAdapter);
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                final ProjectDetailModel.UnitProjectModel unitProjectModel = detailModel.getItems().get(position);
+                if (unitProjectModel.getProgress() == 0) {
+                    alertToActiveUnitProject(unitProjectModel);
+                } else {
+                    showUnitProjectDetailActivity(unitProjectModel);
+                }
+            }
+        });
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                loadData();
+            }
+        });
 
         return view;
+    }
+
+    private void loadData() {
+        DataMonitorService.getInstance().sendProjectDetailQuery(new Callbacks() {
+            @Override
+            public void onSuccess(ResponseBase responseModel) {
+                detailModel = (ProjectDetailModel) responseModel;
+                baseAdapter.notifyDataSetChanged();
+                swipeRefreshLayout.setRefreshing(false);
+            }
+
+            @Override
+            public void onFailed(String error) {
+                Toast.makeText(getActivity(), error, Toast.LENGTH_SHORT).show();
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
     }
 
     @Override
     public void onResume() {
         super.onResume();
 
-        DataMonitorService.getInstance().sendProjectDetailQuery(new Callbacks() {
-            @Override
-            public void onSuccess(ResponseBase responseModel) {
-                detailModel = (ProjectDetailModel) responseModel;
-                baseAdapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onFailed(String error) {
-                Toast.makeText(getActivity(), error, Toast.LENGTH_SHORT).show();
-            }
-        });
+        loadData();
     }
 
     private void alertToActiveUnitProject(final ProjectDetailModel.UnitProjectModel unitProjectModel) {
@@ -155,24 +173,10 @@ public class DataMonitorFragment extends Fragment {
     }
 
     private void showUnitProjectDetailActivity(ProjectDetailModel.UnitProjectModel unitProjectModel) {
-//        if (type == MainService.project_detail_type_pz
-//                || type == MainService.project_detail_type_quality_sampling_inspection) {
-//            Intent intent = new Intent(this ,UnitProjectDetailActivity.class);
-//            intent.putExtra("id", unitProjectModel.getID());
-//            intent.putExtra("name", unitProjectModel.getName());
-//            intent.putExtra("title", getIntent().getStringExtra("title"));
-//            intent.putExtra("type", type);
-//            startActivity(intent);
-//        }
-//        else if (type =' MainService.project_detail_type_quality_inspection
-//                || type == MainService.project_detail_type_safety_inspection
-//                || type == MainService.project_detail_type_environmental_inspection) {
-//            Intent intent = new Intent(this ,UnitProjectDetailForInspectionActivity.class);
-//            intent.putExtra("id", unitProjectModel.getID());
-//            intent.putExtra("name", unitProjectModel.getName());
-//            intent.putExtra("title", getIntent().getStringExtra("title"));
-//            intent.putExtra("type", type);
-//            startActivity(intent);
-//        }
+        Intent intent = new Intent(getActivity() ,MonitorPointListActivity.class);
+        intent.putExtra("id", unitProjectModel.getID());
+        intent.putExtra("title", unitProjectModel.getName());
+        intent.putExtra("isAlarm", unitProjectModel.isAlarm());
+        startActivity(intent);
     }
 }
