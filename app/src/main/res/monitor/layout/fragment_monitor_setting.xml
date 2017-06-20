@@ -1,0 +1,76 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.jacoli.roadsitesupervision.MonitorMain.MonitorSettingFragment">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:orientation="vertical"
+            android:focusable="true"
+            android:focusableInTouchMode="true">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="128dp"
+                android:gravity="center"
+                android:textSize="28sp"
+                android:textColor="@color/primary_text"
+                android:text="登录账号"
+                android:id="@+id/text_view_account"
+                />
+
+            <include layout="@layout/cell_separator"/>
+
+            <View android:layout_height="30dp"
+                android:layout_width="match_parent"/>
+
+            <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:minHeight="64dp"
+                android:id="@+id/cell_sensor">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/primary_text"
+                    android:textSize="24sp"
+                    android:text="传感器数据"
+                    android:layout_centerVertical="true"
+                    android:id="@+id/textView"
+                    />
+
+                <ImageView
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentEnd="true"
+                    android:src="@drawable/next_arrow"
+                    android:scaleType="fitCenter"/>
+
+            </RelativeLayout>
+
+            <View android:layout_height="30dp"
+                android:layout_width="match_parent"/>
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/cell_height"
+                android:layout_margin="16dp"
+                android:background="@color/material_red_500"
+                android:text="注销"
+                android:id="@+id/submit_btn" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</FrameLayout>

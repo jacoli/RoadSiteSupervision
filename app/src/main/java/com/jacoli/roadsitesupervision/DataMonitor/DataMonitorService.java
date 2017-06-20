@@ -159,4 +159,33 @@ public class DataMonitorService {
         }, handler, callbacks);
         req.asyncSend();
     }
+
+    // 获取传感器类型列表
+    public void GetMonitorTypeList(Callbacks callbacks) {
+        EasyRequest req = new EasyRequest(new Processor() {
+            @Override
+            public Response buildRequestAndWaitingResponse() throws IOException {
+                FormBody body = new FormBody.Builder()
+                        .add("Token", getToken())
+                        .build();
+
+                Request request = new Request.Builder()
+                        .url(requestUrl("GetMonitorTypeList"))
+                        .post(body)
+                        .header("FromAPP", "")
+                        .build();
+
+                return httpClient.newCall(request).execute();
+            }
+
+            @Override
+            public ResponseBase jsonModelParsedFromResponseString(String responseJsonString, Gson gson) {
+                return gson.fromJson(responseJsonString, MonitorSensorTypesModel.class);
+            }
+
+            @Override
+            public void onSuccessHandleBeforeNotify(ResponseBase responseModel) {}
+        }, handler, callbacks);
+        req.asyncSend();
+    }
 }

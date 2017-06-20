@@ -8,8 +8,6 @@ import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.view.View;
 import com.jacoli.roadsitesupervision.AssignedMatterCreateActivity;
-import com.jacoli.roadsitesupervision.InformationFragment;
-import com.jacoli.roadsitesupervision.SettingsFragment;
 import com.jacoli.roadsitesupervision.TodoListFragment;
 import com.jacoli.roadsitesupervision.UserSystem.ComponentDetailFragment;
 import com.jacoli.roadsitesupervision.views.TitleBar;
@@ -22,7 +20,7 @@ public class MonitorMainActivity extends CommonActivity {
     private SitesFragment sitesFragment;
     private DataMonitorFragment informationFragment;
     private ComponentDetailFragment componentInfoFragment;
-    private SettingsFragment settingsFragment;
+    private MonitorSettingFragment settingsFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,7 +112,7 @@ public class MonitorMainActivity extends CommonActivity {
 
                 if (settingsFragment == null) {
                     // 如果MessageFragment为空，则创建一个并添加到界面上
-                    settingsFragment = new SettingsFragment();
+                    settingsFragment = new MonitorSettingFragment();
                     transaction.add(R.id.contentContainer, settingsFragment);
                 } else {
                     // 如果MessageFragment不为空，则直接将它显示出来

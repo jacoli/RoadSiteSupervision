@@ -9,25 +9,25 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+
 import com.jacoli.roadsitesupervision.CommonActivity;
 import com.jacoli.roadsitesupervision.EasyRequest.Callbacks;
 import com.jacoli.roadsitesupervision.EasyRequest.ResponseBase;
 import com.jacoli.roadsitesupervision.R;
 
-public class MonitorPointListActivity extends CommonActivity {
-
-    private PointListModel model;
+public class MonitorSensorTypesActivity extends CommonActivity {
+    private MonitorSensorTypesModel model;
     private BaseAdapter adapter;
     private SwipeRefreshLayout swipeRefreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_monitor_point_list);
+        setContentView(R.layout.activity_monitor_sensor_types);
 
         createTitleBar();
         titleBar.setLeftText("返回");
-        titleBar.setTitle(getIntent().getStringExtra("title"));
+        titleBar.setTitle("传感器数据");
 
         ListView listView = (ListView) findViewById(R.id.listView);
         setupListView(listView);
@@ -42,10 +42,10 @@ public class MonitorPointListActivity extends CommonActivity {
     }
 
     public void loadData() {
-        DataMonitorService.getInstance().GetPointListByUnitProjectID(getIntent().getStringExtra("id"), new Callbacks() {
+        DataMonitorService.getInstance().GetMonitorTypeList(new Callbacks() {
             @Override
             public void onSuccess(ResponseBase responseModel) {
-                model = (PointListModel) responseModel;
+                model = (MonitorSensorTypesModel) responseModel;
                 adapter.notifyDataSetChanged();
                 swipeRefreshLayout.setRefreshing(false);
             }
@@ -70,7 +70,8 @@ public class MonitorPointListActivity extends CommonActivity {
 
             @Override
             public int getCount() {
-                return model == null ? 1 : model.getItems().size() + 1;
+                int count = model == null ? 0 : model.getItems().size();
+                return count;
             }
 
             @Override
@@ -85,28 +86,10 @@ public class MonitorPointListActivity extends CommonActivity {
 
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
-                if (position == 0) {
-                    return getLayoutInflater().inflate(R.layout.list_item_point_list_header, null);
-                } else {
-                    PointListModel.Point point = model.getItems().get(position - 1);
-                    View v = getLayoutInflater().inflate(R.layout.list_item_point_list_cell, null);
-                    ((TextView)v.findViewById(R.id.text1)).setText(String.valueOf(position));
-                    ((TextView)v.findViewById(R.id.text2)).setText(point.getPointName());
-                    ((TextView)v.findViewById(R.id.text3)).setText(point.getPointCode());
-                    ((TextView)v.findViewById(R.id.text4)).setText(point.getMonitorTypeName());
-                    ((TextView)v.findViewById(R.id.text5)).setText(point.getValStr());
-
-                    if (getIntent().getBooleanExtra("isAlarm", false)) {
-                        int color = ContextCompat.getColor(MonitorPointListActivity.this, R.color.material_red_300);
-                        ((TextView)v.findViewById(R.id.text1)).setTextColor(color);
-                        ((TextView)v.findViewById(R.id.text2)).setTextColor(color);
-                        ((TextView)v.findViewById(R.id.text3)).setTextColor(color);
-                        ((TextView)v.findViewById(R.id.text4)).setTextColor(color);
-                        ((TextView)v.findViewById(R.id.text5)).setTextColor(color);
-                    }
-
-                    return v;
-                }
+                MonitorSensorTypesModel.SensorType type = model.getItems().get(position);
+                View v = getLayoutInflater().inflate(R.layout.list_item_base_action_button, null);
+                ((TextView)v.findViewById(R.id.textView)).setText(type.getName() + "传感器");
+                return v;
             }
         };
 
@@ -114,8 +97,12 @@ public class MonitorPointListActivity extends CommonActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                // TODO
+                MonitorSensorTypesModel.SensorType type = model.getItems().get(position);
+                showDetail(type);
             }
         });
+    }
+
+    private void showDetail(MonitorSensorTypesModel.SensorType sensorType) {
     }
 }

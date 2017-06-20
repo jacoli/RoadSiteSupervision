@@ -83,15 +83,15 @@ public class DataMonitorFragment extends Fragment {
                 title.setText(unitProjectModel.getName());
 
                 if (unitProjectModel.getProgress() == 0) {
-                    convertView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.material_grey_500));
+                    convertView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.material_grey_300));
                 } else if (unitProjectModel.getProgress() == 1) {
-                    convertView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.material_green_500));
+                    convertView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.material_green_300));
                 } else {
-                    convertView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.material_blue_500));
+                    convertView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.material_blue_300));
                 }
 
                 if (unitProjectModel.isAlarm()) {
-                    convertView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.material_red_500));
+                    convertView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.material_red_300));
                 }
 
                 return convertView;
