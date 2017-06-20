@@ -188,4 +188,39 @@ public class DataMonitorService {
         }, handler, callbacks);
         req.asyncSend();
     }
+
+    // 根据监测/传感器类型ID获取传感器数据列表
+    public void GetSensorListByMonitorTypeID(final String id, Callbacks callbacks) {
+        if (Utils.isStringEmpty(id)) {
+            onFailed("错误：ID不能为空", callbacks);
+            return;
+        }
+
+        EasyRequest req = new EasyRequest(new Processor() {
+            @Override
+            public Response buildRequestAndWaitingResponse() throws IOException {
+                FormBody body = new FormBody.Builder()
+                        .add("Token", getToken())
+                        .add("MonitorTypeID", id)
+                        .build();
+
+                Request request = new Request.Builder()
+                        .url(requestUrl("GetSensorListByMonitorTypeID"))
+                        .post(body)
+                        .header("FromAPP", "")
+                        .build();
+
+                return httpClient.newCall(request).execute();
+            }
+
+            @Override
+            public ResponseBase jsonModelParsedFromResponseString(String responseJsonString, Gson gson) {
+                return gson.fromJson(responseJsonString, MonitorSensorListModel.class);
+            }
+
+            @Override
+            public void onSuccessHandleBeforeNotify(ResponseBase responseModel) {}
+        }, handler, callbacks);
+        req.asyncSend();
+    }
 }

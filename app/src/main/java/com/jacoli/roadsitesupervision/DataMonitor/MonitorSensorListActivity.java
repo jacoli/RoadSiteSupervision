@@ -1,8 +1,6 @@
 package com.jacoli.roadsitesupervision.DataMonitor;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,19 +14,20 @@ import com.jacoli.roadsitesupervision.EasyRequest.Callbacks;
 import com.jacoli.roadsitesupervision.EasyRequest.ResponseBase;
 import com.jacoli.roadsitesupervision.R;
 
-public class MonitorSensorTypesActivity extends CommonActivity {
-    private MonitorSensorTypesModel model;
+public class MonitorSensorListActivity extends CommonActivity {
+
+    private MonitorSensorListModel model;
     private BaseAdapter adapter;
     private SwipeRefreshLayout swipeRefreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_monitor_sensor_types);
+        setContentView(R.layout.activity_monitor_sensor_list);
 
         createTitleBar();
         titleBar.setLeftText("返回");
-        titleBar.setTitle("传感器数据");
+        titleBar.setTitle("传感器列表");
 
         ListView listView = (ListView) findViewById(R.id.listView);
         setupListView(listView);
@@ -43,10 +42,10 @@ public class MonitorSensorTypesActivity extends CommonActivity {
     }
 
     public void loadData() {
-        DataMonitorService.getInstance().GetMonitorTypeList(new Callbacks() {
+        DataMonitorService.getInstance().GetSensorListByMonitorTypeID(getIntent().getStringExtra("id"), new Callbacks() {
             @Override
             public void onSuccess(ResponseBase responseModel) {
-                model = (MonitorSensorTypesModel) responseModel;
+                model = (MonitorSensorListModel) responseModel;
                 adapter.notifyDataSetChanged();
                 swipeRefreshLayout.setRefreshing(false);
             }
@@ -71,8 +70,7 @@ public class MonitorSensorTypesActivity extends CommonActivity {
 
             @Override
             public int getCount() {
-                int count = model == null ? 0 : model.getItems().size();
-                return count;
+                return model == null ? 1 : model.getItems().size() + 1;
             }
 
             @Override
@@ -87,10 +85,18 @@ public class MonitorSensorTypesActivity extends CommonActivity {
 
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
-                MonitorSensorTypesModel.SensorType type = model.getItems().get(position);
-                View v = getLayoutInflater().inflate(R.layout.list_item_base_action_button, null);
-                ((TextView)v.findViewById(R.id.textView)).setText(type.getName() + "传感器");
-                return v;
+                if (position == 0) {
+                    return getLayoutInflater().inflate(R.layout.list_item_sensor_list_header, null);
+                } else {
+                    MonitorSensorListModel.Sensor sensor = model.getItems().get(position - 1);
+                    View v = getLayoutInflater().inflate(R.layout.list_item_sensor_list_cell, null);
+                    ((TextView)v.findViewById(R.id.text1)).setText(String.valueOf(position));
+                    ((TextView)v.findViewById(R.id.text2)).setText(sensor.getSensorCode());
+                    ((TextView)v.findViewById(R.id.text3)).setText(sensor.getPowerStr());
+                    ((TextView)v.findViewById(R.id.text4)).setText(sensor.getValStr());
+                    ((TextView)v.findViewById(R.id.text5)).setText(sensor.getAddTime());
+                    return v;
+                }
             }
         };
 
@@ -98,15 +104,11 @@ public class MonitorSensorTypesActivity extends CommonActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                MonitorSensorTypesModel.SensorType type = model.getItems().get(position);
-                showDetail(type);
+                if (position == 0) {
+                } else {
+                    MonitorSensorListModel.Sensor sensor = model.getItems().get(position - 1);
+                }
             }
         });
-    }
-
-    private void showDetail(MonitorSensorTypesModel.SensorType sensorType) {
-        Intent intent = new Intent(this, MonitorSensorListActivity.class);
-        intent.putExtra("id", sensorType.getID());
-        startActivity(intent);
     }
 }

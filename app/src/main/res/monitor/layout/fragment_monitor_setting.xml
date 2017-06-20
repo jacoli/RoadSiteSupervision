@@ -28,7 +28,7 @@
 
             <include layout="@layout/cell_separator"/>
 
-            <View android:layout_height="30dp"
+            <View android:layout_height="60dp"
                 android:layout_width="match_parent"/>
 
             <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -58,7 +58,7 @@
 
             </RelativeLayout>
 
-            <View android:layout_height="30dp"
+            <View android:layout_height="80dp"
                 android:layout_width="match_parent"/>
 
             <Button
