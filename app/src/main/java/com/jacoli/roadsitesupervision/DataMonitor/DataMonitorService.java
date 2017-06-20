@@ -223,4 +223,48 @@ public class DataMonitorService {
         }, handler, callbacks);
         req.asyncSend();
     }
+
+    // 根据监测/传感器类型ID获取传感器数据列表
+    public void AddSensorData(final String id,
+                              final String code,
+                              final String value1,
+                              final String value2,
+                              final String value3,
+                              Callbacks callbacks) {
+        if (Utils.isStringEmpty(id)) {
+            onFailed("错误：ID不能为空", callbacks);
+            return;
+        }
+
+        EasyRequest req = new EasyRequest(new Processor() {
+            @Override
+            public Response buildRequestAndWaitingResponse() throws IOException {
+                FormBody body = new FormBody.Builder()
+                        .add("Token", getToken())
+                        .add("MonitorTypeID", id)
+                        .add("SensorCode", Utils.notNullString(code))
+                        .add("Value1", Utils.notNullString(value1))
+                        .add("Value2", Utils.notNullString(value2))
+                        .add("Value3", Utils.notNullString(value3))
+                        .build();
+
+                Request request = new Request.Builder()
+                        .url(requestUrl("AddSensorData"))
+                        .post(body)
+                        .header("FromAPP", "")
+                        .build();
+
+                return httpClient.newCall(request).execute();
+            }
+
+            @Override
+            public ResponseBase jsonModelParsedFromResponseString(String responseJsonString, Gson gson) {
+                return gson.fromJson(responseJsonString, ResponseBase.class);
+            }
+
+            @Override
+            public void onSuccessHandleBeforeNotify(ResponseBase responseModel) {}
+        }, handler, callbacks);
+        req.asyncSend();
+    }
 }

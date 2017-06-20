@@ -90,7 +90,8 @@
         <activity android:name=".MonitorMain.MonitorMainActivity" />
         <activity android:name=".DataMonitor.MonitorPointListActivity" />
         <activity android:name=".DataMonitor.MonitorSensorTypesActivity" />
-        <activity android:name=".DataMonitor.MonitorSensorListActivity"></activity>
+        <activity android:name=".DataMonitor.MonitorSensorListActivity" />
+        <activity android:name=".DataMonitor.MonitorAddSensorDataActivity"></activity>
     </application>
 
 </manifest>

@@ -28,7 +28,7 @@ public class MonitorSensorTypesActivity extends CommonActivity {
 
         createTitleBar();
         titleBar.setLeftText("返回");
-        titleBar.setTitle("传感器数据");
+        titleBar.setTitle("传感器类型");
 
         ListView listView = (ListView) findViewById(R.id.listView);
         setupListView(listView);
@@ -107,6 +107,7 @@ public class MonitorSensorTypesActivity extends CommonActivity {
     private void showDetail(MonitorSensorTypesModel.SensorType sensorType) {
         Intent intent = new Intent(this, MonitorSensorListActivity.class);
         intent.putExtra("id", sensorType.getID());
+        intent.putExtra("type_name", sensorType.getName());
         startActivity(intent);
     }
 }

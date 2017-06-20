@@ -1,5 +1,6 @@
 package com.jacoli.roadsitesupervision.DataMonitor;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.View;
@@ -107,6 +108,11 @@ public class MonitorSensorListActivity extends CommonActivity {
                 if (position == 0) {
                 } else {
                     MonitorSensorListModel.Sensor sensor = model.getItems().get(position - 1);
+                    Intent intent = new Intent(MonitorSensorListActivity.this, MonitorAddSensorDataActivity.class);
+                    intent.putExtra("id", getIntent().getStringExtra("id"));
+                    intent.putExtra("type_name", getIntent().getStringExtra("type_name"));
+                    intent.putExtra("code", sensor.getSensorCode());
+                    startActivity(intent);
                 }
             }
         });
