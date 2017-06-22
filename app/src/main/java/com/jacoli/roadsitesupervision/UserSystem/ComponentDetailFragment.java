@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.jacoli.roadsitesupervision.CommonFragment;
+import com.jacoli.roadsitesupervision.MonitorMain.MonitorMainActivity;
 import com.jacoli.roadsitesupervision.R;
 import com.lichuange.bridges.scan.scan.qrmodule.CaptureActivity;
 
@@ -25,6 +26,7 @@ public class ComponentDetailFragment extends CommonFragment {
 
     private View selfView;
     public WeakReference<MainTabActivity> mainTabActivityWeakReference;
+    public WeakReference<MonitorMainActivity> mainTabActivityWeakReference2;
 
     public ComponentDetailFragment() {
         // Required empty public constructor
@@ -40,7 +42,13 @@ public class ComponentDetailFragment extends CommonFragment {
         scanBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mainTabActivityWeakReference.get().scan();
+                if (mainTabActivityWeakReference != null) {
+                    mainTabActivityWeakReference.get().scan();
+                }
+
+                if (mainTabActivityWeakReference2 != null) {
+                    mainTabActivityWeakReference2.get().scan();
+                }
             }
         });
 

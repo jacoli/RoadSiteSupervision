@@ -1,20 +1,29 @@
 package com.jacoli.roadsitesupervision.MonitorMain;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import com.jacoli.roadsitesupervision.CommonActivity;
 import com.jacoli.roadsitesupervision.DataMonitor.DataMonitorFragment;
 import com.jacoli.roadsitesupervision.R;
 import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import com.jacoli.roadsitesupervision.AssignedMatterCreateActivity;
 import com.jacoli.roadsitesupervision.TodoListFragment;
 import com.jacoli.roadsitesupervision.UserSystem.ComponentDetailFragment;
 import com.jacoli.roadsitesupervision.views.TitleBar;
+import com.lichuange.bridges.scan.scan.qrmodule.CaptureActivity;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabSelectListener;
 
+import java.lang.ref.WeakReference;
+
 public class MonitorMainActivity extends CommonActivity {
+    static public final int request_camera_auth_code = 1001;
+    static public final int requset_scanner_code = 1002;
 
     private TodoListFragment todoListFragment;
     private SitesFragment sitesFragment;
@@ -100,7 +109,7 @@ public class MonitorMainActivity extends CommonActivity {
                 if (componentInfoFragment == null) {
                     // 如果MessageFragment为空，则创建一个并添加到界面上
                     componentInfoFragment = new ComponentDetailFragment();
-                    //componentInfoFragment.mainTabActivityWeakReference = new WeakReference<>(this);
+                    componentInfoFragment.mainTabActivityWeakReference2 = new WeakReference<>(this);
                     transaction.add(R.id.contentContainer, componentInfoFragment);
                 } else {
                     // 如果MessageFragment不为空，则直接将它显示出来
@@ -143,6 +152,50 @@ public class MonitorMainActivity extends CommonActivity {
         }
 
         titleBar.removeAllActions();
+    }
+
+    public void scan() {
+        int permission = ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA);
+        if (permission == PackageManager.PERMISSION_GRANTED) {
+            Intent intent = new Intent(this, CaptureActivity.class);
+            startActivityForResult(intent, requset_scanner_code);
+        } else {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, request_camera_auth_code);
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case requset_scanner_code: {
+                if (resultCode == CaptureActivity.ZXING_SCAN_RESULT_CODE && data != null) {
+                    final String contentUri = data.getStringExtra(CaptureActivity.ZXING_SCAN_CONTENT_DATA);
+                    //showToast(("扫码成功，二维码：" + contentUri));
+                    showToast("获取构件详情成功");
+                    componentInfoFragment.onScanedSuccess(contentUri);
+                }
+                break;
+            }
+            default:
+                // ignored
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode == request_camera_auth_code) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission Granted
+                Intent intent = new Intent(this, CaptureActivity.class);
+                startActivityForResult(intent, requset_scanner_code);
+            } else {
+                // Permission Denied
+                showToast("扫码需要相机权限，请在设置中打开");
+            }
+        }
     }
 }
 
