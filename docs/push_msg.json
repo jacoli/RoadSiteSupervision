@@ -1,0 +1,19 @@
+{
+  "appkey": "59191c4d8f4a9d0ce9000a73",
+  "timestamp": "1497492909",  // 时间戳，10位或者13位均可，时间戳有效期为10分钟
+  "type": "customizedcast",
+  "alias": "00d5c139-a33e-4811-9172-e114562e0e45,00d5c139-a33e-4811-9172-e114562e0e45,00d5c139-a33e-4811-9172-e114562e0e45", // 用户ID，可以多个，以逗号分隔
+  "alias_type": "a9fd3bd9-f581-4d54-a39a-71c587817bee", // 项目ID
+  "payload": {
+    "display_type": "notification",
+    "body": {
+      "ticker": "测试提示文字", // 通知栏提示文字
+      "title": "测试标题", // 通知标题
+      "text": "测试文字描述", // 通知文字描述
+      "after_open": "go_app" 
+    }
+  },
+  "extra": {
+    "type": "assigned_matters" // 业务类型，交办事项assigned_matters，巡查patrol
+  }
+}

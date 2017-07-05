@@ -13,8 +13,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.jacoli.roadsitesupervision.CommonFragment;
+import com.jacoli.roadsitesupervision.Commons.WebViewActivity;
 import com.jacoli.roadsitesupervision.MonitorMain.MonitorMainActivity;
 import com.jacoli.roadsitesupervision.R;
+import com.jacoli.roadsitesupervision.services.Utils;
 import com.lichuange.bridges.scan.scan.qrmodule.CaptureActivity;
 
 import java.lang.ref.WeakReference;
@@ -42,6 +44,9 @@ public class ComponentDetailFragment extends CommonFragment {
         scanBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                TextView textView = (TextView) selfView.findViewById(R.id.text_view_content);
+                textView.setText("");
+
                 if (mainTabActivityWeakReference != null) {
                     mainTabActivityWeakReference.get().scan();
                 }
@@ -56,7 +61,16 @@ public class ComponentDetailFragment extends CommonFragment {
     }
 
     public void onScanedSuccess(String text) {
-        TextView textView = (TextView) selfView.findViewById(R.id.text_view_content);
-        textView.setText(text);
+        if (!Utils.isStringEmpty(text)
+                && (text.startsWith("http://")
+                || text.startsWith("https://"))) {
+            Intent intent = new Intent(getActivity(), WebViewActivity.class);
+            intent.putExtra(WebViewActivity.WEBVIEW_EXTRA_URL, text);
+            //intent.putExtra(WebViewActivity.WEBVIEW_EXTRA_TITLE, models[position]);
+            startActivity(intent);
+        } else {
+            TextView textView = (TextView) selfView.findViewById(R.id.text_view_content);
+            textView.setText(text);
+        }
     }
 }

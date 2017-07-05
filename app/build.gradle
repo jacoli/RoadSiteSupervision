@@ -16,12 +16,6 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
-    /*
-    * 版本记录：
-    * V1.6
-    * 新增320支架安全监测系统
-    * */
-
     signingConfigs {
         config {
             keyAlias 'jacoli'

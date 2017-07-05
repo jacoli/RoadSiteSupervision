@@ -91,7 +91,8 @@
         <activity android:name=".DataMonitor.MonitorPointListActivity" />
         <activity android:name=".DataMonitor.MonitorSensorTypesActivity" />
         <activity android:name=".DataMonitor.MonitorSensorListActivity" />
-        <activity android:name=".DataMonitor.MonitorAddSensorDataActivity"></activity>
+        <activity android:name=".DataMonitor.MonitorAddSensorDataActivity" />
+        <activity android:name=".Commons.WebViewActivity"></activity>
     </application>
 
 </manifest>
