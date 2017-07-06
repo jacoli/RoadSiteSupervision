@@ -32,6 +32,7 @@ android {
 //            output.outputFile = new File(outputPathName)
 //        }
 //    }
+    buildToolsVersion '25.0.0'
 }
 
 // 单独编译时还需要在自己project中指定buildScript的repo和classpath
