@@ -17,3 +17,33 @@
     "type": "assigned_matters" // 业务类型，交办事项assigned_matters，巡查patrol
   }
 }
+
+
+// 友盟推送的消息格式
+
+{
+  "appkey": "59191c4d8f4a9d0ce9000a73",
+  "production_mode": "false",
+  "description": "测试123",
+  "type": "broadcast",
+  "payload": {
+    "extra": {
+      "key1": "value1",
+      "key2": "value2",
+      "key3": "value3"
+    },
+    "display_type": "notification",
+    "body": {
+      "title": "title123",
+      "ticker": "title123",
+      "text": "content123",
+      "after_open": "go_app",
+      "play_vibrate": "true",
+      "play_sound": "true",
+      "play_lights": "true"
+    }
+  },
+  "policy": {
+    "expire_time": "2017-07-16 21:11:56"
+  }
+}
