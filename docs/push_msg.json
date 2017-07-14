@@ -10,11 +10,11 @@
       "ticker": "测试提示文字", // 通知栏提示文字
       "title": "测试标题", // 通知标题
       "text": "测试文字描述", // 通知文字描述
-      "after_open": "go_app" 
+      "after_open": "go_app" // 默认是点击通知打开APP
+    },
+    "extra": {
+      "type": "assigned_matters" // 业务类型，交办事项assigned_matters，巡查patrol
     }
-  },
-  "extra": {
-    "type": "assigned_matters" // 业务类型，交办事项assigned_matters，巡查patrol
   }
 }
 
@@ -49,5 +49,32 @@
 }
 
 
-{"appkey":"59191c4d8f4a9d0ce9000a73","production_mode":"false","description":"测试123","type":"customizedcast","payload":{"extra":{"k1":"v1","k2":"v2"},"display_type":"notification","body":{"title":"title123","ticker":"title123","text":"content123","activity":"com.jacoli.roadsitesupervision.SupervisionPatrol.SupervisionPatrolListActivity","after_open":"go_activity","play_vibrate":"false","play_sound":"false","play_lights":"false"}},"policy":{"expire_time":"2017-07-17 22:02:27"},"alias":"26765d4c-b2dc-4973-8af0-0bd3ad15798a","alias_type":"10c9b47e-e11b-4a16-80c5-27d138646566"}
+{
+  "appkey": "59191c4d8f4a9d0ce9000a73",
+  "production_mode": "false",
+  "description": "测试123",
+  "type": "customizedcast",
+  "payload": {
+    "extra": {
+      "k1": "v1",
+      "k2": "v2"
+    },
+    "display_type": "notification",
+    "body": {
+      "title": "title123",
+      "ticker": "title123",
+      "text": "content123",
+      "activity": "com.jacoli.roadsitesupervision.SupervisionPatrol.SupervisionPatrolListActivity",
+      "after_open": "go_activity",
+      "play_vibrate": "false",
+      "play_sound": "false",
+      "play_lights": "false"
+    }
+  },
+  "policy": {
+    "expire_time": "2017-07-17 22:02:27"
+  },
+  "alias": "26765d4c-b2dc-4973-8af0-0bd3ad15798a",
+  "alias_type": "10c9b47e-e11b-4a16-80c5-27d138646566"
+}
 
