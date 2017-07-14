@@ -21,6 +21,9 @@ import com.jacoli.roadsitesupervision.EasyRequest.Callbacks;
 import com.jacoli.roadsitesupervision.EasyRequest.ResponseBase;
 import com.jacoli.roadsitesupervision.MonitorMain.MonitorMainActivity;
 import com.jacoli.roadsitesupervision.ProjectConfigs.Configs;
+import com.jacoli.roadsitesupervision.Upgrade.A;
+import com.jacoli.roadsitesupervision.Upgrade.RemoteNotificationMsg;
+import com.jacoli.roadsitesupervision.Upgrade.RemoteNotificationRegistered;
 import com.jacoli.roadsitesupervision.Upgrade.download.DownLoadUtils;
 import com.jacoli.roadsitesupervision.Upgrade.download.DownloadApk;
 import com.jacoli.roadsitesupervision.UserSystem.MainTabActivity;
@@ -28,7 +31,11 @@ import com.jacoli.roadsitesupervision.Utils.*;
 import com.jacoli.roadsitesupervision.services.*;
 import com.jacoli.roadsitesupervision.services.Utils;
 import com.jacoli.roadsitesupervision.views.MyToast;
+import com.umeng.message.PushAgent;
+import com.umeng.message.UTrack;
 
+import org.simple.eventbus.EventBus;
+import org.simple.eventbus.Subscriber;
 import org.w3c.dom.Text;
 
 import java.io.FileInputStream;
@@ -54,6 +61,12 @@ public class LoginActivity extends CommonActivity {
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
             startActivity(intent);
         }
+
+        getPushAgent().addAlias(MainService.getInstance().getLoginModel().getID(), MainService.getInstance().getLoginModel().getProjectID(), new UTrack.ICallBack() {
+            @Override
+            public void onMessage(boolean isSuccess, String message) {
+            }
+        });
     }
 
     @Override
@@ -166,6 +179,13 @@ public class LoginActivity extends CommonActivity {
         versionTextView.setText(version);
 
         setupUpgradeCheck();
+
+        // register the receiver object
+        EventBus.getDefault().register(this);
+    }
+
+    private PushAgent getPushAgent() {
+        return ((A)getApplication()).mPushAgent;
     }
 
     private void setupUpgradeCheck() {
@@ -256,6 +276,12 @@ public class LoginActivity extends CommonActivity {
             finally {
             }
 
+            getPushAgent().removeAlias(MainService.getInstance().getLoginModel().getID(), MainService.getInstance().getLoginModel().getProjectID(), new UTrack.ICallBack() {
+                @Override
+                public void onMessage(boolean isSuccess, String message) {
+                }
+            });
+
             MainService.getInstance().logout();
         }
 
@@ -310,6 +336,7 @@ public class LoginActivity extends CommonActivity {
                 MyToast.showMessage(getApplicationContext(), "登录成功");
 
                 showMainActivity();
+
                 break;
             }
             case MainService.MSG_LOGIN_FAILED: {
@@ -319,5 +346,18 @@ public class LoginActivity extends CommonActivity {
             default:
                 break;
         }
+    }
+
+
+
+    @Subscriber
+    private void remoteNotificationRegistered(RemoteNotificationRegistered obj) {
+        showToast("remoteNotificationRegistered");
+
+        getPushAgent().addAlias(MainService.getInstance().getLoginModel().getID(), MainService.getInstance().getLoginModel().getProjectID(), new UTrack.ICallBack() {
+            @Override
+            public void onMessage(boolean isSuccess, String message) {
+            }
+        });
     }
 }

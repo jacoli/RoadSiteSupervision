@@ -1,5 +1,6 @@
 package com.jacoli.roadsitesupervision;
 
+import android.app.usage.UsageEvents;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -11,9 +12,14 @@ import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.jacoli.roadsitesupervision.Upgrade.RemoteNotificationMsg;
 import com.jacoli.roadsitesupervision.services.MainService;
 import com.jacoli.roadsitesupervision.services.MyAssignedMattersModel;
 import com.jacoli.roadsitesupervision.services.Utils;
+
+import org.simple.eventbus.EventBus;
+import org.simple.eventbus.Subscriber;
 
 public class TodoListFragment extends CommonFragment {
 
@@ -46,8 +52,14 @@ public class TodoListFragment extends CommonFragment {
     @Override
     public void onResume() {
         super.onResume();
-
+        EventBus.getDefault().register(this);
         MainService.getInstance().sendQueryAssignedMatters(handler);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        EventBus.getDefault().unregister(this);
     }
 
     private void setupListView(ListView listView) {
@@ -138,4 +150,11 @@ public class TodoListFragment extends CommonFragment {
         }
     }
 
+    @Subscriber
+    private void remoteNotificationMsg(RemoteNotificationMsg obj) {
+        if (obj.type.equals("assigned_matters")) {
+            Toast.makeText(getActivity(), "新的交办事项", Toast.LENGTH_SHORT).show();
+            MainService.getInstance().sendQueryAssignedMatters(handler);
+        }
+    }
 }
