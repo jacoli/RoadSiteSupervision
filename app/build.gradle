@@ -32,7 +32,7 @@ android {
                 variant.outputs.each { output ->
                     def outputFile = output.outputFile
                     if (outputFile != null && outputFile.name.endsWith('.apk')) {
-                        //输出apk名称为：渠道名_版本名_时间.apk
+                        //输出apk名称为：渠道名.apk
                         def fileName = "${variant.productFlavors[0].name}.apk"
                         output.outputFile = new File(outputFile.parent, fileName)
                     }
@@ -45,17 +45,17 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.config
 
-//            // 批量打包
-//            applicationVariants.all { variant ->
-//                variant.outputs.each { output ->
-//                    def outputFile = output.outputFile
-//                    if (outputFile != null && outputFile.name.endsWith('.apk')) {
-//                        //输出apk名称为：渠道名_版本名_时间.apk
-//                        def fileName = "${variant.productFlavors[0].name}_v${defaultConfig.versionName}_${releaseTime()}.apk"
-//                        output.outputFile = new File(outputFile.parent, fileName)
-//                    }
-//                }
-//            }
+            // 批量打包
+            applicationVariants.all { variant ->
+                variant.outputs.each { output ->
+                    def outputFile = output.outputFile
+                    if (outputFile != null && outputFile.name.endsWith('.apk')) {
+                        //输出apk名称为：渠道名_版本名_时间.apk
+                        def fileName = "${variant.productFlavors[0].name}_v${defaultConfig.versionName}_${releaseTime()}.apk"
+                        output.outputFile = new File(outputFile.parent, fileName)
+                    }
+                }
+            }
         }
     }
 
@@ -70,6 +70,9 @@ android {
             buildConfigField("String", "ServerAddress", '"http://118.178.92.22"')
             // 服务器端口
             buildConfigField("String", "ServerPort", '"8001"')
+
+            manifestPlaceholders.put("UMENG_APPKEY","59191c4d8f4a9d0ce9000a73")
+            manifestPlaceholders.put("UMENG_MESSAGE_SECRET","c88831dcf5f353e156f8ed1e883be663")
         }
 
         // 320监理系统
@@ -82,6 +85,9 @@ android {
             buildConfigField("String", "ServerAddress", '"http://118.178.92.22"')
             // 服务器端口
             buildConfigField("String", "ServerPort", '"8002"')
+
+            manifestPlaceholders.put("UMENG_APPKEY","59191c4d8f4a9d0ce9000a73")
+            manifestPlaceholders.put("UMENG_MESSAGE_SECRET","c88831dcf5f353e156f8ed1e883be663")
         }
 
         // 十里埠监理系统
@@ -94,6 +100,9 @@ android {
             buildConfigField("String", "ServerAddress", '"http://118.178.92.22"')
             // 服务器端口
             buildConfigField("String", "ServerPort", '"8003"')
+
+            manifestPlaceholders.put("UMENG_APPKEY","59191c4d8f4a9d0ce9000a73")
+            manifestPlaceholders.put("UMENG_MESSAGE_SECRET","c88831dcf5f353e156f8ed1e883be663")
         }
 
         // 320业主系统
@@ -106,6 +115,9 @@ android {
             buildConfigField("String", "ServerAddress", '"http://118.178.92.22"')
             // 服务器端口
             buildConfigField("String", "ServerPort", '"9002"')
+
+            manifestPlaceholders.put("UMENG_APPKEY","5979d89b310c9361be001b93")
+            manifestPlaceholders.put("UMENG_MESSAGE_SECRET","a1a9109af7c916ae2492ebfda6589203")
         }
 
         // 十里埠业主系统
@@ -118,6 +130,9 @@ android {
             buildConfigField("String", "ServerAddress", '"http://118.178.92.22"')
             // 服务器端口
             buildConfigField("String", "ServerPort", '"9003"')
+
+            manifestPlaceholders.put("UMENG_APPKEY","5979d89b310c9361be001b93")
+            manifestPlaceholders.put("UMENG_MESSAGE_SECRET","a1a9109af7c916ae2492ebfda6589203")
         }
 
         // 320支架安全监测系统
@@ -130,6 +145,9 @@ android {
             buildConfigField("String", "ServerAddress", '"http://118.178.92.22"')
             // 服务器端口
             buildConfigField("String", "ServerPort", '"7002"')
+
+            manifestPlaceholders.put("UMENG_APPKEY","5979d641677baa598c001c4f")
+            manifestPlaceholders.put("UMENG_MESSAGE_SECRET","2f8e8c1d26f94087030c1501ec5078a9")
         }
     }
 

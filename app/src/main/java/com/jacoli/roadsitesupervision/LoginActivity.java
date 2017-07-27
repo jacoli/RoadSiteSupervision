@@ -62,11 +62,7 @@ public class LoginActivity extends CommonActivity {
             startActivity(intent);
         }
 
-        getPushAgent().addAlias(MainService.getInstance().getLoginModel().getID(), MainService.getInstance().getLoginModel().getProjectID(), new UTrack.ICallBack() {
-            @Override
-            public void onMessage(boolean isSuccess, String message) {
-            }
-        });
+        registerRemoteAlias();
     }
 
     @Override
@@ -165,7 +161,7 @@ public class LoginActivity extends CommonActivity {
                 if (!Utils.isCurrentTimeExpired(model.getExpirDate())) {
                     // 自动登录
                     MainService.getInstance().setLoginModel(model);
-                    MyToast.showMessage(getApplicationContext(), "Token仍有效，自动登录");
+                    //MyToast.showMessage(getApplicationContext(), "Token仍有效，自动登录");
 
                     showMainActivity();
                 }
@@ -182,10 +178,6 @@ public class LoginActivity extends CommonActivity {
 
         // register the receiver object
         EventBus.getDefault().register(this);
-    }
-
-    private PushAgent getPushAgent() {
-        return ((A)getApplication()).mPushAgent;
     }
 
     private void setupUpgradeCheck() {
@@ -279,6 +271,9 @@ public class LoginActivity extends CommonActivity {
             getPushAgent().removeAlias(MainService.getInstance().getLoginModel().getID(), MainService.getInstance().getLoginModel().getProjectID(), new UTrack.ICallBack() {
                 @Override
                 public void onMessage(boolean isSuccess, String message) {
+                    if (BuildConfig.DEBUG) {
+                        showToast(message);
+                    }
                 }
             });
 
@@ -333,7 +328,7 @@ public class LoginActivity extends CommonActivity {
 
                 configsModel.persist(this);
 
-                MyToast.showMessage(getApplicationContext(), "登录成功");
+                //MyToast.showMessage(getApplicationContext(), "登录成功");
 
                 showMainActivity();
 
@@ -352,12 +347,27 @@ public class LoginActivity extends CommonActivity {
 
     @Subscriber
     private void remoteNotificationRegistered(RemoteNotificationRegistered obj) {
-        showToast("remoteNotificationRegistered");
+        if (BuildConfig.DEBUG) {
+            showToast("remoteNotificationRegistered");
+        }
+        registerRemoteAlias();
+    }
 
-        getPushAgent().addAlias(MainService.getInstance().getLoginModel().getID(), MainService.getInstance().getLoginModel().getProjectID(), new UTrack.ICallBack() {
-            @Override
-            public void onMessage(boolean isSuccess, String message) {
-            }
-        });
+    private PushAgent getPushAgent() {
+        return ((A)getApplication()).mPushAgent;
+    }
+
+    private void registerRemoteAlias() {
+        if (MainService.getInstance().getLoginModel().isLoginSuccess()) {
+            LoginModel model = MainService.getInstance().getLoginModel();
+            getPushAgent().addAlias(model.getID(), model.getProjectID(), new UTrack.ICallBack() {
+                @Override
+                public void onMessage(boolean isSuccess, String message) {
+                    if (BuildConfig.DEBUG) {
+                        showToast(message);
+                    }
+                }
+            });
+        }
     }
 }

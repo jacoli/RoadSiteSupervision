@@ -16,6 +16,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.widget.Toast;
 
+import com.jacoli.roadsitesupervision.Utils.CommonUtils;
 import com.jacoli.roadsitesupervision.views.TitleBar;
 import com.kaopiz.kprogresshud.KProgressHUD;
 
@@ -245,7 +246,16 @@ public class CommonActivity extends Activity {
         }
     }
 
-    public void showToast(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    public void showToast(final String message) {
+        if (CommonUtils.isInMainThread()) {
+            Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+        } else {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(CommonActivity.this, message, Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
     }
 }

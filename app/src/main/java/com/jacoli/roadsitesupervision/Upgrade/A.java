@@ -54,6 +54,7 @@ public class A extends Application {
         mPushAgent.setDebugMode(BuildConfig.DEBUG);
 
         // 点击通知有四种处理模式，如果选择自定义处理方式，则会调用到下面的处理函数。
+        // 暂不考虑使用自定义模式
 //        UmengNotificationClickHandler notificationClickHandler = new UmengNotificationClickHandler() {
 //            @Override
 //            public void dealWithCustomAction(Context context, UMessage msg) {

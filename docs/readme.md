@@ -19,6 +19,18 @@ TODO
 * 业主系统，9002/9003
 * 支架安全系统，7002
 
+## 友盟
+
+* 账号 luckylcg@163.com／770310361
+
+#### 推送
+
+* 支架安全
+
+AppKey 
+Umeng Message Secret
+
+
 ## App签名
 
 ```

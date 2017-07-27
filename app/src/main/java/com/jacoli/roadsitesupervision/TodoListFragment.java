@@ -153,8 +153,12 @@ public class TodoListFragment extends CommonFragment {
     @Subscriber
     private void remoteNotificationMsg(RemoteNotificationMsg obj) {
         if (obj.type.equals("assigned_matters")) {
-            Toast.makeText(getActivity(), "新的交办事项", Toast.LENGTH_SHORT).show();
+
             MainService.getInstance().sendQueryAssignedMatters(handler);
+
+            if (BuildConfig.DEBUG) {
+                Toast.makeText(getActivity(), "新的交办事项", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 }

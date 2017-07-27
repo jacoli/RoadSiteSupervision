@@ -27,10 +27,20 @@
         android:supportsRtl="true"
         android:theme="@android:style/Theme.Light.NoTitleBar"
         tools:replace="android:label">
+
+        <meta-data
+            android:name="UMENG_APPKEY"
+            android:value="${UMENG_APPKEY}" />
+        <meta-data
+            android:name="UMENG_MESSAGE_SECRET"
+            android:value="${UMENG_MESSAGE_SECRET}" />
+        <meta-data
+            android:name="UMENG_CHANNEL"
+            android:value="Channel ID" />
+
         <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -76,16 +86,6 @@
         <activity android:name=".ProgressCheck.UnitProjectDetailActivity" />
         <activity android:name=".ProgressCheck.ComponentDetailActivity" />
         <activity android:name=".UserSystem.MainTabActivity" />
-
-        <meta-data
-            android:name="UMENG_APPKEY"
-            android:value="59191c4d8f4a9d0ce9000a73" />
-        <meta-data
-            android:name="UMENG_MESSAGE_SECRET"
-            android:value="c88831dcf5f353e156f8ed1e883be663" />
-        <meta-data
-            android:name="UMENG_CHANNEL"
-            android:value="Channel ID" />
 
         <activity android:name=".MonitorMain.MonitorMainActivity" />
         <activity android:name=".DataMonitor.MonitorPointListActivity" />

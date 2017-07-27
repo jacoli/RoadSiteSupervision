@@ -7,7 +7,9 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Looper;
 import android.provider.MediaStore;
+import android.util.Log;
 
 /**
  * Created by lichuange on 2017/4/18.
@@ -85,5 +87,14 @@ public class CommonUtils {
             }
         }
         return data;
+    }
+
+    public static final String TAG = "ThreadUtils";
+
+    public static boolean isInMainThread() {
+        Looper myLooper = Looper.myLooper();
+        Looper mainLooper = Looper.getMainLooper();
+        Log.i(TAG, "isInMainThread myLooper=" + myLooper + ";mainLooper=" + mainLooper);
+        return myLooper == mainLooper;
     }
 }
