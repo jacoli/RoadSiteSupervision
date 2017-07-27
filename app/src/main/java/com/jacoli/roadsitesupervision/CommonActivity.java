@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.jacoli.roadsitesupervision.Utils.CommonUtils;
 import com.jacoli.roadsitesupervision.views.TitleBar;
 import com.kaopiz.kprogresshud.KProgressHUD;
+import com.umeng.analytics.MobclickAgent;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -78,6 +79,15 @@ public class CommonActivity extends Activity {
         Log.d("CommonActivity", "onStop " + this);
     }
 
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
+    }
 
     public TitleBar titleBar;
 

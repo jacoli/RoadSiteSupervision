@@ -208,6 +208,7 @@ dependencies {
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.6.0'
     compile 'org.simple:androideventbus:1.0.5.1'
     compile 'com.github.PhilJay:MPAndroidChart:v3.0.2'
+    compile 'com.umeng.analytics:analytics:latest.integration'
 }
 
 

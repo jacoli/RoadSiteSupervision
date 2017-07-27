@@ -9,6 +9,7 @@ import android.widget.Toast;
 import com.jacoli.roadsitesupervision.BuildConfig;
 import com.jacoli.roadsitesupervision.Upgrade.config.SystemParams;
 import com.jacoli.roadsitesupervision.services.Utils;
+import com.umeng.analytics.MobclickAgent;
 import com.umeng.message.IUmengRegisterCallback;
 import com.umeng.message.PushAgent;
 import com.umeng.message.UTrack;
