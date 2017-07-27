@@ -9,7 +9,7 @@ TODO
 
 * 新增320支架安全监测系统, Monitor/DataMonitor/MonitorMain。
 * 新增WebViewActivity，支持应用内H5页面。
-* Push消息，格式约定见push_msg.json，TODO，基本功能已经加上，但还有些细节没有处理
+* Push消息，格式约定见push_msg.json
 
 ### V1.5
 
