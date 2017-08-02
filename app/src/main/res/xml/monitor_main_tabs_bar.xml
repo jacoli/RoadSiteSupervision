@@ -1,12 +1,12 @@
 <tabs>
-    <tab
-        id="@+id/tab_todo_list"
-        icon="@drawable/ic_messages"
-        title="情况速报" />
-    <tab
-        id="@+id/tab_sites"
-        icon="@drawable/ic_inspect"
-        title="安全巡查" />
+    <!--<tab-->
+        <!--id="@+id/tab_todo_list"-->
+        <!--icon="@drawable/ic_messages"-->
+        <!--title="情况速报" />-->
+    <!--<tab-->
+        <!--id="@+id/tab_sites"-->
+        <!--icon="@drawable/ic_inspect"-->
+        <!--title="安全巡查" />-->
     <tab
         id="@+id/tab_informations"
         icon="@drawable/ic_data_statistics"

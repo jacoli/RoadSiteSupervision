@@ -48,7 +48,7 @@ public class MonitorMainActivity extends CommonActivity {
         });
 
         bottomBar.selectTabAtPosition(0);
-        setTabSelection(R.id.tab_todo_list);
+        setTabSelection(R.id.tab_informations);
     }
 
     private void setTabSelection(int index) {
@@ -58,39 +58,39 @@ public class MonitorMainActivity extends CommonActivity {
         hideFragments(transaction);
 
         switch (index) {
-            case R.id.tab_todo_list:
-                titleBar.setTitle("情况速报");
-
-                if (todoListFragment == null) {
-                    // 如果MessageFragment为空，则创建一个并添加到界面上
-                    todoListFragment = new TodoListFragment();
-                    transaction.add(R.id.contentContainer, todoListFragment);
-                } else {
-                    // 如果MessageFragment不为空，则直接将它显示出来
-                    transaction.show(todoListFragment);
-                }
-
-                titleBar.addAction(new TitleBar.TextAction("创建") {
-                    @Override
-                    public void performAction(View view) {
-                        Intent intent = new Intent(MonitorMainActivity.this, AssignedMatterCreateActivity.class);
-                        startActivity(intent);
-                    }
-                });
-
-                break;
-            case R.id.tab_sites:
-                titleBar.setTitle("安全巡查");
-
-                if (sitesFragment == null) {
-                    // 如果MessageFragment为空，则创建一个并添加到界面上
-                    sitesFragment = new SitesFragment();
-                    transaction.add(R.id.contentContainer, sitesFragment);
-                } else {
-                    // 如果MessageFragment不为空，则直接将它显示出来
-                    transaction.show(sitesFragment);
-                }
-                break;
+//            case R.id.tab_todo_list:
+//                titleBar.setTitle("情况速报");
+//
+//                if (todoListFragment == null) {
+//                    // 如果MessageFragment为空，则创建一个并添加到界面上
+//                    todoListFragment = new TodoListFragment();
+//                    transaction.add(R.id.contentContainer, todoListFragment);
+//                } else {
+//                    // 如果MessageFragment不为空，则直接将它显示出来
+//                    transaction.show(todoListFragment);
+//                }
+//
+//                titleBar.addAction(new TitleBar.TextAction("创建") {
+//                    @Override
+//                    public void performAction(View view) {
+//                        Intent intent = new Intent(MonitorMainActivity.this, AssignedMatterCreateActivity.class);
+//                        startActivity(intent);
+//                    }
+//                });
+//
+//                break;
+//            case R.id.tab_sites:
+//                titleBar.setTitle("安全巡查");
+//
+//                if (sitesFragment == null) {
+//                    // 如果MessageFragment为空，则创建一个并添加到界面上
+//                    sitesFragment = new SitesFragment();
+//                    transaction.add(R.id.contentContainer, sitesFragment);
+//                } else {
+//                    // 如果MessageFragment不为空，则直接将它显示出来
+//                    transaction.show(sitesFragment);
+//                }
+//                break;
             case R.id.tab_informations:
                 titleBar.setTitle("数据监控");
 
