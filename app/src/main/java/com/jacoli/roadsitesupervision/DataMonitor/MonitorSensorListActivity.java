@@ -49,12 +49,14 @@ public class MonitorSensorListActivity extends CommonActivity {
                 model = (MonitorSensorListModel) responseModel;
                 adapter.notifyDataSetChanged();
                 swipeRefreshLayout.setRefreshing(false);
+                findViewById(R.id.loadView).setVisibility(View.GONE);
             }
 
             @Override
             public void onFailed(String error) {
                 showToast(error);
                 swipeRefreshLayout.setRefreshing(false);
+                findViewById(R.id.loadView).setVisibility(View.GONE);
             }
         });
     }
