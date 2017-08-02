@@ -12,7 +12,7 @@
         android:stretchMode="columnWidth"
         android:horizontalSpacing="5dp"
         android:verticalSpacing="5dp"
-        android:listSelector="@color/material_grey_50"
+        android:listSelector="@color/material_grey_200"
         android:id="@+id/grid_view">
     </GridView>
 

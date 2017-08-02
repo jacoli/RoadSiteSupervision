@@ -93,7 +93,7 @@ public class MonitorPointListActivity extends CommonActivity {
                     ((TextView)v.findViewById(R.id.text1)).setText(String.valueOf(position));
                     ((TextView)v.findViewById(R.id.text2)).setText(point.getPointName());
                     ((TextView)v.findViewById(R.id.text3)).setText(point.getPointCode());
-                    ((TextView)v.findViewById(R.id.text4)).setText(point.getMonitorTypeName());
+                    ((TextView)v.findViewById(R.id.text4)).setText(point.getUpdateTime());
                     ((TextView)v.findViewById(R.id.text5)).setText(point.getValStr());
 
                     if (getIntent().getBooleanExtra("isAlarm", false)) {

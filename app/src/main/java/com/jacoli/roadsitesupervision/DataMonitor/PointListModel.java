@@ -28,6 +28,7 @@ public class PointListModel extends ResponseBase {
         private String RealTimeVal2;
         private String RealTimeVal3;
         private String Sunit;
+        private String UpdateTime;
 
         public String getPointName() {
             return PointName;
@@ -101,6 +102,14 @@ public class PointListModel extends ResponseBase {
             }
 
             return val;
+        }
+
+        public String getUpdateTime() {
+            return UpdateTime;
+        }
+
+        public void setUpdateTime(String updateTime) {
+            UpdateTime = updateTime;
         }
     }
 }
