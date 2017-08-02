@@ -71,8 +71,8 @@ android {
             // 服务器端口
             buildConfigField("String", "ServerPort", '"8001"')
 
-            manifestPlaceholders.put("UMENG_APPKEY","59191c4d8f4a9d0ce9000a73")
-            manifestPlaceholders.put("UMENG_MESSAGE_SECRET","c88831dcf5f353e156f8ed1e883be663")
+            manifestPlaceholders.put("UMENG_APPKEY", "59191c4d8f4a9d0ce9000a73")
+            manifestPlaceholders.put("UMENG_MESSAGE_SECRET", "c88831dcf5f353e156f8ed1e883be663")
         }
 
         // 320监理系统
@@ -86,8 +86,8 @@ android {
             // 服务器端口
             buildConfigField("String", "ServerPort", '"8002"')
 
-            manifestPlaceholders.put("UMENG_APPKEY","59191c4d8f4a9d0ce9000a73")
-            manifestPlaceholders.put("UMENG_MESSAGE_SECRET","c88831dcf5f353e156f8ed1e883be663")
+            manifestPlaceholders.put("UMENG_APPKEY", "59191c4d8f4a9d0ce9000a73")
+            manifestPlaceholders.put("UMENG_MESSAGE_SECRET", "c88831dcf5f353e156f8ed1e883be663")
         }
 
         // 十里埠监理系统
@@ -101,8 +101,8 @@ android {
             // 服务器端口
             buildConfigField("String", "ServerPort", '"8003"')
 
-            manifestPlaceholders.put("UMENG_APPKEY","59191c4d8f4a9d0ce9000a73")
-            manifestPlaceholders.put("UMENG_MESSAGE_SECRET","c88831dcf5f353e156f8ed1e883be663")
+            manifestPlaceholders.put("UMENG_APPKEY", "59191c4d8f4a9d0ce9000a73")
+            manifestPlaceholders.put("UMENG_MESSAGE_SECRET", "c88831dcf5f353e156f8ed1e883be663")
         }
 
         // 320业主系统
@@ -116,8 +116,8 @@ android {
             // 服务器端口
             buildConfigField("String", "ServerPort", '"9002"')
 
-            manifestPlaceholders.put("UMENG_APPKEY","5979d89b310c9361be001b93")
-            manifestPlaceholders.put("UMENG_MESSAGE_SECRET","a1a9109af7c916ae2492ebfda6589203")
+            manifestPlaceholders.put("UMENG_APPKEY", "5979d89b310c9361be001b93")
+            manifestPlaceholders.put("UMENG_MESSAGE_SECRET", "a1a9109af7c916ae2492ebfda6589203")
         }
 
         // 十里埠业主系统
@@ -131,8 +131,8 @@ android {
             // 服务器端口
             buildConfigField("String", "ServerPort", '"9003"')
 
-            manifestPlaceholders.put("UMENG_APPKEY","5979d89b310c9361be001b93")
-            manifestPlaceholders.put("UMENG_MESSAGE_SECRET","a1a9109af7c916ae2492ebfda6589203")
+            manifestPlaceholders.put("UMENG_APPKEY", "5979d89b310c9361be001b93")
+            manifestPlaceholders.put("UMENG_MESSAGE_SECRET", "a1a9109af7c916ae2492ebfda6589203")
         }
 
         // 320支架安全监测系统
@@ -146,8 +146,8 @@ android {
             // 服务器端口
             buildConfigField("String", "ServerPort", '"7002"')
 
-            manifestPlaceholders.put("UMENG_APPKEY","5979d641677baa598c001c4f")
-            manifestPlaceholders.put("UMENG_MESSAGE_SECRET","2f8e8c1d26f94087030c1501ec5078a9")
+            manifestPlaceholders.put("UMENG_APPKEY", "5979d641677baa598c001c4f")
+            manifestPlaceholders.put("UMENG_MESSAGE_SECRET", "2f8e8c1d26f94087030c1501ec5078a9")
         }
     }
 
@@ -185,7 +185,6 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    testCompile 'junit:junit:4.12'
     compile project(':falcon_scanner')
     compile project(':PushSDK')
 
@@ -205,11 +204,14 @@ dependencies {
     compile 'com.github.yellowhai:TimeSelector:1.4'
     compile 'com.kaopiz:kprogresshud:1.0.5'
     compile 'com.jakewharton:butterknife:8.6.0'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:8.6.0'
     compile 'org.simple:androideventbus:1.0.5.1'
     compile 'com.github.PhilJay:MPAndroidChart:v3.0.2'
     compile 'com.umeng.analytics:analytics:latest.integration'
+    compile 'com.github.zzz40500:android-shapeLoadingView:1.0.3.2'
+    testCompile 'junit:junit:4.12'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.6.0'
 }
+
 
 
 

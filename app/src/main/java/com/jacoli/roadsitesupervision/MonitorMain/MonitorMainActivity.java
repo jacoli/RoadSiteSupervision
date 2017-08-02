@@ -28,7 +28,7 @@ public class MonitorMainActivity extends CommonActivity {
     private TodoListFragment todoListFragment;
     private SitesFragment sitesFragment;
     private DataMonitorFragment informationFragment;
-    private ComponentDetailFragment componentInfoFragment;
+    private DeviceManagerFragment deviceManagerFragment;
     private MonitorSettingFragment settingsFragment;
 
     @Override
@@ -104,16 +104,15 @@ public class MonitorMainActivity extends CommonActivity {
                 }
                 break;
             case R.id.tab_component_info:
-                titleBar.setTitle("资料文件");
+                titleBar.setTitle("设备管理");
 
-                if (componentInfoFragment == null) {
+                if (deviceManagerFragment == null) {
                     // 如果MessageFragment为空，则创建一个并添加到界面上
-                    componentInfoFragment = new ComponentDetailFragment();
-                    componentInfoFragment.mainTabActivityWeakReference2 = new WeakReference<>(this);
-                    transaction.add(R.id.contentContainer, componentInfoFragment);
+                    deviceManagerFragment = new DeviceManagerFragment();
+                    transaction.add(R.id.contentContainer, deviceManagerFragment);
                 } else {
                     // 如果MessageFragment不为空，则直接将它显示出来
-                    transaction.show(componentInfoFragment);
+                    transaction.show(deviceManagerFragment);
                 }
                 break;
             case R.id.tab_settings:
@@ -144,58 +143,14 @@ public class MonitorMainActivity extends CommonActivity {
         if (informationFragment != null) {
             transaction.hide(informationFragment);
         }
-        if (componentInfoFragment != null) {
-            transaction.hide(componentInfoFragment);
+        if (deviceManagerFragment != null) {
+            transaction.hide(deviceManagerFragment);
         }
         if (settingsFragment != null) {
             transaction.hide(settingsFragment);
         }
 
         titleBar.removeAllActions();
-    }
-
-    public void scan() {
-        int permission = ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA);
-        if (permission == PackageManager.PERMISSION_GRANTED) {
-            Intent intent = new Intent(this, CaptureActivity.class);
-            startActivityForResult(intent, requset_scanner_code);
-        } else {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, request_camera_auth_code);
-        }
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (requestCode) {
-            case requset_scanner_code: {
-                if (resultCode == CaptureActivity.ZXING_SCAN_RESULT_CODE && data != null) {
-                    final String contentUri = data.getStringExtra(CaptureActivity.ZXING_SCAN_CONTENT_DATA);
-                    //showToast(("扫码成功，二维码：" + contentUri));
-                    showToast("获取构件详情成功");
-                    componentInfoFragment.onScanedSuccess(contentUri);
-                }
-                break;
-            }
-            default:
-                // ignored
-        }
-        super.onActivityResult(requestCode, resultCode, data);
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
-        if (requestCode == request_camera_auth_code) {
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // Permission Granted
-                Intent intent = new Intent(this, CaptureActivity.class);
-                startActivityForResult(intent, requset_scanner_code);
-            } else {
-                // Permission Denied
-                showToast("扫码需要相机权限，请在设置中打开");
-            }
-        }
     }
 }
 

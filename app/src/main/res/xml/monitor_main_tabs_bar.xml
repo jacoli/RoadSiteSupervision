@@ -14,7 +14,7 @@
     <tab
         id="@+id/tab_component_info"
         icon="@drawable/ic_detail"
-        title="资料文件" />
+        title="设备管理" />
     <tab
         id="@+id/tab_settings"
         icon="@drawable/ic_settings_2"

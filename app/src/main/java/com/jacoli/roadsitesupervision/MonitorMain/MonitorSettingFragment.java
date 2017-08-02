@@ -25,9 +25,6 @@ import butterknife.ButterKnife;
  */
 public class MonitorSettingFragment extends Fragment {
 
-    @BindView(R.id.cell_sensor)
-    RelativeLayout cell_sensor;
-
     public MonitorSettingFragment() {
         // Required empty public constructor
     }
@@ -50,14 +47,6 @@ public class MonitorSettingFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 submit();
-            }
-        });
-
-        cell_sensor.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), MonitorSensorTypesActivity.class);;
-                startActivity(intent);
             }
         });
 

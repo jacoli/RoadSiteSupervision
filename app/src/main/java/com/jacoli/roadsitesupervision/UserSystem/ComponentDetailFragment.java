@@ -28,7 +28,6 @@ public class ComponentDetailFragment extends CommonFragment {
 
     private View selfView;
     public WeakReference<MainTabActivity> mainTabActivityWeakReference;
-    public WeakReference<MonitorMainActivity> mainTabActivityWeakReference2;
 
     public ComponentDetailFragment() {
         // Required empty public constructor
@@ -49,10 +48,6 @@ public class ComponentDetailFragment extends CommonFragment {
 
                 if (mainTabActivityWeakReference != null) {
                     mainTabActivityWeakReference.get().scan();
-                }
-
-                if (mainTabActivityWeakReference2 != null) {
-                    mainTabActivityWeakReference2.get().scan();
                 }
             }
         });
