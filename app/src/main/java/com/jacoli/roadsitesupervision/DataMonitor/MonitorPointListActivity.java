@@ -34,18 +34,6 @@ public class MonitorPointListActivity extends CommonActivity {
         createTitleBar();
         titleBar.setTitle(getIntent().getStringExtra("title"));
 
-        titleBar.addAction(new TitleBar.TextAction("测点图") {
-            @Override
-            public void performAction(View view) {
-                if (!Utils.isStringEmpty(picUrl)) {
-                    Intent intent = new Intent(MonitorPointListActivity.this, ImagePreviewActivity.class);
-                    intent.putExtra("title", "测点布局图");
-                    intent.putExtra("url", picUrl);
-                    startActivity(intent);
-                }
-            }
-        });
-
         ListView listView = (ListView) findViewById(R.id.listView);
         setupListView(listView);
 
@@ -61,6 +49,17 @@ public class MonitorPointListActivity extends CommonActivity {
             @Override
             public void onSuccess(ResponseBase responseModel) {
                 picUrl = ((PointsImageModel) responseModel).getPointPic();
+                if (!Utils.isStringEmpty(picUrl)) {
+                    titleBar.addAction(new TitleBar.TextAction("测点图") {
+                        @Override
+                        public void performAction(View view) {
+                            Intent intent = new Intent(MonitorPointListActivity.this, ImagePreviewActivity.class);
+                            intent.putExtra("title", "测点布局图");
+                            intent.putExtra("url", picUrl);
+                            startActivity(intent);
+                        }
+                    });
+                }
             }
 
             @Override
