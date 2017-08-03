@@ -36,7 +36,7 @@ public class ProjectDetailActivity extends CommonActivity {
         itemViews = new ArrayList<>();
 
         createTitleBar();
-        titleBar.setLeftText("返回");
+
         titleBar.setTitle("进度巡查");
 
         TextView operatorTextView = (TextView) findViewById(R.id.operator_text);

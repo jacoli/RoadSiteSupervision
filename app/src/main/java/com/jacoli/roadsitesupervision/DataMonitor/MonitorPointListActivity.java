@@ -1,5 +1,6 @@
 package com.jacoli.roadsitesupervision.DataMonitor;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -10,9 +11,12 @@ import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import com.jacoli.roadsitesupervision.CommonActivity;
+import com.jacoli.roadsitesupervision.Commons.ImagePreviewActivity;
 import com.jacoli.roadsitesupervision.EasyRequest.Callbacks;
 import com.jacoli.roadsitesupervision.EasyRequest.ResponseBase;
 import com.jacoli.roadsitesupervision.R;
+import com.jacoli.roadsitesupervision.services.Utils;
+import com.jacoli.roadsitesupervision.views.TitleBar;
 
 public class MonitorPointListActivity extends CommonActivity {
 
@@ -20,14 +24,27 @@ public class MonitorPointListActivity extends CommonActivity {
     private BaseAdapter adapter;
     private SwipeRefreshLayout swipeRefreshLayout;
 
+    private String picUrl;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_monitor_point_list);
 
         createTitleBar();
-        titleBar.setLeftText("返回");
         titleBar.setTitle(getIntent().getStringExtra("title"));
+
+        titleBar.addAction(new TitleBar.TextAction("测点图") {
+            @Override
+            public void performAction(View view) {
+                if (!Utils.isStringEmpty(picUrl)) {
+                    Intent intent = new Intent(MonitorPointListActivity.this, ImagePreviewActivity.class);
+                    intent.putExtra("title", "测点布局图");
+                    intent.putExtra("url", picUrl);
+                    startActivity(intent);
+                }
+            }
+        });
 
         ListView listView = (ListView) findViewById(R.id.listView);
         setupListView(listView);
@@ -39,6 +56,17 @@ public class MonitorPointListActivity extends CommonActivity {
                 loadData();
             }
         });
+
+        DataMonitorService.getInstance().GetPointPicByUnitProjectID(getIntent().getStringExtra("id"), new Callbacks() {
+            @Override
+            public void onSuccess(ResponseBase responseModel) {
+                picUrl = ((PointsImageModel) responseModel).getPointPic();
+            }
+
+            @Override
+            public void onFailed(String error) {
+            }
+        });
     }
 
     public void loadData() {
@@ -48,14 +76,17 @@ public class MonitorPointListActivity extends CommonActivity {
                 model = (PointListModel) responseModel;
                 adapter.notifyDataSetChanged();
                 swipeRefreshLayout.setRefreshing(false);
+                dismissHUD();
             }
 
             @Override
             public void onFailed(String error) {
                 showToast(error);
                 swipeRefreshLayout.setRefreshing(false);
+                dismissHUD();
             }
         });
+        showHUD();
     }
 
     @Override

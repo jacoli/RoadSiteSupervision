@@ -31,7 +31,7 @@ public class ComponentDetailActivity extends CommonActivity {
         setContentView(R.layout.activity_component_detail);
 
         createTitleBar();
-        titleBar.setLeftText("返回");
+
         titleBar.setTitle("施工旁站");
 
         Intent intent = getIntent();

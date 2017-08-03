@@ -95,7 +95,7 @@ public class CommonActivity extends Activity {
         titleBar = (TitleBar) findViewById(R.id.title_bar);
         titleBar.setBackgroundColor(ContextCompat.getColor(getBaseContext(), R.color.primary_dark));
 
-        //titleBar.setLeftImageResource(R.drawable.ic_back_arrow);
+        titleBar.setLeftImageResource(R.drawable.ic_back);
         titleBar.setLeftText("返回");
         titleBar.setLeftTextColor(Color.WHITE);
         titleBar.setLeftClickListener(new View.OnClickListener() {
@@ -105,10 +105,12 @@ public class CommonActivity extends Activity {
             }
         });
 
-        titleBar.setTitle("文章详情");
+        //titleBar.setTitle("文章详情");
         titleBar.setTitleColor(Color.WHITE);
         titleBar.setSubTitleColor(Color.GREEN);
         titleBar.setDividerColor(Color.GRAY);
+
+        titleBar.setActionTextColor(Color.WHITE);
     }
 
     public static void compressPicture(String srcPath, String desPath) {

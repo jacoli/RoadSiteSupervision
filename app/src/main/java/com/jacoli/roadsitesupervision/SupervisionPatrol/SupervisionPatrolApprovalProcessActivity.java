@@ -35,7 +35,7 @@ public class SupervisionPatrolApprovalProcessActivity extends CommonActivity {
         setContentView(R.layout.activity_supervision_patrol_approval_process);
 
         createTitleBar();
-        titleBar.setLeftText("返回");
+
         titleBar.setTitle("待审批");
 
         Intent intent = getIntent();

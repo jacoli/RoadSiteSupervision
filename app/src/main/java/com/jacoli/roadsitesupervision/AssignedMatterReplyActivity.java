@@ -29,7 +29,7 @@ public class AssignedMatterReplyActivity extends CommonActivity {
         setContentView(R.layout.activity_assigned_matter_reply);
 
         createTitleBar();
-        titleBar.setLeftText("返回");
+
         titleBar.setTitle("回复");
 
         Intent intent = getIntent();

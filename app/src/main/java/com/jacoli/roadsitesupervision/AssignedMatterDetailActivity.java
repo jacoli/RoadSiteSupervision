@@ -36,7 +36,7 @@ public class AssignedMatterDetailActivity extends CommonActivity {
         setContentView(R.layout.activity_assigned_matter_detail);
 
         createTitleBar();
-        titleBar.setLeftText("返回");
+
         titleBar.setTitle("交办事项详情");
 
         Intent intent = getIntent();

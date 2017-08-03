@@ -267,4 +267,39 @@ public class DataMonitorService {
         }, handler, callbacks);
         req.asyncSend();
     }
+
+    // 根据单位工程ID获取测点布局图
+    public void GetPointPicByUnitProjectID(final String id, Callbacks callbacks) {
+        if (Utils.isStringEmpty(id)) {
+            onFailed("错误：ID不能为空", callbacks);
+            return;
+        }
+
+        EasyRequest req = new EasyRequest(new Processor() {
+            @Override
+            public Response buildRequestAndWaitingResponse() throws IOException {
+                FormBody body = new FormBody.Builder()
+                        .add("Token", getToken())
+                        .add("UnitProjectID", id)
+                        .build();
+
+                Request request = new Request.Builder()
+                        .url(requestUrl("GetUnitProjectPointPic"))
+                        .post(body)
+                        .header("FromAPP", "")
+                        .build();
+
+                return httpClient.newCall(request).execute();
+            }
+
+            @Override
+            public ResponseBase jsonModelParsedFromResponseString(String responseJsonString, Gson gson) {
+                return gson.fromJson(responseJsonString, PointsImageModel.class);
+            }
+
+            @Override
+            public void onSuccessHandleBeforeNotify(ResponseBase responseModel) {}
+        }, handler, callbacks);
+        req.asyncSend();
+    }
 }

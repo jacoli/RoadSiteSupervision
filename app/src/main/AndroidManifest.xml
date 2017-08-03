@@ -27,7 +27,6 @@
         android:supportsRtl="true"
         android:theme="@android:style/Theme.Light.NoTitleBar"
         tools:replace="android:label">
-
         <meta-data
             android:name="UMENG_APPKEY"
             android:value="${UMENG_APPKEY}" />
@@ -41,6 +40,7 @@
         <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -86,13 +86,13 @@
         <activity android:name=".ProgressCheck.UnitProjectDetailActivity" />
         <activity android:name=".ProgressCheck.ComponentDetailActivity" />
         <activity android:name=".UserSystem.MainTabActivity" />
-
         <activity android:name=".MonitorMain.MonitorMainActivity" />
         <activity android:name=".DataMonitor.MonitorPointListActivity" />
         <activity android:name=".DataMonitor.MonitorSensorTypesActivity" />
         <activity android:name=".DataMonitor.MonitorSensorListActivity" />
         <activity android:name=".DataMonitor.MonitorAddSensorDataActivity" />
-        <activity android:name=".Commons.WebViewActivity"></activity>
+        <activity android:name=".Commons.WebViewActivity" />
+        <activity android:name=".Commons.ImagePreviewActivity"></activity>
     </application>
 
 </manifest>

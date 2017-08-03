@@ -38,7 +38,7 @@ public class SamplingInspectionActivity extends CommonActivity {
         id = getIntent().getStringExtra("id");
 
         createTitleBar();
-        titleBar.setLeftText("返回");
+
         titleBar.setTitle(getIntent().getStringExtra("title"));
         titleBar.setLeftClickListener(new View.OnClickListener() {
             @Override

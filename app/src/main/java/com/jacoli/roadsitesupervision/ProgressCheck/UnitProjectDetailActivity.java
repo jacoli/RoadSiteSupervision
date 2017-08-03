@@ -29,7 +29,7 @@ public class UnitProjectDetailActivity extends CommonActivity {
         setContentView(R.layout.activity_progress_check_unit_project_detail);
 
         createTitleBar();
-        titleBar.setLeftText("返回");
+
         titleBar.setTitle("进度巡查");
 
         String name = getIntent().getStringExtra("name") + "\n巡视情况:";

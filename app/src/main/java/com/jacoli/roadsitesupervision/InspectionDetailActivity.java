@@ -36,7 +36,6 @@ public class InspectionDetailActivity extends CommonActivity {
         type = getIntent().getIntExtra("type", MainService.project_detail_type_pz);
 
         createTitleBar();
-        titleBar.setLeftText("返回");
         titleBar.setTitle(getIntent().getStringExtra("title"));
         titleBar.setLeftClickListener(new View.OnClickListener() {
             @Override

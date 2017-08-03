@@ -27,7 +27,7 @@ public class MonitorSensorListActivity extends CommonActivity {
         setContentView(R.layout.activity_monitor_sensor_list);
 
         createTitleBar();
-        titleBar.setLeftText("返回");
+
         titleBar.setTitle("传感器列表");
 
         ListView listView = (ListView) findViewById(R.id.listView);

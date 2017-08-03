@@ -32,7 +32,7 @@ public class SupervisionPatrolListActivity extends CommonActivity {
         setContentView(R.layout.activity_supervision_patrol_list);
 
         createTitleBar();
-        titleBar.setLeftText("返回");
+
         titleBar.setTitle(getString(R.string.SupervisionPatrolTitle));
 
         Button submitBtn = (Button) findViewById(R.id.submit_btn);

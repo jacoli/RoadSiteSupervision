@@ -35,7 +35,7 @@ public class SupervisionPatrolUnitProjectDetailActivity extends CommonActivity {
         setContentView(R.layout.activity_supervision_patrol_unit_project_detail);
 
         createTitleBar();
-        titleBar.setLeftText("返回");
+
         titleBar.setTitle("选择工程构件");
 
         Intent intent = getIntent();

@@ -27,7 +27,7 @@ public class MonitorSensorTypesActivity extends CommonActivity {
         setContentView(R.layout.activity_monitor_sensor_types);
 
         createTitleBar();
-        titleBar.setLeftText("返回");
+
         titleBar.setTitle("传感器类型");
 
         ListView listView = (ListView) findViewById(R.id.listView);

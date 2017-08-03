@@ -22,7 +22,7 @@ public class WebViewActivity extends CommonActivity {
         setContentView(R.layout.activity_web_view);
 
         createTitleBar();
-        titleBar.setLeftText("返回");
+
 
         Intent intent = getIntent();
         webUrl = intent.getStringExtra(WEBVIEW_EXTRA_URL);

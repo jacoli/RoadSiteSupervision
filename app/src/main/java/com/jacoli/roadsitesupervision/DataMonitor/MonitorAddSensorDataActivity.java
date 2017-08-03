@@ -39,7 +39,7 @@ public class MonitorAddSensorDataActivity extends CommonActivity {
         ButterKnife.bind(this);
 
         createTitleBar();
-        titleBar.setLeftText("返回");
+
         titleBar.setTitle("添加传感器数据");
 
         code.setText(getIntent().getStringExtra("code"));

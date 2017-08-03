@@ -63,6 +63,19 @@ public class LoginActivity extends CommonActivity {
         }
 
         registerRemoteAlias();
+
+        backPressedCount = 0;
+    }
+
+    private int backPressedCount = 0;
+    @Override
+    public void onBackPressed() {
+        if (backPressedCount > 0) {
+            finish();
+        } else {
+            backPressedCount++;
+            showToast("再按一下退出程序");
+        }
     }
 
     @Override

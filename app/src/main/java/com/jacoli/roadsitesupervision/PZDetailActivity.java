@@ -50,7 +50,7 @@ public class PZDetailActivity extends CommonActivity {
         setContentView(R.layout.activity_pzdetail);
 
         createTitleBar();
-        titleBar.setLeftText("返回");
+
         titleBar.setTitle("施工旁站");
         titleBar.setLeftClickListener(new View.OnClickListener() {
             @Override
