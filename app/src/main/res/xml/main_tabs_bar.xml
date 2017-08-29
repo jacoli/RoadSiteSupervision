@@ -7,10 +7,10 @@
         id="@+id/tab_sites"
         icon="@drawable/ic_main_sites"
         title="现场工作" />
-    <tab
-        id="@+id/tab_informations"
-        icon="@drawable/ic_main_informations"
-        title="信息查询" />
+    <!--<tab-->
+        <!--id="@+id/tab_informations"-->
+        <!--icon="@drawable/ic_main_informations"-->
+        <!--title="信息查询" />-->
     <tab
         id="@+id/tab_settings"
         icon="@drawable/ic_main_settings"
