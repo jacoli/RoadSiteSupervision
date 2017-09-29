@@ -20,6 +20,7 @@ public class LoginModel extends MsgResponseBase implements Serializable {
     private boolean SupervisionLog;
     private boolean ProgressCheck;
     private boolean SupervisionCheck;
+    private boolean DeviceMange;
 
     // 登录是否成功
     public boolean isLoginSuccess() {
@@ -121,5 +122,14 @@ public class LoginModel extends MsgResponseBase implements Serializable {
 
     public void setSupervisionLog(boolean supervisionLog) {
         SupervisionLog = supervisionLog;
+    }
+
+
+    public boolean isDeviceMange() {
+        return DeviceMange;
+    }
+
+    public void setDeviceMange(boolean deviceMange) {
+        DeviceMange = deviceMange;
     }
 }

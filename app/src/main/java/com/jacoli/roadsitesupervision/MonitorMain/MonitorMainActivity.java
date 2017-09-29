@@ -14,6 +14,7 @@ import android.view.View;
 import com.jacoli.roadsitesupervision.AssignedMatterCreateActivity;
 import com.jacoli.roadsitesupervision.TodoListFragment;
 import com.jacoli.roadsitesupervision.UserSystem.ComponentDetailFragment;
+import com.jacoli.roadsitesupervision.services.MainService;
 import com.jacoli.roadsitesupervision.views.TitleBar;
 import com.lichuange.bridges.scan.scan.qrmodule.CaptureActivity;
 import com.roughike.bottombar.BottomBar;
@@ -34,7 +35,12 @@ public class MonitorMainActivity extends CommonActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_monitor_main);
+
+        if (MainService.getInstance().getLoginModel().isDeviceMange()) {
+            setContentView(R.layout.activity_monitor_main);
+        } else {
+            setContentView(R.layout.activity_monitor_main_no_device_manager);
+        }
 
         createTitleBar();
         titleBar.setLeftVisible(false);
