@@ -1,0 +1,79 @@
+http://dev.umeng.com/push/ios/api-doc#4_10
+
+
+
+
+2.1.2  调用地址
+POST 
+
+http接口：http://msg.umeng.com/api/send?sign=mysign
+
+https接口：  https://msgapi.umeng.com/api/send?sign=mysign
+
+签名（sign=mysign)的计算方式参见附录K。
+
+
+
+
+4.10  附录K 关于签名
+为了确保用户发送的请求不被更改，我们设计了签名算法。该算法基本可以保证请求是合法者发送且参数没有被修改，但无法保证不被偷窥。 签名生成规则：
+A）提取请求方法method（POST，全大写）；
+B）提取请求url信息，包括Host字段的域名(或ip:端口)和URI的path部分。注意不包括path的querystring。
+比如http://msg.umeng.com/api/send 或者 http://msg.umeng.com/api/status;
+C）提取请求的post-body；
+D）拼接请求方法、url、post-body及应用的app_master_secret；
+E）将D形成字符串计算MD5值，形成一个32位的十六进制（字母小写）字符串，即为本次请求sign（签名）的值；
+Sign=MD5($http_method$url$post-body$app_master_secret);
+
+
+
+4.10.1  python生成签名示例
+import hashlib
+def md5(s):
+    m = hashlib.md5(s)
+    return m.hexdigest()
+
+appkey = '你的appkey'
+app_master_secret = '你的app_master_secret'
+timestamp = '你的timestamp'
+method = 'POST'
+url = 'http://msg.umeng.com/api/send'
+params = {'appkey': appkey,
+          'timestamp': timestamp,
+          'device_tokens': device_token,
+          'type': 'unicast',
+          'payload': {'body': {'ticker': 'Hello World',
+                               'title':'你好',
+                               'text':'来自友盟推送',
+                               'after_open': 'go_app'},
+                      'display_type': 'notification'
+          }
+}
+post_body = json.dumps(params)
+print post_body
+sign = md5('%s%s%s%s' % (method,url,post_body,app_master_secret))
+
+
+
+json 内容
+{
+  "appkey": "59191c4d8f4a9d0ce9000a73", // 支架安全：5979d641677baa598c001c4f， 业主系统：5979d89b310c9361be001b93，监理系统：59191c4d8f4a9d0ce9000a73
+  "timestamp": "1497492909",  // 时间戳，10位或者13位均可，时间戳有效期为10分钟
+  "type": "customizedcast",
+  "alias": "00d5c139-a33e-4811-9172-e114562e0e45,00d5c139-a33e-4811-9172-e114562e0e45,00d5c139-a33e-4811-9172-e114562e0e45", // 用户ID，可以多个，以逗号分隔
+  "alias_type": "a9fd3bd9-f581-4d54-a39a-71c587817bee", // 项目ID
+  "payload": {
+    "display_type": "notification",
+    "body": {
+      "ticker": "测试提示文字", // 通知栏提示文字
+      "title": "测试标题", // 通知标题
+      "text": "测试文字描述", // 通知文字描述
+      "after_open": "go_app" // 默认是点击通知打开APP
+    },
+    "extra": {
+      "type": "assigned_matters" // 业务类型，交办事项assigned_matters，巡查patrol
+    }
+  }
+}
+
+
