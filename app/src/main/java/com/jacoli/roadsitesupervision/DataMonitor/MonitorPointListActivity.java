@@ -145,6 +145,10 @@ public class MonitorPointListActivity extends CommonActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 // TODO
+                Intent intent = new Intent(MonitorPointListActivity.this, LineChartActivity1.class);
+                intent.putExtra("title", "测点布局图");
+                intent.putExtra("url", picUrl);
+                startActivity(intent);
             }
         });
     }

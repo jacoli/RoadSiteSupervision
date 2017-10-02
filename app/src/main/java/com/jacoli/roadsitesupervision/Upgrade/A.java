@@ -83,6 +83,7 @@ public class A extends Application {
                     String type = var2.extra.get("type");
                     if (!Utils.isStringEmpty(type)) {
                         EventBus.getDefault().post(new RemoteNotificationMsg(type));
+                        Toast.makeText(getApplicationContext(), "通知类型： " + type, Toast.LENGTH_SHORT).show();
                     }
                 }
             }
