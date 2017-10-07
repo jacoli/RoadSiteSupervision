@@ -21,6 +21,7 @@ public class PointListModel extends ResponseBase {
     private List<Point> items;
 
     public class Point {
+        private String ID;
         private String PointName;
         private String PointCode;
         private String MonitorTypeName;
@@ -29,6 +30,10 @@ public class PointListModel extends ResponseBase {
         private String RealTimeVal3;
         private String Sunit;
         private String UpdateTime;
+
+        public String getID () {return  ID;}
+
+        public void setID(String ID) {this.ID = ID;}
 
         public String getPointName() {
             return PointName;

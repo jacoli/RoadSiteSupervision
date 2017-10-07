@@ -11,6 +11,9 @@ import android.os.Looper;
 import android.provider.MediaStore;
 import android.util.Log;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * Created by lichuange on 2017/4/18.
  */
@@ -96,5 +99,11 @@ public class CommonUtils {
         Looper mainLooper = Looper.getMainLooper();
         Log.i(TAG, "isInMainThread myLooper=" + myLooper + ";mainLooper=" + mainLooper);
         return myLooper == mainLooper;
+    }
+
+    static public String getCurrentDayStr() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date curDate = new Date();
+        return sdf.format(curDate);
     }
 }

@@ -316,7 +316,7 @@ public class DataMonitorService {
                 FormBody body = new FormBody.Builder()
                         .add("Token", getToken())
                         .add("MonitorPointID", MonitorPointID)
-                        .add("Date", Date)
+                        .add("Date", "2017-10-01")
                         .add("APP", "Y")
                         .build();
 

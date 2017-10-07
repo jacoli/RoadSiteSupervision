@@ -52,6 +52,12 @@ public class Utils {
         return sdf.format(curDate);
     }
 
+    static public String getCurrentDayStr() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date curDate = new Date();
+        return sdf.format(curDate);
+    }
+
     static public long convertStackNumberToDistance(String stackNumber) {
         long distance = -1;
 

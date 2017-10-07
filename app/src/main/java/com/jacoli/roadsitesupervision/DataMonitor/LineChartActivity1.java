@@ -35,7 +35,10 @@ import com.github.mikephil.charting.listener.OnChartGestureListener;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.Utils;
 import com.jacoli.roadsitesupervision.CommonActivity;
+import com.jacoli.roadsitesupervision.EasyRequest.Callbacks;
+import com.jacoli.roadsitesupervision.EasyRequest.ResponseBase;
 import com.jacoli.roadsitesupervision.R;
+import com.jacoli.roadsitesupervision.Utils.CommonUtils;
 //import com.xxmassdeveloper.mpchartexample.custom.MyMarkerView;
 //import com.xxmassdeveloper.mpchartexample.notimportant.DemoBase;
 
@@ -162,6 +165,78 @@ public class LineChartActivity1 extends CommonActivity implements OnSeekBarChang
 
         // // dont forget to refresh the drawing
         // mChart.invalidate();
+
+
+        DataMonitorService.getInstance().GetHistroySensorData(getIntent().getStringExtra("id"), CommonUtils.getCurrentDayStr(), new Callbacks() {
+            @Override
+            public void onSuccess(ResponseBase responseModel) {
+                GetHistroySensorDataModel model = (GetHistroySensorDataModel)responseModel;
+                setDataFromModel(model);
+            }
+
+            @Override
+            public void onFailed(String error) {
+
+            }
+        });
+    }
+
+    void setDataFromModel(GetHistroySensorDataModel model) {
+        List<Entry> values = new ArrayList();
+
+        for (int i = 0; i < model.getItems().size(); i++) {
+            GetHistroySensorDataModel.Item item = model.getItems().get(i);
+            float val = Double.valueOf(item.getCol4()).floatValue();
+            values.add(new Entry(i, val, getResources().getDrawable(R.drawable.star)));
+        }
+
+        LineDataSet set1;
+
+        if (mChart.getData() != null &&
+                mChart.getData().getDataSetCount() > 0) {
+            set1 = (LineDataSet)mChart.getData().getDataSetByIndex(0);
+            set1.setValues(values);
+            mChart.getData().notifyDataChanged();
+            mChart.notifyDataSetChanged();
+        } else {
+            // create a dataset and give it a type
+            set1 = new LineDataSet(values, "DataSet 1");
+
+            set1.setDrawIcons(false);
+
+            // set the line to be drawn like this "- - - - - -"
+            set1.enableDashedLine(10f, 5f, 0f);
+            set1.enableDashedHighlightLine(10f, 5f, 0f);
+            set1.setColor(Color.BLACK);
+            set1.setCircleColor(Color.BLACK);
+            set1.setLineWidth(1f);
+            set1.setCircleRadius(3f);
+            set1.setDrawCircleHole(false);
+            set1.setValueTextSize(9f);
+            set1.setDrawFilled(true);
+            set1.setFormLineWidth(1f);
+            set1.setFormLineDashEffect(new DashPathEffect(new float[]{10f, 5f}, 0f));
+            set1.setFormSize(15.f);
+
+//            if (Utils.getSDKInt() >= 18) {
+//                // fill drawable only supported on api level 18 and above
+//                Drawable drawable = ContextCompat.getDrawable(this, R.drawable.fade_red);
+//                set1.setFillDrawable(drawable);
+//            }
+//            else {
+//                set1.setFillColor(Color.BLACK);
+//            }
+
+            ArrayList<ILineDataSet> dataSets = new ArrayList<ILineDataSet>();
+            dataSets.add(set1); // add the datasets
+
+            // create a data object with the datasets
+            LineData data = new LineData(dataSets);
+
+            // set data
+            mChart.setData(data);
+        }
+
     }
 
     @Override

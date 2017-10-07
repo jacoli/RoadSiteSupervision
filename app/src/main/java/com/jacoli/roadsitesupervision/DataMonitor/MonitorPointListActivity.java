@@ -144,10 +144,10 @@ public class MonitorPointListActivity extends CommonActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                // TODO
+                PointListModel.Point point = model.getItems().get(position - 1);
                 Intent intent = new Intent(MonitorPointListActivity.this, LineChartActivity1.class);
                 intent.putExtra("title", "测点布局图");
-                intent.putExtra("url", picUrl);
+                intent.putExtra("id", point.getID());
                 startActivity(intent);
             }
         });
