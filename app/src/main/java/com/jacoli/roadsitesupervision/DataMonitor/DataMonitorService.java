@@ -304,7 +304,7 @@ public class DataMonitorService {
     }
 
     // 根据单位工程ID获取测点布局图
-    public void GetHistroySensorData(final String MonitorPointID, final String Date, Callbacks callbacks) {
+    public void GetHistroySensorData(final String MonitorPointID, final String DayStr, Callbacks callbacks) {
         if (Utils.isStringEmpty(MonitorPointID)) {
             onFailed("错误：ID不能为空", callbacks);
             return;
@@ -316,7 +316,7 @@ public class DataMonitorService {
                 FormBody body = new FormBody.Builder()
                         .add("Token", getToken())
                         .add("MonitorPointID", MonitorPointID)
-                        .add("Date", "2017-10-01")
+                        .add("Date", Utils.notNullString(DayStr))
                         .add("APP", "Y")
                         .build();
 

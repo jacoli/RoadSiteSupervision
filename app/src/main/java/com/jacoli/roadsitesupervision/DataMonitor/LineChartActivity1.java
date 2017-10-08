@@ -11,7 +11,10 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
+import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
@@ -33,24 +36,48 @@ import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.listener.ChartTouchListener;
 import com.github.mikephil.charting.listener.OnChartGestureListener;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
+import com.github.mikephil.charting.utils.ColorTemplate;
 import com.github.mikephil.charting.utils.Utils;
+import com.hh.timeselector.timeutil.datedialog.DateListener;
+import com.hh.timeselector.timeutil.datedialog.TimeConfig;
+import com.hh.timeselector.timeutil.datedialog.TimeSelectorDialog;
 import com.jacoli.roadsitesupervision.CommonActivity;
 import com.jacoli.roadsitesupervision.EasyRequest.Callbacks;
 import com.jacoli.roadsitesupervision.EasyRequest.ResponseBase;
 import com.jacoli.roadsitesupervision.R;
 import com.jacoli.roadsitesupervision.Utils.CommonUtils;
+import com.mingle.widget.LoadingView;
 //import com.xxmassdeveloper.mpchartexample.custom.MyMarkerView;
 //import com.xxmassdeveloper.mpchartexample.notimportant.DemoBase;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class LineChartActivity1 extends CommonActivity implements OnSeekBarChangeListener,
         OnChartGestureListener, OnChartValueSelectedListener {
 
     private LineChart mChart;
-    private SeekBar mSeekBarX, mSeekBarY;
-    private TextView tvX, tvY;
+    //private SeekBar mSeekBarX, mSeekBarY;
+    //private TextView tvX, tvY;
+    @BindView(R.id.text)
+    TextView textView;
+
+    @BindView(R.id.submit_btn)
+    Button button;
+
+    @BindView(R.id.text_placehoder)
+    TextView placeHolderTextView;
+
+    @BindView(R.id.loadView)
+    LoadingView loadingView;
+
+    private String selectedDayStr;
+    private boolean isSpecialType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,115 +86,90 @@ public class LineChartActivity1 extends CommonActivity implements OnSeekBarChang
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_linechart);
 
-        tvX = (TextView) findViewById(R.id.tvXMax);
-        tvY = (TextView) findViewById(R.id.tvYMax);
+        ButterKnife.bind(this);
 
-        mSeekBarX = (SeekBar) findViewById(R.id.seekBar1);
-        mSeekBarY = (SeekBar) findViewById(R.id.seekBar2);
+        createTitleBar();
+        titleBar.setTitle(getIntent().getStringExtra("title"));
 
-        mSeekBarX.setProgress(45);
-        mSeekBarY.setProgress(100);
+        isSpecialType = getIntent().getBooleanExtra("special", false);
 
-        mSeekBarY.setOnSeekBarChangeListener(this);
-        mSeekBarX.setOnSeekBarChangeListener(this);
+
 
         mChart = (LineChart) findViewById(R.id.chart1);
-        mChart.setOnChartGestureListener(this);
-        mChart.setOnChartValueSelectedListener(this);
-        mChart.setDrawGridBackground(false);
 
-        // no description text
-        mChart.getDescription().setEnabled(false);
-
-        // enable touch gestures
-        mChart.setTouchEnabled(true);
 
         // enable scaling and dragging
         mChart.setDragEnabled(true);
         mChart.setScaleEnabled(true);
-        // mChart.setScaleXEnabled(true);
-        // mChart.setScaleYEnabled(true);
+        mChart.setDrawGridBackground(false);
+        mChart.setHighlightPerDragEnabled(true);
+
+        // no description text
+        mChart.getDescription().setEnabled(false);
+        //mChart.getDescription().setText("测点数据");
+
+        // enable touch gestures
+        mChart.setTouchEnabled(true);
 
         // if disabled, scaling can be done on x- and y-axis separately
         mChart.setPinchZoom(true);
 
         // set an alternative background color
-        // mChart.setBackgroundColor(Color.GRAY);
-
-        // create a custom MarkerView (extend MarkerView) and specify the layout
-        // to use for it
-//        MyMarkerView mv = new MyMarkerView(this, R.layout.custom_marker_view);
-//        mv.setChartView(mChart); // For bounds control
-//        mChart.setMarker(mv); // Set the marker to the chart
-
-        // x-axis limit line
-        LimitLine llXAxis = new LimitLine(10f, "Index 10");
-        llXAxis.setLineWidth(4f);
-        llXAxis.enableDashedLine(10f, 10f, 0f);
-        llXAxis.setLabelPosition(LimitLabelPosition.RIGHT_BOTTOM);
-        llXAxis.setTextSize(10f);
-
-        XAxis xAxis = mChart.getXAxis();
-        xAxis.enableGridDashedLine(10f, 10f, 0f);
-        //xAxis.setValueFormatter(new MyCustomXAxisValueFormatter());
-        //xAxis.addLimitLine(llXAxis); // add x-axis limit line
-
-
-        //Typeface tf = Typeface.createFromAsset(getAssets(), "OpenSans-Regular.ttf");
-
-        LimitLine ll1 = new LimitLine(150f, "Upper Limit");
-        ll1.setLineWidth(4f);
-        ll1.enableDashedLine(10f, 10f, 0f);
-        ll1.setLabelPosition(LimitLabelPosition.RIGHT_TOP);
-        ll1.setTextSize(10f);
-        //ll1.setTypeface(tf);
-
-        LimitLine ll2 = new LimitLine(-30f, "Lower Limit");
-        ll2.setLineWidth(4f);
-        ll2.enableDashedLine(10f, 10f, 0f);
-        ll2.setLabelPosition(LimitLabelPosition.RIGHT_BOTTOM);
-        ll2.setTextSize(10f);
-        //ll2.setTypeface(tf);
-
-        YAxis leftAxis = mChart.getAxisLeft();
-        leftAxis.removeAllLimitLines(); // reset all limit lines to avoid overlapping lines
-        leftAxis.addLimitLine(ll1);
-        leftAxis.addLimitLine(ll2);
-        leftAxis.setAxisMaximum(200f);
-        leftAxis.setAxisMinimum(-50f);
-        //leftAxis.setYOffset(20f);
-        leftAxis.enableGridDashedLine(10f, 10f, 0f);
-        leftAxis.setDrawZeroLine(false);
-
-        // limit lines are drawn behind data (and not on top)
-        leftAxis.setDrawLimitLinesBehindData(true);
-
-        mChart.getAxisRight().setEnabled(false);
-
-        //mChart.getViewPortHandler().setMaximumScaleY(2f);
-        //mChart.getViewPortHandler().setMaximumScaleX(2f);
-
-        // add data
-        setData(45, 100);
-
-//        mChart.setVisibleXRange(20);
-//        mChart.setVisibleYRange(20f, AxisDependency.LEFT);
-//        mChart.centerViewTo(20, 50, AxisDependency.LEFT);
+        //mChart.setBackgroundColor(Color.LTGRAY);
 
         mChart.animateX(2500);
-        //mChart.invalidate();
 
         // get the legend (only possible after setting data)
         Legend l = mChart.getLegend();
 
         // modify the legend ...
         l.setForm(LegendForm.LINE);
+        l.setTextSize(11f);
+        l.setTextColor(Color.BLACK);
+        l.setVerticalAlignment(Legend.LegendVerticalAlignment.TOP);
+        l.setHorizontalAlignment(Legend.LegendHorizontalAlignment.RIGHT);
+        l.setOrientation(Legend.LegendOrientation.HORIZONTAL);
+        l.setDrawInside(false);
 
-        // // dont forget to refresh the drawing
-        // mChart.invalidate();
+        XAxis xAxis = mChart.getXAxis();
+        xAxis.setTextSize(11f);
+        xAxis.setTextColor(Color.BLACK);
+        xAxis.setDrawGridLines(false);
+        xAxis.setDrawAxisLine(false);
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+
+        YAxis leftAxis = mChart.getAxisLeft();
+        leftAxis.setTextColor(Color.BLACK);
+        leftAxis.setDrawGridLines(true);
+        leftAxis.setGranularityEnabled(true);
+
+        mChart.getAxisRight().setEnabled(false);
+
+//        YAxis rightAxis = mChart.getAxisRight();
+//        rightAxis.setTextColor(Color.RED);
+//        rightAxis.setDrawGridLines(false);
+//        rightAxis.setDrawZeroLine(false);
+//        rightAxis.setGranularityEnabled(false);
 
 
-        DataMonitorService.getInstance().GetHistroySensorData(getIntent().getStringExtra("id"), CommonUtils.getCurrentDayStr(), new Callbacks() {
+        loadDataForDay(CommonUtils.getCurrentDayStr());
+
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onEditDayClicked();
+            }
+        });
+    }
+
+    void loadDataForDay(String dayStr) {
+        loadingView.setVisibility(View.VISIBLE);
+        placeHolderTextView.setVisibility(View.INVISIBLE);
+        mChart.setVisibility(View.INVISIBLE);
+
+        selectedDayStr = dayStr;
+
+        DataMonitorService.getInstance().GetHistroySensorData(getIntent().getStringExtra("id"), dayStr, new Callbacks() {
             @Override
             public void onSuccess(ResponseBase responseModel) {
                 GetHistroySensorDataModel model = (GetHistroySensorDataModel)responseModel;
@@ -179,64 +181,186 @@ public class LineChartActivity1 extends CommonActivity implements OnSeekBarChang
 
             }
         });
+
+        textView.setText("日期选择：" + dayStr);
     }
 
     void setDataFromModel(GetHistroySensorDataModel model) {
-        List<Entry> values = new ArrayList();
-
-        for (int i = 0; i < model.getItems().size(); i++) {
-            GetHistroySensorDataModel.Item item = model.getItems().get(i);
-            float val = Double.valueOf(item.getCol4()).floatValue();
-            values.add(new Entry(i, val, getResources().getDrawable(R.drawable.star)));
-        }
-
-        LineDataSet set1;
-
-        if (mChart.getData() != null &&
-                mChart.getData().getDataSetCount() > 0) {
-            set1 = (LineDataSet)mChart.getData().getDataSetByIndex(0);
-            set1.setValues(values);
-            mChart.getData().notifyDataChanged();
-            mChart.notifyDataSetChanged();
+        loadingView.setVisibility(View.INVISIBLE);
+        if (model.getItems().size() == 0) {
+            placeHolderTextView.setVisibility(View.VISIBLE);
+            return;
         } else {
-            // create a dataset and give it a type
-            set1 = new LineDataSet(values, "DataSet 1");
-
-            set1.setDrawIcons(false);
-
-            // set the line to be drawn like this "- - - - - -"
-            set1.enableDashedLine(10f, 5f, 0f);
-            set1.enableDashedHighlightLine(10f, 5f, 0f);
-            set1.setColor(Color.BLACK);
-            set1.setCircleColor(Color.BLACK);
-            set1.setLineWidth(1f);
-            set1.setCircleRadius(3f);
-            set1.setDrawCircleHole(false);
-            set1.setValueTextSize(9f);
-            set1.setDrawFilled(true);
-            set1.setFormLineWidth(1f);
-            set1.setFormLineDashEffect(new DashPathEffect(new float[]{10f, 5f}, 0f));
-            set1.setFormSize(15.f);
-
-//            if (Utils.getSDKInt() >= 18) {
-//                // fill drawable only supported on api level 18 and above
-//                Drawable drawable = ContextCompat.getDrawable(this, R.drawable.fade_red);
-//                set1.setFillDrawable(drawable);
-//            }
-//            else {
-//                set1.setFillColor(Color.BLACK);
-//            }
-
-            ArrayList<ILineDataSet> dataSets = new ArrayList<ILineDataSet>();
-            dataSets.add(set1); // add the datasets
-
-            // create a data object with the datasets
-            LineData data = new LineData(dataSets);
-
-            // set data
-            mChart.setData(data);
+            mChart.setVisibility(View.VISIBLE);
         }
 
+        LimitLine ll1 = new LimitLine(Float.valueOf(model.getEarlyWarningThreshold()), "预警值");
+        ll1.setLineWidth(4f);
+        ll1.enableDashedLine(10f, 10f, 0f);
+        ll1.setLabelPosition(LimitLabelPosition.RIGHT_TOP);
+        ll1.setTextSize(10f);
+        ll1.setLineColor(Color.YELLOW);
+
+        LimitLine ll2 = new LimitLine(Float.valueOf(model.getThreshold()), "报警值");
+        ll2.setLineWidth(4f);
+        ll2.enableDashedLine(10f, 10f, 0f);
+        ll2.setLabelPosition(LimitLabelPosition.RIGHT_BOTTOM);
+        ll2.setTextSize(10f);
+        ll2.setLineColor(Color.RED);
+
+        LimitLine ll3 = new LimitLine(-Float.valueOf(model.getEarlyWarningThreshold()), "预警值");
+        ll3.setLineWidth(4f);
+        ll3.enableDashedLine(10f, 10f, 0f);
+        ll3.setLabelPosition(LimitLabelPosition.RIGHT_TOP);
+        ll3.setTextSize(10f);
+        ll3.setLineColor(Color.YELLOW);
+
+        LimitLine ll4 = new LimitLine(-Float.valueOf(model.getThreshold()), "报警值");
+        ll4.setLineWidth(4f);
+        ll4.enableDashedLine(10f, 10f, 0f);
+        ll4.setLabelPosition(LimitLabelPosition.RIGHT_BOTTOM);
+        ll4.setTextSize(10f);
+        ll4.setLineColor(Color.RED);
+
+        YAxis leftAxis = mChart.getAxisLeft();
+        leftAxis.removeAllLimitLines(); // reset all limit lines to avoid overlapping lines
+        leftAxis.addLimitLine(ll1);
+        leftAxis.addLimitLine(ll2);
+        leftAxis.addLimitLine(ll3);
+        leftAxis.addLimitLine(ll4);
+
+        if (isSpecialType) {
+            List<Entry> yVals1 = new ArrayList<>();
+            for (int i = model.getItems().size() - 1; i >= 0; i--) {
+                GetHistroySensorDataModel.Item item = model.getItems().get(i);
+                float yValue = Double.valueOf(item.getCol1()).floatValue();
+                float xValue = Double.valueOf(CommonUtils.hoursInDay(item.getAddTime())).floatValue();
+                yVals1.add(new Entry(xValue, yValue));
+            }
+
+            List<Entry> yVals2 = new ArrayList<>();
+            for (int i = model.getItems().size() - 1; i >= 0; i--) {
+                GetHistroySensorDataModel.Item item = model.getItems().get(i);
+                float yValue = Double.valueOf(item.getCol2()).floatValue();
+                float xValue = Double.valueOf(CommonUtils.hoursInDay(item.getAddTime())).floatValue();
+                yVals2.add(new Entry(xValue, yValue));
+            }
+
+            List<Entry> yVals3 = new ArrayList<>();
+            for (int i = model.getItems().size() - 1; i >= 0; i--) {
+                GetHistroySensorDataModel.Item item = model.getItems().get(i);
+                float yValue = Double.valueOf(item.getCol3()).floatValue();
+                float xValue = Double.valueOf(CommonUtils.hoursInDay(item.getAddTime())).floatValue();
+                yVals3.add(new Entry(xValue, yValue));
+            }
+
+            LineDataSet set1, set2, set3;
+
+            if (mChart.getData() != null &&
+                    mChart.getData().getDataSetCount() > 0) {
+                set1 = (LineDataSet) mChart.getData().getDataSetByIndex(0);
+                set2 = (LineDataSet) mChart.getData().getDataSetByIndex(1);
+                set3 = (LineDataSet) mChart.getData().getDataSetByIndex(2);
+                set1.setValues(yVals1);
+                set2.setValues(yVals2);
+                set3.setValues(yVals3);
+                mChart.getData().notifyDataChanged();
+                mChart.notifyDataSetChanged();
+            } else {
+                // create a dataset and give it a type
+                set1 = new LineDataSet(yVals1, "X轴");
+
+                set1.enableDashedLine(10f, 5f, 0f);
+                set1.enableDashedHighlightLine(10f, 5f, 0f);
+                set1.setColor(Color.GREEN);
+                set1.setCircleColor(Color.GREEN);
+                set1.setLineWidth(1f);
+                set1.setCircleRadius(3f);
+                set1.setDrawCircleHole(false);
+                set1.setValueTextSize(9f);
+                set1.setFormLineWidth(1f);
+                set1.setFormLineDashEffect(new DashPathEffect(new float[]{10f, 5f}, 0f));
+                set1.setFormSize(15.f);
+
+                // create a dataset and give it a type
+                set2 = new LineDataSet(yVals2, "Y轴");
+                set2.enableDashedLine(10f, 5f, 0f);
+                set2.enableDashedHighlightLine(10f, 5f, 0f);
+                set2.setColor(Color.CYAN);
+                set2.setCircleColor(Color.CYAN);
+                set2.setLineWidth(1f);
+                set2.setCircleRadius(3f);
+                set2.setDrawCircleHole(false);
+                set2.setValueTextSize(9f);
+                set2.setFormLineWidth(1f);
+                set2.setFormLineDashEffect(new DashPathEffect(new float[]{10f, 5f}, 0f));
+                set2.setFormSize(15.f);
+
+                set3 = new LineDataSet(yVals3, "Z轴");
+                set3.enableDashedLine(10f, 5f, 0f);
+                set3.enableDashedHighlightLine(10f, 5f, 0f);
+                set3.setColor(Color.MAGENTA);
+                set3.setCircleColor(Color.MAGENTA);
+                set3.setLineWidth(1f);
+                set3.setCircleRadius(3f);
+                set3.setDrawCircleHole(false);
+                set3.setValueTextSize(9f);
+                set3.setFormLineWidth(1f);
+                set3.setFormLineDashEffect(new DashPathEffect(new float[]{10f, 5f}, 0f));
+                set3.setFormSize(15.f);
+
+                // create a data object with the datasets
+                LineData data = new LineData(set1, set2, set3);
+                data.setValueTextColor(Color.BLACK);
+                data.setValueTextSize(9f);
+
+                // set data
+                mChart.setData(data);
+            }
+        } else {
+            List<Entry> yVals1 = new ArrayList<>();
+            for (int i = model.getItems().size() - 1; i >= 0; i--) {
+                GetHistroySensorDataModel.Item item = model.getItems().get(i);
+                float yValue = Double.valueOf(item.getCol1()).floatValue();
+                float xValue = Double.valueOf(CommonUtils.hoursInDay(item.getAddTime())).floatValue();
+                yVals1.add(new Entry(xValue, yValue));
+            }
+
+            LineDataSet set1;
+
+            if (mChart.getData() != null &&
+                    mChart.getData().getDataSetCount() > 0) {
+                set1 = (LineDataSet) mChart.getData().getDataSetByIndex(0);
+                set1.setValues(yVals1);
+                mChart.getData().notifyDataChanged();
+                mChart.notifyDataSetChanged();
+            } else {
+                // create a dataset and give it a type
+                set1 = new LineDataSet(yVals1, "X轴");
+
+                set1.enableDashedLine(10f, 5f, 0f);
+                set1.enableDashedHighlightLine(10f, 5f, 0f);
+                set1.setColor(Color.GREEN);
+                set1.setCircleColor(Color.GREEN);
+                set1.setLineWidth(1f);
+                set1.setCircleRadius(3f);
+                set1.setDrawCircleHole(false);
+                set1.setValueTextSize(9f);
+                set1.setFormLineWidth(1f);
+                set1.setFormLineDashEffect(new DashPathEffect(new float[]{10f, 5f}, 0f));
+                set1.setFormSize(15.f);
+
+                // create a data object with the datasets
+                LineData data = new LineData(set1);
+                data.setValueTextColor(Color.BLACK);
+                data.setValueTextSize(9f);
+
+                // set data
+                mChart.setData(data);
+            }
+        }
+
+        mChart.setVisibleXRangeMaximum(6);
     }
 
     @Override
@@ -244,170 +368,13 @@ public class LineChartActivity1 extends CommonActivity implements OnSeekBarChang
         super.onWindowFocusChanged(hasFocus);
     }
 
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        getMenuInflater().inflate(R.menu.line, menu);
-//        return true;
-//    }
-
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//
-//        switch (item.getItemId()) {
-//            case R.id.actionToggleValues: {
-//                List<ILineDataSet> sets = mChart.getData()
-//                        .getDataSets();
-//
-//                for (ILineDataSet iSet : sets) {
-//
-//                    LineDataSet set = (LineDataSet) iSet;
-//                    set.setDrawValues(!set.isDrawValuesEnabled());
-//                }
-//
-//                mChart.invalidate();
-//                break;
-//            }
-//            case R.id.actionToggleIcons: {
-//                List<ILineDataSet> sets = mChart.getData()
-//                        .getDataSets();
-//
-//                for (ILineDataSet iSet : sets) {
-//
-//                    LineDataSet set = (LineDataSet) iSet;
-//                    set.setDrawIcons(!set.isDrawIconsEnabled());
-//                }
-//
-//                mChart.invalidate();
-//                break;
-//            }
-//            case R.id.actionToggleHighlight: {
-//                if(mChart.getData() != null) {
-//                    mChart.getData().setHighlightEnabled(!mChart.getData().isHighlightEnabled());
-//                    mChart.invalidate();
-//                }
-//                break;
-//            }
-//            case R.id.actionToggleFilled: {
-//
-//                List<ILineDataSet> sets = mChart.getData()
-//                        .getDataSets();
-//
-//                for (ILineDataSet iSet : sets) {
-//
-//                    LineDataSet set = (LineDataSet) iSet;
-//                    if (set.isDrawFilledEnabled())
-//                        set.setDrawFilled(false);
-//                    else
-//                        set.setDrawFilled(true);
-//                }
-//                mChart.invalidate();
-//                break;
-//            }
-//            case R.id.actionToggleCircles: {
-//                List<ILineDataSet> sets = mChart.getData()
-//                        .getDataSets();
-//
-//                for (ILineDataSet iSet : sets) {
-//
-//                    LineDataSet set = (LineDataSet) iSet;
-//                    if (set.isDrawCirclesEnabled())
-//                        set.setDrawCircles(false);
-//                    else
-//                        set.setDrawCircles(true);
-//                }
-//                mChart.invalidate();
-//                break;
-//            }
-//            case R.id.actionToggleCubic: {
-//                List<ILineDataSet> sets = mChart.getData()
-//                        .getDataSets();
-//
-//                for (ILineDataSet iSet : sets) {
-//
-//                    LineDataSet set = (LineDataSet) iSet;
-//                    set.setMode(set.getMode() == LineDataSet.Mode.CUBIC_BEZIER
-//                            ? LineDataSet.Mode.LINEAR
-//                            :  LineDataSet.Mode.CUBIC_BEZIER);
-//                }
-//                mChart.invalidate();
-//                break;
-//            }
-//            case R.id.actionToggleStepped: {
-//                List<ILineDataSet> sets = mChart.getData()
-//                        .getDataSets();
-//
-//                for (ILineDataSet iSet : sets) {
-//
-//                    LineDataSet set = (LineDataSet) iSet;
-//                    set.setMode(set.getMode() == LineDataSet.Mode.STEPPED
-//                            ? LineDataSet.Mode.LINEAR
-//                            :  LineDataSet.Mode.STEPPED);
-//                }
-//                mChart.invalidate();
-//                break;
-//            }
-//            case R.id.actionToggleHorizontalCubic: {
-//                List<ILineDataSet> sets = mChart.getData()
-//                        .getDataSets();
-//
-//                for (ILineDataSet iSet : sets) {
-//
-//                    LineDataSet set = (LineDataSet) iSet;
-//                    set.setMode(set.getMode() == LineDataSet.Mode.HORIZONTAL_BEZIER
-//                            ? LineDataSet.Mode.LINEAR
-//                            :  LineDataSet.Mode.HORIZONTAL_BEZIER);
-//                }
-//                mChart.invalidate();
-//                break;
-//            }
-//            case R.id.actionTogglePinch: {
-//                if (mChart.isPinchZoomEnabled())
-//                    mChart.setPinchZoom(false);
-//                else
-//                    mChart.setPinchZoom(true);
-//
-//                mChart.invalidate();
-//                break;
-//            }
-//            case R.id.actionToggleAutoScaleMinMax: {
-//                mChart.setAutoScaleMinMaxEnabled(!mChart.isAutoScaleMinMaxEnabled());
-//                mChart.notifyDataSetChanged();
-//                break;
-//            }
-//            case R.id.animateX: {
-//                mChart.animateX(3000);
-//                break;
-//            }
-//            case R.id.animateY: {
-//                mChart.animateY(3000, Easing.EasingOption.EaseInCubic);
-//                break;
-//            }
-//            case R.id.animateXY: {
-//                mChart.animateXY(3000, 3000);
-//                break;
-//            }
-//            case R.id.actionSave: {
-//                if (mChart.saveToPath("title" + System.currentTimeMillis(), "")) {
-//                    Toast.makeText(getApplicationContext(), "Saving SUCCESSFUL!",
-//                            Toast.LENGTH_SHORT).show();
-//                } else
-//                    Toast.makeText(getApplicationContext(), "Saving FAILED!", Toast.LENGTH_SHORT)
-//                            .show();
-//
-//                // mChart.saveToGallery("title"+System.currentTimeMillis())
-//                break;
-//            }
-//        }
-//        return true;
-//    }
-
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 
-        tvX.setText("" + (mSeekBarX.getProgress() + 1));
-        tvY.setText("" + (mSeekBarY.getProgress()));
-
-        setData(mSeekBarX.getProgress() + 1, mSeekBarY.getProgress());
+//        tvX.setText("" + (mSeekBarX.getProgress() + 1));
+//        tvY.setText("" + (mSeekBarY.getProgress()));
+//
+//        setData(mSeekBarX.getProgress() + 1, mSeekBarY.getProgress());
 
         // redraw
         mChart.invalidate();
@@ -423,64 +390,6 @@ public class LineChartActivity1 extends CommonActivity implements OnSeekBarChang
     public void onStopTrackingTouch(SeekBar seekBar) {
         // TODO Auto-generated method stub
 
-    }
-
-    private void setData(int count, float range) {
-
-        ArrayList<Entry> values = new ArrayList<Entry>();
-
-        for (int i = 0; i < count; i++) {
-
-            float val = (float) (Math.random() * range) + 3;
-            values.add(new Entry(i, val, getResources().getDrawable(R.drawable.star)));
-        }
-
-        LineDataSet set1;
-
-        if (mChart.getData() != null &&
-                mChart.getData().getDataSetCount() > 0) {
-            set1 = (LineDataSet)mChart.getData().getDataSetByIndex(0);
-            set1.setValues(values);
-            mChart.getData().notifyDataChanged();
-            mChart.notifyDataSetChanged();
-        } else {
-            // create a dataset and give it a type
-            set1 = new LineDataSet(values, "DataSet 1");
-
-            set1.setDrawIcons(false);
-
-            // set the line to be drawn like this "- - - - - -"
-            set1.enableDashedLine(10f, 5f, 0f);
-            set1.enableDashedHighlightLine(10f, 5f, 0f);
-            set1.setColor(Color.BLACK);
-            set1.setCircleColor(Color.BLACK);
-            set1.setLineWidth(1f);
-            set1.setCircleRadius(3f);
-            set1.setDrawCircleHole(false);
-            set1.setValueTextSize(9f);
-            set1.setDrawFilled(true);
-            set1.setFormLineWidth(1f);
-            set1.setFormLineDashEffect(new DashPathEffect(new float[]{10f, 5f}, 0f));
-            set1.setFormSize(15.f);
-
-//            if (Utils.getSDKInt() >= 18) {
-//                // fill drawable only supported on api level 18 and above
-//                Drawable drawable = ContextCompat.getDrawable(this, R.drawable.fade_red);
-//                set1.setFillDrawable(drawable);
-//            }
-//            else {
-//                set1.setFillColor(Color.BLACK);
-//            }
-
-            ArrayList<ILineDataSet> dataSets = new ArrayList<ILineDataSet>();
-            dataSets.add(set1); // add the datasets
-
-            // create a data object with the datasets
-            LineData data = new LineData(dataSets);
-
-            // set data
-            mChart.setData(data);
-        }
     }
 
     @Override
@@ -537,5 +446,29 @@ public class LineChartActivity1 extends CommonActivity implements OnSeekBarChang
     @Override
     public void onNothingSelected() {
         Log.i("Nothing selected", "Nothing selected.");
+    }
+
+    void onEditDayClicked() {
+        TimeSelectorDialog dialog = new TimeSelectorDialog(this);
+        //设置标题
+        dialog.setTimeTitle("选择时间:");
+        //显示类型
+        dialog.setIsShowtype(TimeConfig.YEAR_MONTH_DAY);
+        //默认时间
+        dialog.setCurrentDate(selectedDayStr);
+        //隐藏清除按钮
+        dialog.setEmptyIsShow(false);
+        //设置起始时间
+        dialog.setStartYear(2010);
+        dialog.setDateListener(new DateListener() {
+            @Override
+            public void onReturnDate(String time,int year, int month, int day, int hour, int minute, int isShowType) {
+                loadDataForDay(time);
+            }
+            @Override
+            public void onReturnDate(String empty) {
+            }
+        });
+        dialog.show();
     }
 }

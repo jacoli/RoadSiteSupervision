@@ -146,8 +146,9 @@ public class MonitorPointListActivity extends CommonActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 PointListModel.Point point = model.getItems().get(position - 1);
                 Intent intent = new Intent(MonitorPointListActivity.this, LineChartActivity1.class);
-                intent.putExtra("title", "测点布局图");
+                intent.putExtra("title", point.getPointName());
                 intent.putExtra("id", point.getID());
+                intent.putExtra("special", point.getMonitorTypeName().equals("变形"));
                 startActivity(intent);
             }
         });

@@ -11,6 +11,7 @@ import android.os.Looper;
 import android.provider.MediaStore;
 import android.util.Log;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -105,5 +106,27 @@ public class CommonUtils {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Date curDate = new Date();
         return sdf.format(curDate);
+    }
+
+    static public double hoursInDay(String timeStr) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+        int milisecondsPerDay = 60 * 60 * 24 * 1000;
+
+        double hoursInDay= 0;
+
+        try {
+            Date date = sdf.parse(timeStr);
+            long time = date.getTime() + 8 * 3600 * 1000;
+            double days = Math.floor((double)time / milisecondsPerDay);
+            double secondsInDay = ((double)time - days * milisecondsPerDay) / 1000;
+            hoursInDay = secondsInDay / 60 / 60;
+        }
+        catch (ParseException e){
+        }
+        finally {
+        }
+
+        return hoursInDay;
     }
 }
