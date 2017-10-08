@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
@@ -58,7 +59,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class LineChartActivity1 extends CommonActivity implements OnSeekBarChangeListener,
+public class LineChartActivity1 extends CommonActivity implements
         OnChartGestureListener, OnChartValueSelectedListener {
 
     private LineChart mChart;
@@ -76,14 +77,15 @@ public class LineChartActivity1 extends CommonActivity implements OnSeekBarChang
     @BindView(R.id.loadView)
     LoadingView loadingView;
 
+    @BindView(R.id.chart_container)
+    LinearLayout chartContainer;
+
     private String selectedDayStr;
     private boolean isSpecialType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_linechart);
 
         ButterKnife.bind(this);
@@ -93,8 +95,6 @@ public class LineChartActivity1 extends CommonActivity implements OnSeekBarChang
 
         isSpecialType = getIntent().getBooleanExtra("special", false);
 
-
-
         mChart = (LineChart) findViewById(R.id.chart1);
 
 
@@ -103,6 +103,7 @@ public class LineChartActivity1 extends CommonActivity implements OnSeekBarChang
         mChart.setScaleEnabled(true);
         mChart.setDrawGridBackground(false);
         mChart.setHighlightPerDragEnabled(true);
+        mChart.setOnChartGestureListener(this);
 
         // no description text
         mChart.getDescription().setEnabled(false);
@@ -124,7 +125,7 @@ public class LineChartActivity1 extends CommonActivity implements OnSeekBarChang
 
         // modify the legend ...
         l.setForm(LegendForm.LINE);
-        l.setTextSize(11f);
+        //l.setTextSize(11f);
         l.setTextColor(Color.BLACK);
         l.setVerticalAlignment(Legend.LegendVerticalAlignment.TOP);
         l.setHorizontalAlignment(Legend.LegendHorizontalAlignment.RIGHT);
@@ -132,7 +133,7 @@ public class LineChartActivity1 extends CommonActivity implements OnSeekBarChang
         l.setDrawInside(false);
 
         XAxis xAxis = mChart.getXAxis();
-        xAxis.setTextSize(11f);
+        //xAxis.setTextSize(11f);
         xAxis.setTextColor(Color.BLACK);
         xAxis.setDrawGridLines(false);
         xAxis.setDrawAxisLine(false);
@@ -144,12 +145,6 @@ public class LineChartActivity1 extends CommonActivity implements OnSeekBarChang
         leftAxis.setGranularityEnabled(true);
 
         mChart.getAxisRight().setEnabled(false);
-
-//        YAxis rightAxis = mChart.getAxisRight();
-//        rightAxis.setTextColor(Color.RED);
-//        rightAxis.setDrawGridLines(false);
-//        rightAxis.setDrawZeroLine(false);
-//        rightAxis.setGranularityEnabled(false);
 
 
         loadDataForDay(CommonUtils.getCurrentDayStr());
@@ -165,7 +160,7 @@ public class LineChartActivity1 extends CommonActivity implements OnSeekBarChang
     void loadDataForDay(String dayStr) {
         loadingView.setVisibility(View.VISIBLE);
         placeHolderTextView.setVisibility(View.INVISIBLE);
-        mChart.setVisibility(View.INVISIBLE);
+        chartContainer.setVisibility(View.INVISIBLE);
 
         selectedDayStr = dayStr;
 
@@ -191,36 +186,28 @@ public class LineChartActivity1 extends CommonActivity implements OnSeekBarChang
             placeHolderTextView.setVisibility(View.VISIBLE);
             return;
         } else {
-            mChart.setVisibility(View.VISIBLE);
+            chartContainer.setVisibility(View.VISIBLE);
         }
 
         LimitLine ll1 = new LimitLine(Float.valueOf(model.getEarlyWarningThreshold()), "预警值");
-        ll1.setLineWidth(4f);
-        ll1.enableDashedLine(10f, 10f, 0f);
-        ll1.setLabelPosition(LimitLabelPosition.RIGHT_TOP);
-        ll1.setTextSize(10f);
+        ll1.setLabelPosition(LimitLabelPosition.RIGHT_BOTTOM);
         ll1.setLineColor(Color.YELLOW);
+        ll1.setTextColor(Color.YELLOW);
 
-        LimitLine ll2 = new LimitLine(Float.valueOf(model.getThreshold()), "报警值");
-        ll2.setLineWidth(4f);
-        ll2.enableDashedLine(10f, 10f, 0f);
-        ll2.setLabelPosition(LimitLabelPosition.RIGHT_BOTTOM);
-        ll2.setTextSize(10f);
+        LimitLine ll2 = new LimitLine(Float.valueOf(model.getThreshold()), "报警值(" + model.getThreshold() + ")");
+        ll2.setLabelPosition(LimitLabelPosition.RIGHT_TOP);
         ll2.setLineColor(Color.RED);
+        ll2.setTextColor(Color.RED);
 
         LimitLine ll3 = new LimitLine(-Float.valueOf(model.getEarlyWarningThreshold()), "预警值");
-        ll3.setLineWidth(4f);
-        ll3.enableDashedLine(10f, 10f, 0f);
         ll3.setLabelPosition(LimitLabelPosition.RIGHT_TOP);
-        ll3.setTextSize(10f);
         ll3.setLineColor(Color.YELLOW);
+        ll3.setTextColor(Color.YELLOW);
 
-        LimitLine ll4 = new LimitLine(-Float.valueOf(model.getThreshold()), "报警值");
-        ll4.setLineWidth(4f);
-        ll4.enableDashedLine(10f, 10f, 0f);
+        LimitLine ll4 = new LimitLine(-Float.valueOf(model.getThreshold()), "报警值(-" + model.getThreshold() + ")");
         ll4.setLabelPosition(LimitLabelPosition.RIGHT_BOTTOM);
-        ll4.setTextSize(10f);
         ll4.setLineColor(Color.RED);
+        ll4.setTextColor(Color.RED);
 
         YAxis leftAxis = mChart.getAxisLeft();
         leftAxis.removeAllLimitLines(); // reset all limit lines to avoid overlapping lines
@@ -274,10 +261,10 @@ public class LineChartActivity1 extends CommonActivity implements OnSeekBarChang
                 set1.enableDashedHighlightLine(10f, 5f, 0f);
                 set1.setColor(Color.GREEN);
                 set1.setCircleColor(Color.GREEN);
-                set1.setLineWidth(1f);
-                set1.setCircleRadius(3f);
+                //set1.setLineWidth(1f);
+                set1.setCircleRadius(2f);
                 set1.setDrawCircleHole(false);
-                set1.setValueTextSize(9f);
+                //set1.setValueTextSize(14f);
                 set1.setFormLineWidth(1f);
                 set1.setFormLineDashEffect(new DashPathEffect(new float[]{10f, 5f}, 0f));
                 set1.setFormSize(15.f);
@@ -288,10 +275,10 @@ public class LineChartActivity1 extends CommonActivity implements OnSeekBarChang
                 set2.enableDashedHighlightLine(10f, 5f, 0f);
                 set2.setColor(Color.CYAN);
                 set2.setCircleColor(Color.CYAN);
-                set2.setLineWidth(1f);
-                set2.setCircleRadius(3f);
-                set2.setDrawCircleHole(false);
-                set2.setValueTextSize(9f);
+                //set2.setLineWidth(1f);
+                set2.setCircleRadius(2f);
+                //set2.setDrawCircleHole(false);
+                //set2.setValueTextSize(9f);
                 set2.setFormLineWidth(1f);
                 set2.setFormLineDashEffect(new DashPathEffect(new float[]{10f, 5f}, 0f));
                 set2.setFormSize(15.f);
@@ -301,10 +288,10 @@ public class LineChartActivity1 extends CommonActivity implements OnSeekBarChang
                 set3.enableDashedHighlightLine(10f, 5f, 0f);
                 set3.setColor(Color.MAGENTA);
                 set3.setCircleColor(Color.MAGENTA);
-                set3.setLineWidth(1f);
-                set3.setCircleRadius(3f);
+                //set3.setLineWidth(1f);
+                set3.setCircleRadius(2f);
                 set3.setDrawCircleHole(false);
-                set3.setValueTextSize(9f);
+                //set3.setValueTextSize(9f);
                 set3.setFormLineWidth(1f);
                 set3.setFormLineDashEffect(new DashPathEffect(new float[]{10f, 5f}, 0f));
                 set3.setFormSize(15.f);
@@ -313,6 +300,7 @@ public class LineChartActivity1 extends CommonActivity implements OnSeekBarChang
                 LineData data = new LineData(set1, set2, set3);
                 data.setValueTextColor(Color.BLACK);
                 data.setValueTextSize(9f);
+                data.setDrawValues(false);
 
                 // set data
                 mChart.setData(data);
@@ -343,9 +331,9 @@ public class LineChartActivity1 extends CommonActivity implements OnSeekBarChang
                 set1.setColor(Color.GREEN);
                 set1.setCircleColor(Color.GREEN);
                 set1.setLineWidth(1f);
-                set1.setCircleRadius(3f);
+                set1.setCircleRadius(2f);
                 set1.setDrawCircleHole(false);
-                set1.setValueTextSize(9f);
+                //set1.setValueTextSize(9f);
                 set1.setFormLineWidth(1f);
                 set1.setFormLineDashEffect(new DashPathEffect(new float[]{10f, 5f}, 0f));
                 set1.setFormSize(15.f);
@@ -354,6 +342,7 @@ public class LineChartActivity1 extends CommonActivity implements OnSeekBarChang
                 LineData data = new LineData(set1);
                 data.setValueTextColor(Color.BLACK);
                 data.setValueTextSize(9f);
+                data.setDrawValues(false);
 
                 // set data
                 mChart.setData(data);
@@ -361,35 +350,8 @@ public class LineChartActivity1 extends CommonActivity implements OnSeekBarChang
         }
 
         mChart.setVisibleXRangeMaximum(6);
-    }
-
-    @Override
-    public void onWindowFocusChanged(boolean hasFocus) {
-        super.onWindowFocusChanged(hasFocus);
-    }
-
-    @Override
-    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-
-//        tvX.setText("" + (mSeekBarX.getProgress() + 1));
-//        tvY.setText("" + (mSeekBarY.getProgress()));
-//
-//        setData(mSeekBarX.getProgress() + 1, mSeekBarY.getProgress());
-
-        // redraw
-        mChart.invalidate();
-    }
-
-    @Override
-    public void onStartTrackingTouch(SeekBar seekBar) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void onStopTrackingTouch(SeekBar seekBar) {
-        // TODO Auto-generated method stub
-
+        mChart.getAxisLeft().setAxisMinimum(1.1f * Math.min(mChart.getData().getYMin(), -Float.valueOf(model.getThreshold())));
+        mChart.getAxisLeft().setAxisMaximum(1.1f * Math.max(mChart.getData().getYMax(), Float.valueOf(model.getThreshold())));
     }
 
     @Override
@@ -404,6 +366,12 @@ public class LineChartActivity1 extends CommonActivity implements OnSeekBarChang
         // un-highlight values after the gesture is finished and no single-tap
         if(lastPerformedGesture != ChartTouchListener.ChartGesture.SINGLE_TAP)
             mChart.highlightValues(null); // or highlightTouch(null) for callback to onNothingSelected(...)
+
+        if (mChart.getScaleY() > 1.5) {
+            mChart.getData().setDrawValues(true);
+        } else {
+            mChart.getData().setDrawValues(false);
+        }
     }
 
     @Override
@@ -428,7 +396,14 @@ public class LineChartActivity1 extends CommonActivity implements OnSeekBarChang
 
     @Override
     public void onChartScale(MotionEvent me, float scaleX, float scaleY) {
-        Log.i("Scale / Zoom", "ScaleX: " + scaleX + ", ScaleY: " + scaleY);
+        Log.i("Scale / Zoom", "ScaleX: " + scaleX + ", ScaleY: " + scaleY + "mChart.getScaleY()" + mChart.getScaleY());
+
+        if (mChart.getScaleY() > 1.5) {
+            mChart.getData().setDrawValues(true);
+        } else {
+            mChart.getData().setDrawValues(false);
+        }
+
     }
 
     @Override

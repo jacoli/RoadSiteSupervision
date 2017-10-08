@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/activity_linechart"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.jacoli.roadsitesupervision.DataMonitor.LineChartActivity1">
 
     <com.jacoli.roadsitesupervision.views.TitleBar
         android:id="@+id/title_bar"
@@ -13,7 +16,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_below="@+id/title_bar">
+        android:layout_below="@+id/title_bar"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:background="@color/material_blueGrey_50">
 
         <TextView
             android:id="@+id/text"
@@ -26,8 +32,8 @@
             />
 
         <Button
-            android:layout_width="120dp"
-            android:layout_height="@dimen/cell_height"
+            android:layout_width="100dp"
+            android:layout_height="30dp"
             android:layout_margin="16dp"
             android:background="@color/material_indigo_300"
             android:text="修改"
@@ -40,10 +46,26 @@
         android:layout_below="@+id/linear_layout"
         android:layout_alignParentBottom="true">
 
-        <com.github.mikephil.charting.charts.LineChart
-            android:id="@+id/chart1"
+        <LinearLayout
+            android:id="@+id/chart_container"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <com.github.mikephil.charting.charts.LineChart
+                android:id="@+id/chart1"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textSize="10sp"
+                android:text="时间(H)"
+                />
+        </LinearLayout>
 
         <TextView
             android:id="@+id/text_placehoder"
