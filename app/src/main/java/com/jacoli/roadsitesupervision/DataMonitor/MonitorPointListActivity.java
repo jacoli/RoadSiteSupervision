@@ -126,7 +126,7 @@ public class MonitorPointListActivity extends CommonActivity {
                     ((TextView)v.findViewById(R.id.text4)).setText(point.getUpdateTime());
                     ((TextView)v.findViewById(R.id.text5)).setText(point.getValStr());
 
-                    if (getIntent().getBooleanExtra("isAlarm", false)) {
+                    if (point.isAlarm()) {
                         int color = ContextCompat.getColor(MonitorPointListActivity.this, R.color.material_red_300);
                         ((TextView)v.findViewById(R.id.text1)).setTextColor(color);
                         ((TextView)v.findViewById(R.id.text2)).setTextColor(color);

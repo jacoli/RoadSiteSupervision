@@ -30,6 +30,7 @@ public class PointListModel extends ResponseBase {
         private String RealTimeVal3;
         private String Sunit;
         private String UpdateTime;
+        private boolean IsAlarm;
 
         public String getID () {return  ID;}
 
@@ -116,5 +117,9 @@ public class PointListModel extends ResponseBase {
         public void setUpdateTime(String updateTime) {
             UpdateTime = updateTime;
         }
+
+        public boolean isAlarm() { return IsAlarm; }
+
+        public void setAlarm(boolean isAlarm) { IsAlarm = isAlarm; }
     }
 }
