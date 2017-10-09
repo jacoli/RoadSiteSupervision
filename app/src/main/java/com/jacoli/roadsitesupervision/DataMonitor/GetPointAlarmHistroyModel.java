@@ -96,7 +96,7 @@ public class GetPointAlarmHistroyModel extends ResponseBase {
             if (ProcessStatus == 0) {
                 return "未处理";
             } else if (ProcessStatus == 1) {
-                return "处治完毕";
+                return "处理完毕";
             } else {
                 return "传感器故障";
             }

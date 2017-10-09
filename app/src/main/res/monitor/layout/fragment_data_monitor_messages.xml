@@ -30,14 +30,14 @@
             <View
                 android:id="@+id/seperator1"
                 android:layout_width="match_parent"
-                android:layout_height="4dp"
+                android:layout_height="3dp"
                 android:background="@color/material_blue_400"/>
         </LinearLayout>
 
         <View android:layout_width="2dp"
             android:layout_height="match_parent"
-            android:paddingBottom="4dp"
-            android:paddingTop="4dp"
+            android:layout_marginTop="6dp"
+            android:layout_marginBottom="6dp"
             android:background="@color/material_blueGrey_200"/>
 
         <LinearLayout
@@ -59,7 +59,7 @@
             <View
                 android:id="@+id/seperator2"
                 android:layout_width="match_parent"
-                android:layout_height="4dp"
+                android:layout_height="3dp"
                 android:background="@color/material_blueGrey_200"/>
         </LinearLayout>
 
