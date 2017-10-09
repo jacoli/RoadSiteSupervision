@@ -1,6 +1,8 @@
 package com.jacoli.roadsitesupervision.DataMonitor;
 
+import android.app.AlertDialog;
 import android.app.Fragment;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
@@ -11,6 +13,8 @@ import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.cjj.MaterialRefreshLayout;
 import com.cjj.MaterialRefreshListener;
 import com.jacoli.roadsitesupervision.EasyRequest.Callbacks;
@@ -285,12 +289,58 @@ public class MessagesFragment extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                PointListModel.Point point = model.getItems().get(position - 1);
-//                Intent intent = new Intent(MonitorPointListActivity.this, LineChartActivity1.class);
-//                intent.putExtra("title", point.getPointName());
-//                intent.putExtra("id", point.getID());
-//                intent.putExtra("special", point.getMonitorTypeName().equals("变形"));
-//                startActivity(intent);
+                if (position == 0) {
+                    return;
+                }
+
+                final GetPointAlarmHistroyModel.Item item = items.get(position - 1);
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                //builder.setTitle("提示");
+                builder.setMessage("报警处置 (序号：" + position + ")");
+
+                builder.setPositiveButton("处置完毕", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int which) {
+                        DataMonitorService.getInstance().ProcesstPointAlarmHistroy(item.getID(), 1, new Callbacks() {
+                            @Override
+                            public void onSuccess(ResponseBase responseModel) {
+                                items.remove(item);
+                                adapter.notifyDataSetChanged();
+                            }
+
+                            @Override
+                            public void onFailed(String error) {
+
+                            }
+                        });
+                    }
+                });
+                builder.setNeutralButton("传感器故障", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        DataMonitorService.getInstance().ProcesstPointAlarmHistroy(item.getID(), 2, new Callbacks() {
+                            @Override
+                            public void onSuccess(ResponseBase responseModel) {
+                                items.remove(item);
+                                adapter.notifyDataSetChanged();
+                            }
+
+                            @Override
+                            public void onFailed(String error) {
+
+                            }
+                        });
+                    }
+                });
+                builder.setNegativeButton("未处理", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                });
+
+                builder.setCancelable(true);
+                builder.create().show();
             }
         });
     }

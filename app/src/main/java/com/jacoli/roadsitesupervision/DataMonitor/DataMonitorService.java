@@ -370,4 +370,34 @@ public class DataMonitorService {
         }, handler, callbacks);
         req.asyncSend();
     }
+
+    public void ProcesstPointAlarmHistroy(final String AlarmHistroyID, final int ProcessStatus, Callbacks callbacks) {
+        EasyRequest req = new EasyRequest(new Processor() {
+            @Override
+            public Response buildRequestAndWaitingResponse() throws IOException {
+                FormBody body = new FormBody.Builder()
+                        .add("Token", getToken())
+                        .add("AlarmHistroyID", AlarmHistroyID)
+                        .add("ProcessStatus", String.valueOf(ProcessStatus))
+                        .build();
+
+                Request request = new Request.Builder()
+                        .url(requestUrl("ProcesstPointAlarmHistroy"))
+                        .post(body)
+                        .header("FromAPP", "")
+                        .build();
+
+                return httpClient.newCall(request).execute();
+            }
+
+            @Override
+            public ResponseBase jsonModelParsedFromResponseString(String responseJsonString, Gson gson) {
+                return gson.fromJson(responseJsonString, ResponseBase.class);
+            }
+
+            @Override
+            public void onSuccessHandleBeforeNotify(ResponseBase responseModel) {}
+        }, handler, callbacks);
+        req.asyncSend();
+    }
 }
