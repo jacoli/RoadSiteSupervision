@@ -5,6 +5,7 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import com.jacoli.roadsitesupervision.CommonActivity;
 import com.jacoli.roadsitesupervision.DataMonitor.DataMonitorFragment;
+import com.jacoli.roadsitesupervision.DataMonitor.MessagesFragment;
 import com.jacoli.roadsitesupervision.R;
 import android.app.FragmentTransaction;
 import android.content.Intent;
@@ -31,6 +32,7 @@ public class MonitorMainActivity extends CommonActivity {
     private DataMonitorFragment informationFragment;
     private DeviceManagerFragment deviceManagerFragment;
     private MonitorSettingFragment settingsFragment;
+    private MessagesFragment messagesFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,18 +87,18 @@ public class MonitorMainActivity extends CommonActivity {
 //                });
 //
 //                break;
-//            case R.id.tab_sites:
-//                titleBar.setTitle("安全巡查");
-//
-//                if (sitesFragment == null) {
-//                    // 如果MessageFragment为空，则创建一个并添加到界面上
-//                    sitesFragment = new SitesFragment();
-//                    transaction.add(R.id.contentContainer, sitesFragment);
-//                } else {
-//                    // 如果MessageFragment不为空，则直接将它显示出来
-//                    transaction.show(sitesFragment);
-//                }
-//                break;
+            case R.id.tab_messages:
+                titleBar.setTitle("报警信息");
+
+                if (messagesFragment == null) {
+                    // 如果MessageFragment为空，则创建一个并添加到界面上
+                    messagesFragment = new MessagesFragment();
+                    transaction.add(R.id.contentContainer, messagesFragment);
+                } else {
+                    // 如果MessageFragment不为空，则直接将它显示出来
+                    transaction.show(messagesFragment);
+                }
+                break;
             case R.id.tab_informations:
                 titleBar.setTitle("数据监控");
 
@@ -143,8 +145,8 @@ public class MonitorMainActivity extends CommonActivity {
         if (todoListFragment != null) {
             transaction.hide(todoListFragment);
         }
-        if (sitesFragment != null) {
-            transaction.hide(sitesFragment);
+        if (messagesFragment != null) {
+            transaction.hide(messagesFragment);
         }
         if (informationFragment != null) {
             transaction.hide(informationFragment);

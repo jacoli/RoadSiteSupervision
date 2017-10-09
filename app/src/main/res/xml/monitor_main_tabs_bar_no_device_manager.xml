@@ -12,6 +12,10 @@
         icon="@drawable/ic_data_statistics"
         title="监控数据" />
     <tab
+        id="@+id/tab_messages"
+        icon="@drawable/ic_messages"
+        title="报警信息" />
+    <tab
         id="@+id/tab_settings"
         icon="@drawable/ic_settings_2"
         title="系统设置" />

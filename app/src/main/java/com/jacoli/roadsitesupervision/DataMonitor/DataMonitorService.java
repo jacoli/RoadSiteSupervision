@@ -339,4 +339,35 @@ public class DataMonitorService {
         }, handler, callbacks);
         req.asyncSend();
     }
+
+    public void GetPointAlarmHistroy(final boolean IsProcessed, final int page, Callbacks callbacks) {
+        EasyRequest req = new EasyRequest(new Processor() {
+            @Override
+            public Response buildRequestAndWaitingResponse() throws IOException {
+                FormBody body = new FormBody.Builder()
+                        .add("Token", getToken())
+                        .add("ProjectID", MainService.getInstance().getLoginModel().getProjectID())
+                        .add("IsProcessed", IsProcessed ? "true" : "false")
+                        .add("Page", String.valueOf(page))
+                        .build();
+
+                Request request = new Request.Builder()
+                        .url(requestUrl("GetPointAlarmHistroy"))
+                        .post(body)
+                        .header("FromAPP", "")
+                        .build();
+
+                return httpClient.newCall(request).execute();
+            }
+
+            @Override
+            public ResponseBase jsonModelParsedFromResponseString(String responseJsonString, Gson gson) {
+                return gson.fromJson(responseJsonString, GetPointAlarmHistroyModel.class);
+            }
+
+            @Override
+            public void onSuccessHandleBeforeNotify(ResponseBase responseModel) {}
+        }, handler, callbacks);
+        req.asyncSend();
+    }
 }
