@@ -1,40 +1,21 @@
 package com.jacoli.roadsitesupervision.DataMonitor;
 
-
-import android.app.AlertDialog;
 import android.app.Fragment;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.IdRes;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
-//import android.support.v4.view.ViewPager;
-import android.support.v4.view.ViewPager;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.cjj.MaterialRefreshLayout;
 import com.cjj.MaterialRefreshListener;
 import com.jacoli.roadsitesupervision.EasyRequest.Callbacks;
 import com.jacoli.roadsitesupervision.EasyRequest.ResponseBase;
 import com.jacoli.roadsitesupervision.R;
-
-import java.io.FileDescriptor;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,6 +33,18 @@ public class MessagesFragment extends Fragment {
     @BindView(R.id.tab2)
     LinearLayout linearLayout2;
 
+    @BindView(R.id.title1)
+    TextView textView1;
+
+    @BindView(R.id.title2)
+    TextView textView2;
+
+    @BindView(R.id.seperator1)
+    View seperator1;
+
+    @BindView(R.id.seperator2)
+    View seperator2;
+
     @BindView(R.id.refresh)
     MaterialRefreshLayout refreshLayout;
 
@@ -68,9 +61,10 @@ public class MessagesFragment extends Fragment {
     private BaseAdapter adapter2;
 
     private List<GetPointAlarmHistroyModel> models;
+    private List<GetPointAlarmHistroyModel.Item> items;
 
-    private GetPointAlarmHistroyModel model;
-    private GetPointAlarmHistroyModel model2;
+    private List<GetPointAlarmHistroyModel> models2;
+    private List<GetPointAlarmHistroyModel.Item> items2;
 
     public MessagesFragment() {
         // Required empty public constructor
@@ -84,20 +78,34 @@ public class MessagesFragment extends Fragment {
         ButterKnife.bind(this, view);
 
         models = new ArrayList<>();
+        items = new ArrayList<>();
+        models2 = new ArrayList<>();
+        items2 = new ArrayList<>();
+
+        final int selectedColor = ContextCompat.getColor(getActivity(), R.color.material_blue_400);
+        final int unselectedColor = ContextCompat.getColor(getActivity(), R.color.material_blueGrey_200);
 
         linearLayout1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 refreshLayout.setVisibility(View.VISIBLE);
+                textView1.setTextColor(selectedColor);
+                seperator1.setBackgroundColor(selectedColor);
                 refreshLayout2.setVisibility(View.INVISIBLE);
+                textView2.setTextColor(unselectedColor);
+                seperator2.setBackgroundColor(unselectedColor);
             }
         });
 
         linearLayout2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                refreshLayout2.setVisibility(View.VISIBLE);
                 refreshLayout.setVisibility(View.INVISIBLE);
+                textView1.setTextColor(unselectedColor);
+                seperator1.setBackgroundColor(unselectedColor);
+                refreshLayout2.setVisibility(View.VISIBLE);
+                textView2.setTextColor(selectedColor);
+                seperator2.setBackgroundColor(selectedColor);
             }
         });
 
@@ -123,9 +131,12 @@ public class MessagesFragment extends Fragment {
 
             @Override
             public void onRefreshLoadMore(MaterialRefreshLayout materialRefreshLayout) {
-                loadData2();
+                loadMore2();
             }
         });
+
+        loadData();
+        loadData2();
 
         return view;
     }
@@ -136,7 +147,9 @@ public class MessagesFragment extends Fragment {
             public void onSuccess(ResponseBase responseModel) {
                 GetPointAlarmHistroyModel model = (GetPointAlarmHistroyModel)responseModel;
                 models.clear();
+                items.clear();
                 models.add(model);
+                items.addAll(model.getItems());
                 adapter.notifyDataSetChanged();
                 refreshLayout.finishRefresh();
                 refreshLayout.finishRefreshLoadMore();
@@ -156,11 +169,12 @@ public class MessagesFragment extends Fragment {
     }
 
     public void loadMore() {
-        DataMonitorService.getInstance().GetPointAlarmHistroy(false, 1, new Callbacks() {
+        DataMonitorService.getInstance().GetPointAlarmHistroy(false, models.size() + 1, new Callbacks() {
             @Override
             public void onSuccess(ResponseBase responseModel) {
                 GetPointAlarmHistroyModel model = (GetPointAlarmHistroyModel)responseModel;
                 models.add(model);
+                items.addAll(model.getItems());
                 adapter.notifyDataSetChanged();
                 refreshLayout.finishRefresh();
                 refreshLayout.finishRefreshLoadMore();
@@ -180,13 +194,43 @@ public class MessagesFragment extends Fragment {
     }
 
     public void loadData2() {
-        DataMonitorService.getInstance().GetPointAlarmHistroy(false, 1, new Callbacks() {
+        DataMonitorService.getInstance().GetPointAlarmHistroy(true, 1, new Callbacks() {
             @Override
             public void onSuccess(ResponseBase responseModel) {
-                model = (GetPointAlarmHistroyModel) responseModel;
-                adapter.notifyDataSetChanged();
+                GetPointAlarmHistroyModel model = (GetPointAlarmHistroyModel)responseModel;
+                models2.clear();
+                items2.clear();
+                models2.add(model);
+                items2.addAll(model.getItems());
+                adapter2.notifyDataSetChanged();
                 refreshLayout2.finishRefresh();
                 refreshLayout2.finishRefreshLoadMore();
+                refreshLayout2.setLoadMore(model.getPageCounts() > 1);
+                //dismissHUD();
+            }
+
+            @Override
+            public void onFailed(String error) {
+                //showToast(error);
+                refreshLayout2.finishRefresh();
+                refreshLayout2.finishRefreshLoadMore();
+                //dismissHUD();
+            }
+        });
+        //showHUD();
+    }
+
+    public void loadMore2() {
+        DataMonitorService.getInstance().GetPointAlarmHistroy(true, models2.size() + 1, new Callbacks() {
+            @Override
+            public void onSuccess(ResponseBase responseModel) {
+                GetPointAlarmHistroyModel model = (GetPointAlarmHistroyModel)responseModel;
+                models2.add(model);
+                items2.addAll(model.getItems());
+                adapter2.notifyDataSetChanged();
+                refreshLayout2.finishRefresh();
+                refreshLayout2.finishRefreshLoadMore();
+                refreshLayout2.setLoadMore(model.getPageCounts() > models2.size());
                 //dismissHUD();
             }
 
@@ -206,7 +250,7 @@ public class MessagesFragment extends Fragment {
 
             @Override
             public int getCount() {
-                return model == null ? 1 : model.getItems().size() + 1;
+                return items.size() + 1;
             }
 
             @Override
@@ -222,16 +266,16 @@ public class MessagesFragment extends Fragment {
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
                 if (position == 0) {
-                    return getActivity().getLayoutInflater().inflate(R.layout.list_item_point_list_header, null);
+                    return getActivity().getLayoutInflater().inflate(R.layout.list_item_message_list_header, null);
                 } else {
-                    GetPointAlarmHistroyModel.Item item = model.getItems().get(position - 1);
-                    View v = getActivity().getLayoutInflater().inflate(R.layout.list_item_point_list_cell, null);
+                    GetPointAlarmHistroyModel.Item item = items.get(position - 1);
+                    View v = getActivity().getLayoutInflater().inflate(R.layout.list_item_message_list_cell, null);
                     ((TextView)v.findViewById(R.id.text1)).setText(String.valueOf(position));
-                    ((TextView)v.findViewById(R.id.text2)).setText(item.getProcessByName());
+                    ((TextView)v.findViewById(R.id.text2)).setText(item.getUnitProjectName());
                     ((TextView)v.findViewById(R.id.text3)).setText(item.getPointCode());
-                    ((TextView)v.findViewById(R.id.text4)).setText(item.getAddTime());
-                    ((TextView)v.findViewById(R.id.text5)).setText(item.getMonitorTypeName());
-
+                    ((TextView)v.findViewById(R.id.text4)).setText(item.getMonitorTypeName());
+                    ((TextView)v.findViewById(R.id.text5)).setText(item.getProcessStatusStr());
+                    ((TextView)v.findViewById(R.id.text6)).setText(item.getAddTime());
                     return v;
                 }
             }
@@ -256,7 +300,7 @@ public class MessagesFragment extends Fragment {
 
             @Override
             public int getCount() {
-                return model2 == null ? 1 : model2.getItems().size() + 1;
+                return items2.size() + 1;
             }
 
             @Override
@@ -272,16 +316,16 @@ public class MessagesFragment extends Fragment {
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
                 if (position == 0) {
-                    return getActivity().getLayoutInflater().inflate(R.layout.list_item_point_list_header, null);
+                    return getActivity().getLayoutInflater().inflate(R.layout.list_item_message_list_header, null);
                 } else {
-                    GetPointAlarmHistroyModel.Item item = model2.getItems().get(position - 1);
-                    View v = getActivity().getLayoutInflater().inflate(R.layout.list_item_point_list_cell, null);
+                    GetPointAlarmHistroyModel.Item item = items2.get(position - 1);
+                    View v = getActivity().getLayoutInflater().inflate(R.layout.list_item_message_list_cell, null);
                     ((TextView)v.findViewById(R.id.text1)).setText(String.valueOf(position));
-                    ((TextView)v.findViewById(R.id.text2)).setText(item.getProcessByName());
+                    ((TextView)v.findViewById(R.id.text2)).setText(item.getUnitProjectName());
                     ((TextView)v.findViewById(R.id.text3)).setText(item.getPointCode());
-                    ((TextView)v.findViewById(R.id.text4)).setText(item.getAddTime());
-                    ((TextView)v.findViewById(R.id.text5)).setText(item.getMonitorTypeName());
-
+                    ((TextView)v.findViewById(R.id.text4)).setText(item.getMonitorTypeName());
+                    ((TextView)v.findViewById(R.id.text5)).setText(item.getProcessStatusStr());
+                    ((TextView)v.findViewById(R.id.text6)).setText(item.getAddTime());
                     return v;
                 }
             }

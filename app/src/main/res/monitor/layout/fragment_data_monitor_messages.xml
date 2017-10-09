@@ -18,14 +18,18 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/title1"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:gravity="center"
                 android:textSize="18sp"
                 android:text="未处理"
+                android:textColor="@color/material_blue_400"
                 />
-            <View android:layout_width="match_parent"
+            <View
+                android:id="@+id/seperator1"
+                android:layout_width="match_parent"
                 android:layout_height="4dp"
                 android:background="@color/material_blue_400"/>
         </LinearLayout>
@@ -44,6 +48,7 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/title2"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
@@ -51,9 +56,11 @@
                 android:textSize="18sp"
                 android:text="已处理"
                 />
-            <View android:layout_width="match_parent"
+            <View
+                android:id="@+id/seperator2"
+                android:layout_width="match_parent"
                 android:layout_height="4dp"
-                android:background="@color/material_blue_400"/>
+                android:background="@color/material_blueGrey_200"/>
         </LinearLayout>
 
     </LinearLayout>

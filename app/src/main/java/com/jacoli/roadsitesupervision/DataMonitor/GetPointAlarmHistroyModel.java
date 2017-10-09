@@ -92,6 +92,17 @@ public class GetPointAlarmHistroyModel extends ResponseBase {
             return ProcessStatus;
         }
 
+        public String getProcessStatusStr() {
+            if (ProcessStatus == 0) {
+                return "未处理";
+            } else if (ProcessStatus == 1) {
+                return "处治完毕";
+            } else {
+                return "传感器故障";
+            }
+        }
+
+
         public void setProcessStatus(int processStatus) {
             ProcessStatus = processStatus;
         }
