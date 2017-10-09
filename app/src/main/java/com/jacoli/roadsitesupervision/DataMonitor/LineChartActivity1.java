@@ -189,25 +189,36 @@ public class LineChartActivity1 extends CommonActivity implements
             chartContainer.setVisibility(View.VISIBLE);
         }
 
+        final int color1 = ContextCompat.getColor(this, R.color.material_blue_500);
+        final int color2 = ContextCompat.getColor(this, R.color.material_green_500);
+        final int color3 = ContextCompat.getColor(this, R.color.material_brown_500);
+
+        final int errorColor = ContextCompat.getColor(this, R.color.material_red_500);
+        final int warnColor = ContextCompat.getColor(this, R.color.material_orange_500);
+
         LimitLine ll1 = new LimitLine(Float.valueOf(model.getEarlyWarningThreshold()), "预警值");
         ll1.setLabelPosition(LimitLabelPosition.RIGHT_BOTTOM);
-        ll1.setLineColor(Color.YELLOW);
-        ll1.setTextColor(Color.YELLOW);
+        ll1.setLineColor(warnColor);
+        ll1.setTextColor(warnColor);
+        ll1.setLineWidth(2f);
 
         LimitLine ll2 = new LimitLine(Float.valueOf(model.getThreshold()), "报警值(" + model.getThreshold() + ")");
         ll2.setLabelPosition(LimitLabelPosition.RIGHT_TOP);
-        ll2.setLineColor(Color.RED);
-        ll2.setTextColor(Color.RED);
+        ll2.setLineColor(errorColor);
+        ll2.setTextColor(errorColor);
+        ll2.setLineWidth(2f);
 
         LimitLine ll3 = new LimitLine(-Float.valueOf(model.getEarlyWarningThreshold()), "预警值");
         ll3.setLabelPosition(LimitLabelPosition.RIGHT_TOP);
-        ll3.setLineColor(Color.YELLOW);
-        ll3.setTextColor(Color.YELLOW);
+        ll3.setLineColor(warnColor);
+        ll3.setTextColor(warnColor);
+        ll3.setLineWidth(2f);
 
         LimitLine ll4 = new LimitLine(-Float.valueOf(model.getThreshold()), "报警值(-" + model.getThreshold() + ")");
         ll4.setLabelPosition(LimitLabelPosition.RIGHT_BOTTOM);
-        ll4.setLineColor(Color.RED);
-        ll4.setTextColor(Color.RED);
+        ll4.setLineColor(errorColor);
+        ll4.setTextColor(errorColor);
+        ll4.setLineWidth(2f);
 
         YAxis leftAxis = mChart.getAxisLeft();
         leftAxis.removeAllLimitLines(); // reset all limit lines to avoid overlapping lines
@@ -259,10 +270,10 @@ public class LineChartActivity1 extends CommonActivity implements
 
                 set1.enableDashedLine(10f, 5f, 0f);
                 set1.enableDashedHighlightLine(10f, 5f, 0f);
-                set1.setColor(Color.GREEN);
-                set1.setCircleColor(Color.GREEN);
+                set1.setColor(color1);
+                set1.setCircleColor(color1);
                 //set1.setLineWidth(1f);
-                set1.setCircleRadius(2f);
+                set1.setCircleRadius(4f);
                 set1.setDrawCircleHole(false);
                 //set1.setValueTextSize(14f);
                 set1.setFormLineWidth(1f);
@@ -273,10 +284,10 @@ public class LineChartActivity1 extends CommonActivity implements
                 set2 = new LineDataSet(yVals2, "Y轴");
                 set2.enableDashedLine(10f, 5f, 0f);
                 set2.enableDashedHighlightLine(10f, 5f, 0f);
-                set2.setColor(Color.CYAN);
-                set2.setCircleColor(Color.CYAN);
+                set2.setColor(color2);
+                set2.setCircleColor(color2);
                 //set2.setLineWidth(1f);
-                set2.setCircleRadius(2f);
+                set2.setCircleRadius(4f);
                 //set2.setDrawCircleHole(false);
                 //set2.setValueTextSize(9f);
                 set2.setFormLineWidth(1f);
@@ -286,10 +297,10 @@ public class LineChartActivity1 extends CommonActivity implements
                 set3 = new LineDataSet(yVals3, "Z轴");
                 set3.enableDashedLine(10f, 5f, 0f);
                 set3.enableDashedHighlightLine(10f, 5f, 0f);
-                set3.setColor(Color.MAGENTA);
-                set3.setCircleColor(Color.MAGENTA);
+                set3.setColor(color3);
+                set3.setCircleColor(color3);
                 //set3.setLineWidth(1f);
-                set3.setCircleRadius(2f);
+                set3.setCircleRadius(4f);
                 set3.setDrawCircleHole(false);
                 //set3.setValueTextSize(9f);
                 set3.setFormLineWidth(1f);
@@ -328,10 +339,10 @@ public class LineChartActivity1 extends CommonActivity implements
 
                 set1.enableDashedLine(10f, 5f, 0f);
                 set1.enableDashedHighlightLine(10f, 5f, 0f);
-                set1.setColor(Color.GREEN);
-                set1.setCircleColor(Color.GREEN);
+                set1.setColor(color1);
+                set1.setCircleColor(color1);
                 set1.setLineWidth(1f);
-                set1.setCircleRadius(2f);
+                set1.setCircleRadius(4f);
                 set1.setDrawCircleHole(false);
                 //set1.setValueTextSize(9f);
                 set1.setFormLineWidth(1f);
@@ -350,8 +361,8 @@ public class LineChartActivity1 extends CommonActivity implements
         }
 
         mChart.setVisibleXRangeMaximum(6);
-        mChart.getAxisLeft().setAxisMinimum(1.1f * Math.min(mChart.getData().getYMin(), -Float.valueOf(model.getThreshold())));
-        mChart.getAxisLeft().setAxisMaximum(1.1f * Math.max(mChart.getData().getYMax(), Float.valueOf(model.getThreshold())));
+        mChart.getAxisLeft().setAxisMinimum(1.3f * Math.min(mChart.getData().getYMin(), -Float.valueOf(model.getThreshold())));
+        mChart.getAxisLeft().setAxisMaximum(1.3f * Math.max(mChart.getData().getYMax(), Float.valueOf(model.getThreshold())));
     }
 
     @Override
