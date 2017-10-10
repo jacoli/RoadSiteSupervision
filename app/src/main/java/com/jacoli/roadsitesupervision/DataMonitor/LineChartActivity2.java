@@ -59,17 +59,10 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class LineChartActivity1 extends CommonActivity implements
+public class LineChartActivity2 extends CommonActivity implements
         OnChartGestureListener, OnChartValueSelectedListener {
 
     private LineChart mChart;
-    //private SeekBar mSeekBarX, mSeekBarY;
-    //private TextView tvX, tvY;
-    @BindView(R.id.text)
-    TextView textView;
-
-    @BindView(R.id.submit_btn)
-    Button button;
 
     @BindView(R.id.text_placehoder)
     TextView placeHolderTextView;
@@ -80,20 +73,15 @@ public class LineChartActivity1 extends CommonActivity implements
     @BindView(R.id.chart_container)
     LinearLayout chartContainer;
 
-    private String selectedDayStr;
-    private boolean isSpecialType;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_linechart);
+        setContentView(R.layout.activity_linechart2);
 
         ButterKnife.bind(this);
 
         createTitleBar();
         titleBar.setTitle(getIntent().getStringExtra("title"));
-
-        isSpecialType = getIntent().getBooleanExtra("special", false);
 
         mChart = (LineChart) findViewById(R.id.chart1);
 
@@ -112,10 +100,10 @@ public class LineChartActivity1 extends CommonActivity implements
         // enable touch gestures
         mChart.setTouchEnabled(true);
 
+        mChart.setAutoScaleMinMaxEnabled(true);
+
         // if disabled, scaling can be done on x- and y-axis separately
         mChart.setPinchZoom(true);
-
-        mChart.setAutoScaleMinMaxEnabled(true);
 
         // set an alternative background color
         //mChart.setBackgroundColor(Color.LTGRAY);
@@ -149,24 +137,15 @@ public class LineChartActivity1 extends CommonActivity implements
         mChart.getAxisRight().setEnabled(false);
 
 
-        loadDataForDay(CommonUtils.getCurrentDayStr());
-
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onEditDayClicked();
-            }
-        });
+        loadDataForDay();
     }
 
-    void loadDataForDay(String dayStr) {
+    void loadDataForDay() {
         loadingView.setVisibility(View.VISIBLE);
         placeHolderTextView.setVisibility(View.INVISIBLE);
         chartContainer.setVisibility(View.INVISIBLE);
 
-        selectedDayStr = dayStr;
-
-        DataMonitorService.getInstance().GetHistroySensorData(getIntent().getStringExtra("id"), dayStr, new Callbacks() {
+        DataMonitorService.getInstance().GetHistroySensorData2(getIntent().getStringExtra("id"), new Callbacks() {
             @Override
             public void onSuccess(ResponseBase responseModel) {
                 GetHistroySensorDataModel model = (GetHistroySensorDataModel)responseModel;
@@ -178,8 +157,6 @@ public class LineChartActivity1 extends CommonActivity implements
 
             }
         });
-
-        textView.setText("日期选择：" + dayStr);
     }
 
     void setDataFromModel(GetHistroySensorDataModel model) {
@@ -192,8 +169,6 @@ public class LineChartActivity1 extends CommonActivity implements
         }
 
         final int color1 = ContextCompat.getColor(this, R.color.material_blue_500);
-        final int color2 = ContextCompat.getColor(this, R.color.material_green_500);
-        final int color3 = ContextCompat.getColor(this, R.color.material_brown_500);
 
         final int errorColor = ContextCompat.getColor(this, R.color.material_red_500);
         final int warnColor = ContextCompat.getColor(this, R.color.material_orange_500);
@@ -229,140 +204,48 @@ public class LineChartActivity1 extends CommonActivity implements
         leftAxis.addLimitLine(ll3);
         leftAxis.addLimitLine(ll4);
 
-        if (isSpecialType) {
-            List<Entry> yVals1 = new ArrayList<>();
-            for (int i = model.getItems().size() - 1; i >= 0; i--) {
-                GetHistroySensorDataModel.Item item = model.getItems().get(i);
-                float yValue = Double.valueOf(item.getCol1()).floatValue();
-                float xValue = Double.valueOf(CommonUtils.hoursInDay(item.getAddTime())).floatValue();
-                yVals1.add(new Entry(xValue, yValue));
-            }
-
-            List<Entry> yVals2 = new ArrayList<>();
-            for (int i = model.getItems().size() - 1; i >= 0; i--) {
-                GetHistroySensorDataModel.Item item = model.getItems().get(i);
-                float yValue = Double.valueOf(item.getCol2()).floatValue();
-                float xValue = Double.valueOf(CommonUtils.hoursInDay(item.getAddTime())).floatValue();
-                yVals2.add(new Entry(xValue, yValue));
-            }
-
-            List<Entry> yVals3 = new ArrayList<>();
-            for (int i = model.getItems().size() - 1; i >= 0; i--) {
-                GetHistroySensorDataModel.Item item = model.getItems().get(i);
-                float yValue = Double.valueOf(item.getCol3()).floatValue();
-                float xValue = Double.valueOf(CommonUtils.hoursInDay(item.getAddTime())).floatValue();
-                yVals3.add(new Entry(xValue, yValue));
-            }
-
-            LineDataSet set1, set2, set3;
-
-            if (mChart.getData() != null &&
-                    mChart.getData().getDataSetCount() > 0) {
-                set1 = (LineDataSet) mChart.getData().getDataSetByIndex(0);
-                set2 = (LineDataSet) mChart.getData().getDataSetByIndex(1);
-                set3 = (LineDataSet) mChart.getData().getDataSetByIndex(2);
-                set1.setValues(yVals1);
-                set2.setValues(yVals2);
-                set3.setValues(yVals3);
-                mChart.getData().notifyDataChanged();
-                mChart.notifyDataSetChanged();
-            } else {
-                // create a dataset and give it a type
-                set1 = new LineDataSet(yVals1, "X轴");
-
-                set1.enableDashedLine(10f, 5f, 0f);
-                set1.enableDashedHighlightLine(10f, 5f, 0f);
-                set1.setColor(color1);
-                set1.setCircleColor(color1);
-                //set1.setLineWidth(1f);
-                set1.setCircleRadius(4f);
-                set1.setDrawCircleHole(false);
-                //set1.setValueTextSize(14f);
-                set1.setFormLineWidth(1f);
-                set1.setFormLineDashEffect(new DashPathEffect(new float[]{10f, 5f}, 0f));
-                set1.setFormSize(15.f);
-
-                // create a dataset and give it a type
-                set2 = new LineDataSet(yVals2, "Y轴");
-                set2.enableDashedLine(10f, 5f, 0f);
-                set2.enableDashedHighlightLine(10f, 5f, 0f);
-                set2.setColor(color2);
-                set2.setCircleColor(color2);
-                //set2.setLineWidth(1f);
-                set2.setCircleRadius(4f);
-                //set2.setDrawCircleHole(false);
-                //set2.setValueTextSize(9f);
-                set2.setFormLineWidth(1f);
-                set2.setFormLineDashEffect(new DashPathEffect(new float[]{10f, 5f}, 0f));
-                set2.setFormSize(15.f);
-
-                set3 = new LineDataSet(yVals3, "Z轴");
-                set3.enableDashedLine(10f, 5f, 0f);
-                set3.enableDashedHighlightLine(10f, 5f, 0f);
-                set3.setColor(color3);
-                set3.setCircleColor(color3);
-                //set3.setLineWidth(1f);
-                set3.setCircleRadius(4f);
-                set3.setDrawCircleHole(false);
-                //set3.setValueTextSize(9f);
-                set3.setFormLineWidth(1f);
-                set3.setFormLineDashEffect(new DashPathEffect(new float[]{10f, 5f}, 0f));
-                set3.setFormSize(15.f);
-
-                // create a data object with the datasets
-                LineData data = new LineData(set1, set2, set3);
-                data.setValueTextColor(Color.BLACK);
-                data.setValueTextSize(9f);
-                data.setDrawValues(false);
-
-                // set data
-                mChart.setData(data);
-            }
-        } else {
-            List<Entry> yVals1 = new ArrayList<>();
-            for (int i = model.getItems().size() - 1; i >= 0; i--) {
-                GetHistroySensorDataModel.Item item = model.getItems().get(i);
-                float yValue = Double.valueOf(item.getCol1()).floatValue();
-                float xValue = Double.valueOf(CommonUtils.hoursInDay(item.getAddTime())).floatValue();
-                yVals1.add(new Entry(xValue, yValue));
-            }
-
-            LineDataSet set1;
-
-            if (mChart.getData() != null &&
-                    mChart.getData().getDataSetCount() > 0) {
-                set1 = (LineDataSet) mChart.getData().getDataSetByIndex(0);
-                set1.setValues(yVals1);
-                mChart.getData().notifyDataChanged();
-                mChart.notifyDataSetChanged();
-            } else {
-                // create a dataset and give it a type
-                set1 = new LineDataSet(yVals1, "X轴");
-
-                set1.enableDashedLine(10f, 5f, 0f);
-                set1.enableDashedHighlightLine(10f, 5f, 0f);
-                set1.setColor(color1);
-                set1.setCircleColor(color1);
-                set1.setLineWidth(1f);
-                set1.setCircleRadius(4f);
-                set1.setDrawCircleHole(false);
-                //set1.setValueTextSize(9f);
-                set1.setFormLineWidth(1f);
-                set1.setFormLineDashEffect(new DashPathEffect(new float[]{10f, 5f}, 0f));
-                set1.setFormSize(15.f);
-
-                // create a data object with the datasets
-                LineData data = new LineData(set1);
-                data.setValueTextColor(Color.BLACK);
-                data.setValueTextSize(9f);
-                data.setDrawValues(false);
-
-                // set data
-                mChart.setData(data);
-            }
+        List<Entry> yVals1 = new ArrayList<>();
+        for (int i = model.getItems().size() - 1; i >= 0; i--) {
+            GetHistroySensorDataModel.Item item = model.getItems().get(i);
+            float yValue = Double.valueOf(item.getCol1()).floatValue();
+            float xValue = Integer.valueOf(model.getItems().size() - i).floatValue();
+            yVals1.add(new Entry(xValue, yValue));
         }
 
-        mChart.setVisibleXRangeMaximum(6);
+        LineDataSet set1;
+
+        if (mChart.getData() != null &&
+                mChart.getData().getDataSetCount() > 0) {
+            set1 = (LineDataSet) mChart.getData().getDataSetByIndex(0);
+            set1.setValues(yVals1);
+            mChart.getData().notifyDataChanged();
+            mChart.notifyDataSetChanged();
+        } else {
+            // create a dataset and give it a type
+            set1 = new LineDataSet(yVals1, "X轴");
+
+            set1.enableDashedLine(10f, 5f, 0f);
+            set1.enableDashedHighlightLine(10f, 5f, 0f);
+            set1.setColor(color1);
+            set1.setCircleColor(color1);
+            set1.setLineWidth(1f);
+            set1.setCircleRadius(4f);
+            set1.setDrawCircleHole(false);
+            set1.setValueTextSize(9f);
+            set1.setFormLineWidth(1f);
+            set1.setFormLineDashEffect(new DashPathEffect(new float[]{10f, 5f}, 0f));
+            set1.setFormSize(15.f);
+
+            // create a data object with the datasets
+            LineData data = new LineData(set1);
+            data.setValueTextColor(Color.BLACK);
+            data.setValueTextSize(9f);
+
+            // set data
+            mChart.setData(data);
+        }
+
+        mChart.setVisibleXRangeMaximum(30);
         mChart.getAxisLeft().setAxisMinimum(1.3f * Math.min(mChart.getData().getYMin(), -Float.valueOf(model.getThreshold())));
         mChart.getAxisLeft().setAxisMaximum(1.3f * Math.max(mChart.getData().getYMax(), Float.valueOf(model.getThreshold())));
     }
@@ -379,12 +262,6 @@ public class LineChartActivity1 extends CommonActivity implements
         // un-highlight values after the gesture is finished and no single-tap
         if(lastPerformedGesture != ChartTouchListener.ChartGesture.SINGLE_TAP)
             mChart.highlightValues(null); // or highlightTouch(null) for callback to onNothingSelected(...)
-
-        if (mChart.getScaleY() > 1.5) {
-            mChart.getData().setDrawValues(true);
-        } else {
-            mChart.getData().setDrawValues(false);
-        }
     }
 
     @Override
@@ -410,13 +287,6 @@ public class LineChartActivity1 extends CommonActivity implements
     @Override
     public void onChartScale(MotionEvent me, float scaleX, float scaleY) {
         Log.i("Scale / Zoom", "ScaleX: " + scaleX + ", ScaleY: " + scaleY + "mChart.getScaleY()" + mChart.getScaleY());
-
-        if (mChart.getScaleY() > 1.5) {
-            mChart.getData().setDrawValues(true);
-        } else {
-            mChart.getData().setDrawValues(false);
-        }
-
     }
 
     @Override
@@ -434,29 +304,5 @@ public class LineChartActivity1 extends CommonActivity implements
     @Override
     public void onNothingSelected() {
         Log.i("Nothing selected", "Nothing selected.");
-    }
-
-    void onEditDayClicked() {
-        TimeSelectorDialog dialog = new TimeSelectorDialog(this);
-        //设置标题
-        dialog.setTimeTitle("选择时间:");
-        //显示类型
-        dialog.setIsShowtype(TimeConfig.YEAR_MONTH_DAY);
-        //默认时间
-        dialog.setCurrentDate(selectedDayStr);
-        //隐藏清除按钮
-        dialog.setEmptyIsShow(false);
-        //设置起始时间
-        dialog.setStartYear(2010);
-        dialog.setDateListener(new DateListener() {
-            @Override
-            public void onReturnDate(String time,int year, int month, int day, int hour, int minute, int isShowType) {
-                loadDataForDay(time);
-            }
-            @Override
-            public void onReturnDate(String empty) {
-            }
-        });
-        dialog.show();
     }
 }

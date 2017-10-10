@@ -145,11 +145,18 @@ public class MonitorPointListActivity extends CommonActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 PointListModel.Point point = model.getItems().get(position - 1);
-                Intent intent = new Intent(MonitorPointListActivity.this, LineChartActivity1.class);
-                intent.putExtra("title", point.getPointName());
-                intent.putExtra("id", point.getID());
-                intent.putExtra("special", point.getMonitorTypeName().equals("变形"));
-                startActivity(intent);
+                if (point.getMonitorTypeName().equals("变形") || point.getMonitorTypeName().equals("应变")) {
+                    Intent intent = new Intent(MonitorPointListActivity.this, LineChartActivity1.class);
+                    intent.putExtra("title", point.getPointName());
+                    intent.putExtra("id", point.getID());
+                    intent.putExtra("special", point.getMonitorTypeName().equals("变形"));
+                    startActivity(intent);
+                } else {
+                    Intent intent = new Intent(MonitorPointListActivity.this, LineChartActivity2.class);
+                    intent.putExtra("title", point.getPointName());
+                    intent.putExtra("id", point.getID());
+                    startActivity(intent);
+                }
             }
         });
     }

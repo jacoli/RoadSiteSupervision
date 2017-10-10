@@ -11,39 +11,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <LinearLayout
-        android:id="@+id/linear_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_below="@+id/title_bar"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
-        android:background="@color/material_blueGrey_50">
-
-        <TextView
-            android:id="@+id/text"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:textSize="18sp"
-            android:text="时间："
-            />
-
-        <Button
-            android:layout_width="100dp"
-            android:layout_height="30dp"
-            android:layout_margin="16dp"
-            android:background="@color/material_indigo_300"
-            android:text="修改"
-            android:id="@+id/submit_btn" />
-    </LinearLayout>
-
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_below="@+id/linear_layout"
+        android:layout_below="@+id/title_bar"
         android:layout_alignParentBottom="true">
 
         <LinearLayout
@@ -61,13 +32,13 @@
                 android:layout_weight="1"
                 />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:textSize="10sp"
-                android:text="时间(H)"
-                />
+            <!--<TextView-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:gravity="center"-->
+                <!--android:textSize="10sp"-->
+                <!--android:text="时间(H)"-->
+                <!--/>-->
         </LinearLayout>
 
         <TextView

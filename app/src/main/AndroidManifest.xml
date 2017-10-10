@@ -91,6 +91,7 @@
         <activity android:name=".DataMonitor.MonitorSensorTypesActivity" />
         <activity android:name=".DataMonitor.MonitorSensorListActivity" />
         <activity android:name=".DataMonitor.LineChartActivity1" />
+        <activity android:name=".DataMonitor.LineChartActivity2" />
         <activity android:name=".DataMonitor.MonitorAddSensorDataActivity" />
         <activity android:name=".Commons.WebViewActivity" />
         <activity android:name=".Commons.ImagePreviewActivity"></activity>

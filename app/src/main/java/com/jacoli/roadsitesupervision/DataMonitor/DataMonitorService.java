@@ -340,6 +340,42 @@ public class DataMonitorService {
         req.asyncSend();
     }
 
+    // 根据单位工程ID获取测点布局图
+    public void GetHistroySensorData2(final String MonitorPointID, Callbacks callbacks) {
+        if (Utils.isStringEmpty(MonitorPointID)) {
+            onFailed("错误：ID不能为空", callbacks);
+            return;
+        }
+
+        EasyRequest req = new EasyRequest(new Processor() {
+            @Override
+            public Response buildRequestAndWaitingResponse() throws IOException {
+                FormBody body = new FormBody.Builder()
+                        .add("Token", getToken())
+                        .add("MonitorPointID", MonitorPointID)
+                        .add("APP", "Y")
+                        .build();
+
+                Request request = new Request.Builder()
+                        .url(requestUrl("GetHistroySensorData"))
+                        .post(body)
+                        .header("FromAPP", "")
+                        .build();
+
+                return httpClient.newCall(request).execute();
+            }
+
+            @Override
+            public ResponseBase jsonModelParsedFromResponseString(String responseJsonString, Gson gson) {
+                return gson.fromJson(responseJsonString, GetHistroySensorDataModel.class);
+            }
+
+            @Override
+            public void onSuccessHandleBeforeNotify(ResponseBase responseModel) {}
+        }, handler, callbacks);
+        req.asyncSend();
+    }
+
     public void GetPointAlarmHistroy(final boolean IsProcessed, final int page, Callbacks callbacks) {
         EasyRequest req = new EasyRequest(new Processor() {
             @Override
