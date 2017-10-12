@@ -57,6 +57,8 @@ public class MonitorMainActivity extends CommonActivity {
 
         bottomBar.selectTabAtPosition(0);
         setTabSelection(R.id.tab_informations);
+
+        //bottomBar.getTabWithId(R.id.tab_messages).setBadgeCount(5);
     }
 
     private void setTabSelection(int index) {

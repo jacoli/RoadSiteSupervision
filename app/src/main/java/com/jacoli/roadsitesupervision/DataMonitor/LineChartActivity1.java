@@ -198,7 +198,7 @@ public class LineChartActivity1 extends CommonActivity implements
         final int errorColor = ContextCompat.getColor(this, R.color.material_red_500);
         final int warnColor = ContextCompat.getColor(this, R.color.material_orange_500);
 
-        LimitLine ll1 = new LimitLine(Float.valueOf(model.getEarlyWarningThreshold()), "预警值");
+        LimitLine ll1 = new LimitLine(Float.valueOf(model.getEarlyWarningThreshold()), "预警值(" + model.getEarlyWarningThreshold() + ")");
         ll1.setLabelPosition(LimitLabelPosition.RIGHT_BOTTOM);
         ll1.setLineColor(warnColor);
         ll1.setTextColor(warnColor);
@@ -210,7 +210,7 @@ public class LineChartActivity1 extends CommonActivity implements
         ll2.setTextColor(errorColor);
         ll2.setLineWidth(2f);
 
-        LimitLine ll3 = new LimitLine(-Float.valueOf(model.getEarlyWarningThreshold()), "预警值");
+        LimitLine ll3 = new LimitLine(-Float.valueOf(model.getEarlyWarningThreshold()), "预警值(-" + model.getEarlyWarningThreshold() + ")");
         ll3.setLabelPosition(LimitLabelPosition.RIGHT_TOP);
         ll3.setLineColor(warnColor);
         ll3.setTextColor(warnColor);
